@@ -1,0 +1,25 @@
+{
+  "name": "Galaxy A06",
+  "category": "a-series",
+  "tagline": "Entrée de gamme",
+  "variants": [
+    "4 Go / 64 Go",
+    "4 Go / 128 Go"
+  ],
+  "highlights": [
+    "Smartphone Galaxy A d'entrée de gamme",
+    "Deux capacités de stockage disponibles chez INFOLOG"
+  ],
+  "description": "Le Galaxy A06 ouvre la gamme Galaxy A chez INFOLOG. Deux capacités de stockage sont proposées : 64 Go et 128 Go, avec 4 Go de RAM.",
+  "specs": [
+    {
+      "label": "RAM",
+      "value": "4 Go"
+    },
+    {
+      "label": "Stockage",
+      "value": "64 Go ou 128 Go"
+    }
+  ],
+  "sourceNote": "Stock INFOLOG"
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Galaxy Tab A11",
+  "category": "tablet",
+  "tagline": "Tablette Galaxy",
+  "variants": [
+    "4 Go / 64 Go",
+    "8 Go / 128 Go"
+  ],
+  "highlights": [
+    "Tablette Samsung Galaxy Tab A11",
+    "Deux configurations disponibles chez INFOLOG"
+  ],
+  "description": "La Galaxy Tab A11 est la tablette de la sélection INFOLOG, disponible en 4 Go / 64 Go et 8 Go / 128 Go pour le travail, les études ou le divertissement.",
+  "specs": [
+    {
+      "label": "Variantes",
+      "value": "4 Go / 64 Go · 8 Go / 128 Go"
+    },
+    {
+      "label": "Type",
+      "value": "Tablette"
+    }
+  ],
+  "sourceNote": "Stock INFOLOG"
+}

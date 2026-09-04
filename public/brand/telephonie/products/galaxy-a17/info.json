@@ -1,0 +1,64 @@
+{
+  "name": "Galaxy A17",
+  "category": "a-series",
+  "tagline": "Super AMOLED · 90 Hz",
+  "heroLayout": "banner",
+  "heroTagline": "Fin. Élégant. Stylé.",
+  "variants": ["4 Go / 128 Go"],
+  "ram": ["4 Go"],
+  "storage": ["128 Go"],
+  "highlights": [
+    "Écran Super AMOLED 6,7\" FHD+ à 90 Hz",
+    "Triple caméra 50 MP + 5 MP + 2 MP avec stabilisation optique (OIS)",
+    "Photos en basse lumière jusqu’à 2,5× plus lumineuses",
+    "Profil affiné 7,5 mm · lecteur d’empreinte intégré",
+    "IP54 et verre Corning® Gorilla® Glass Victus®+",
+    "Jusqu’à 6 générations de mises à jour OS et 6 ans de sécurité",
+    "Gemini Live et Entourer pour chercher",
+    "Batterie 5000 mAh · microSD jusqu’à 2 To"
+  ],
+  "description": "Le Galaxy A17 combine un design élégant et une finesse de 7,5 mm avec une triple caméra pour des photos vives et détaillées. Son écran Super AMOLED de 6,7 pouces et ses bordures fines garantissent une expérience visuelle immersive. Accédez instantanément à l’intelligence artificielle grâce au bouton latéral qui active l’assistant Gemini. La caméra, équipée de la stabilisation optique, assure des vidéos stables et des photos en faible luminosité jusqu’à 2,5 fois plus lumineuses que sur le modèle précédent.",
+  "keyPoints": {
+    "title": "Un écran Super AMOLED de 6,7 pouces pour un monde éclatant de couleurs",
+    "body": "Entrez dans une nouvelle dimension avec un écran de 6,7 pouces Super AMOLED de 90 Hz : fluidité, intensité, et une immersion visuelle au rendez-vous",
+    "heading": "Les points clés",
+    "slides": [
+      {
+        "image": "image-2.webp",
+        "caption": "Discutez en direct avec Gemini Live"
+      },
+      {
+        "image": "image-3.webp",
+        "caption": "Fin. Élégant. Stylé."
+      },
+      {
+        "image": "image-4.webp",
+        "caption": "Nuit et jour, capturez des images claires et lumineuses grâce à la stabilisation optique"
+      },
+      {
+        "image": "image-5.webp",
+        "caption": "Conçu pour durer avec 6 générations de mises à jour Android"
+      }
+    ]
+  },
+  "colors": [
+    { "name": "Noir", "hex": "#1F2937" },
+    { "name": "Gris", "hex": "#6B7280" },
+    { "name": "Bleu clair", "hex": "#93C5FD" }
+  ],
+  "specs": [
+    { "label": "RAM", "value": "4 Go" },
+    { "label": "Stockage", "value": "128 Go (extensible microSD jusqu’à 2 To)" },
+    { "label": "Écran", "value": "6,7\" Super AMOLED FHD+ · 90 Hz" },
+    { "label": "Caméra", "value": "50 MP (OIS) + 5 MP + 2 MP · Frontale 13 MP" },
+    { "label": "Processeur", "value": "Octa-core jusqu’à 2,2 GHz" },
+    { "label": "Batterie", "value": "5000 mAh" },
+    { "label": "Résistance", "value": "IP54 · Gorilla Glass Victus+" },
+    { "label": "Épaisseur", "value": "7,5 mm" },
+    { "label": "Poids", "value": "190 g" },
+    { "label": "Mises à jour", "value": "Jusqu’à 6 OS · 6 ans de sécurité" },
+    { "label": "Coloris", "value": "Noir · Gris · Bleu clair" },
+    { "label": "Connectivité", "value": "4G · Dual SIM · USB-C · NFC · Bluetooth 5.3" }
+  ],
+  "sourceNote": "Stock INFOLOG · Fiche Samsung FR"
+}

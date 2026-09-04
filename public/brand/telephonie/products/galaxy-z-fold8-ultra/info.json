@@ -1,0 +1,61 @@
+{
+  "name": "Galaxy Z Fold8 Ultra",
+  "category": "foldable",
+  "tagline": "Pliable Ultra",
+  "variants": ["12 Go / 128 Go", "12 Go / 256 Go", "12 Go / 512 Go"],
+  "ram": ["12 Go"],
+  "storage": ["128 Go", "256 Go", "512 Go"],
+  "highlights": [
+    "Smartphone pliable haut de gamme de la gamme Galaxy Z",
+    "Disponible chez INFOLOG en 128 Go, 256 Go et 512 Go de stockage, RAM 12 Go"
+  ],
+  "description": "Faites confiance les yeux fermés au nouveau Galaxy Z Fold8 Ultra. Conçu pour être Ultra puissant et répondre à vos besoins, il vous permet de gérer plusieurs exigences à la fois sans perdre le rythme.",
+  "media": {
+    "title": "Dans les médias",
+    "quote": "Le Galaxy Z Fold8 Ultra place la barre plus haut en associant Now Nudge au multitâche.",
+    "source": "Tom's Guide, 07/2026"
+  },
+  "storyHeading": "DÉCOUVREZ VOTRE FOLD ULTRA",
+  "storyCaptions": [
+    "Une finesse rendue possible",
+    "Un coup de pouce pour la suite. Il vous fait passer à l’étape suivante",
+    "Ultra rapide. Sur mesure pour Galaxy",
+    "Batterie Ultra. Maximisez la puissance",
+    "Soirées. Caméra. Action"
+  ],
+  "design": {
+    "label": "DESIGN",
+    "title": "Divisez votre écran. Soyez efficace."
+  },
+  "performance": {
+    "title": "Vitesse Ultra, propulsée par Snapdragon, sur mesure pour Galaxy",
+    "body": "Pour ceux qui aiment mener plusieurs projets de front, la dernière chose que vous souhaitez, c'est une interruption de votre flux de travail. Le Galaxy Z Fold8 Ultra est équipé du Snapdragon® 8 Elite Gen 5 pour Galaxy, alliant CPU, GPU et NPU nouvelle génération pour <strong>garder une longueur d'avance sur vos tâches sans effort.</strong> Cette puce conçue sur mesure offre des performances d'élite, des graphismes ultra-fluides et une IA rapide pour une résolution avancée.",
+    "footnote": "comparé au Galaxy Z Fold7",
+    "stats": [
+      { "label": "NPU", "value": "21", "unit": "%", "description": "d'accélération de l'IA" },
+      { "label": "GPU", "value": "15", "unit": "%", "description": "d'amélioration des performances graphiques" },
+      { "label": "CPU", "value": "16", "unit": "%", "description": "d'accélération du traitement" }
+    ]
+  },
+  "battery": {
+    "title": "Batterie Ultra.\nMaximisez la puissance",
+    "body": "La batterie de 5 000 mAh du Galaxy Z Fold8 Ultra a été intégrée dans un Fold fin et léger pour offrir plus de puissance sans compromis sur l'expérience. Profitez de jusqu'à <strong>27 heures de lecture vidéo</strong> avant une recharge en un clin d'œil grâce à la charge ultra-rapide.",
+    "capacityValue": "5000",
+    "capacityUnit": "mAh",
+    "playbackPrefix": "Jusqu'à",
+    "playbackValue": "27",
+    "playbackUnit": "heures"
+  },
+  "colors": [
+    { "name": "Techno violet", "hex": "#5B21B6" },
+    { "name": "Graphite", "hex": "#4B5563" },
+    { "name": "Blanc", "hex": "#E5E7EB" },
+    { "name": "Noir", "hex": "#1F2937" }
+  ],
+  "specs": [
+    { "label": "RAM", "value": "12 Go" },
+    { "label": "Stockage", "value": "128 Go, 256 Go ou 512 Go" },
+    { "label": "Réseau", "value": "5G" }
+  ],
+  "sourceNote": "Stock INFOLOG"
+}

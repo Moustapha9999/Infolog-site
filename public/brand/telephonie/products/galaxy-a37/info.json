@@ -1,0 +1,37 @@
+{
+  "name": "Galaxy A37 5G",
+  "category": "a-series",
+  "tagline": "Nouveau",
+  "heroLayout": "banner",
+  "variants": ["8 Go / 256 Go"],
+  "ram": ["8 Go"],
+  "storage": ["256 Go"],
+  "highlights": [
+    "Design fin et raffiné",
+    "Intelligence artificielle intégrée pour sublimer vos photos",
+    "Autonomie longue durée",
+    "Jusqu’à 6 générations de mises à jour OS et 6 ans de mises à jour de sécurité",
+    "Écran immersif 6,7 pouces · 5G"
+  ],
+  "description": "Laissez-vous séduire par le nouveau Galaxy A37 5G au design fin et raffiné. Grâce à l’intelligence artificielle intégrée, sublimer vos photos devient un jeu d’enfant : effacez les éléments gênants ou suivez les suggestions de retouche en un geste. Soyez productif au quotidien grâce à une autonomie longue durée. Et parce que votre smartphone doit rester performant dans le temps, profitez de jusqu’à 6 générations de mises à jour du système d’exploitation et de 6 ans de mises à jour de sécurité. Un compagnon fiable, sécurisé et toujours à la pointe, pour longtemps.",
+  "storyHeading": "DÉCOUVREZ LE GALAXY A37 5G",
+  "storyCaptions": [
+    "Design fin. Raffiné. Awesome."
+  ],
+  "colors": [
+    { "name": "Lavande", "hex": "#C5B4E3" },
+    { "name": "Vert", "hex": "#2F6F6A" },
+    { "name": "Blanc", "hex": "#F3F4F6" }
+  ],
+  "specs": [
+    { "label": "RAM", "value": "8 Go" },
+    { "label": "Stockage", "value": "256 Go" },
+    { "label": "Réseau", "value": "5G" },
+    { "label": "Écran", "value": "6,7\"" },
+    { "label": "Processeur", "value": "Exynos 1480 · Octa-core · 2,75 GHz" },
+    { "label": "Caméra", "value": "50 MP + 8 MP · Frontale 12 MP" },
+    { "label": "Batterie", "value": "5000 mAh" },
+    { "label": "Mises à jour", "value": "Jusqu’à 6 OS · 6 ans de sécurité" }
+  ],
+  "sourceNote": "Stock INFOLOG"
+}

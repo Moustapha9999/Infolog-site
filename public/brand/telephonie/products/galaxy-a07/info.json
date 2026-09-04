@@ -1,0 +1,23 @@
+{
+  "name": "Galaxy A07",
+  "category": "a-series",
+  "tagline": "4 Go · 128 Go",
+  "variants": [
+    "4 Go / 128 Go"
+  ],
+  "highlights": [
+    "Smartphone Galaxy A disponible chez INFOLOG"
+  ],
+  "description": "Le Galaxy A07 est un smartphone Galaxy A accessible, disponible chez INFOLOG en configuration 4 Go de RAM et 128 Go de stockage.",
+  "specs": [
+    {
+      "label": "RAM",
+      "value": "4 Go"
+    },
+    {
+      "label": "Stockage",
+      "value": "128 Go"
+    }
+  ],
+  "sourceNote": "Stock INFOLOG"
+}

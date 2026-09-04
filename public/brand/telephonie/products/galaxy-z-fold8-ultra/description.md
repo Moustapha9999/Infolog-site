@@ -1,0 +1,1 @@
+Faites confiance les yeux fermés au nouveau Galaxy Z Fold8 Ultra. Conçu pour être Ultra puissant et répondre à vos besoins, il vous permet de gérer plusieurs exigences à la fois sans perdre le rythme.
