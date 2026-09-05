@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
 import { poles } from "@/data/poles";
-import { phones } from "@/data/telephonie";
+import { getPublishedProducts } from "@/data/telephonie";
 import { site } from "@/data/site";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
+  const phones = await getPublishedProducts();
   const pages = [
     "",
     "/qui-sommes-nous",

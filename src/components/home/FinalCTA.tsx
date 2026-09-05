@@ -1,5 +1,5 @@
 import { Mail, MapPin, Phone } from "lucide-react";
-import { ContactForm } from "@/components/contact/ContactForm";
+import { ContactFormGate } from "@/components/contact/ContactFormGate";
 import { SectionLabel } from "@/components/sections/SectionLabel";
 import { Container } from "@/components/ui/Container";
 import { site } from "@/data/site";
@@ -66,7 +66,7 @@ export function FinalCTA() {
             </p>
             <span className="h-1.5 w-1.5 bg-copper" aria-hidden />
           </div>
-          <ContactForm variant="home" />
+          <ContactFormGate variant="home" />
         </div>
       </Container>
     </section>

@@ -15,7 +15,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
-import { aboutServices } from "@/data/site";
+import { getPublishedServices } from "@/lib/cms/services";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
@@ -34,7 +34,8 @@ const serviceIcons: LucideIcon[] = [
   Handshake,
 ];
 
-export function AboutServices() {
+export async function AboutServices() {
+  const services = await getPublishedServices();
   return (
     <section className="border-t border-ink/10 bg-paper-2/40 pb-20 pt-16 sm:pb-24 sm:pt-20">
       <Container>
@@ -68,10 +69,10 @@ export function AboutServices() {
               <span className="frame-corners-bl" aria-hidden />
               <span className="frame-corners-br" aria-hidden />
               <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4">
-                {aboutServices.map((service, index) => {
+                {services.map((service, index) => {
                   const Icon = serviceIcons[index] ?? Network;
                   return (
-                    <li key={service}>
+                    <li key={service.id}>
                       <article className="group flex h-full flex-col border border-ink/12 bg-paper-2/40 px-4 py-5 transition-[transform,border-color,background-color] duration-300 ease-out hover:-translate-y-0.5 hover:border-plan/40 hover:bg-paper sm:px-5 sm:py-6">
                         <span className="grid h-11 w-11 shrink-0 place-items-center border border-plan/30 text-plan transition-colors duration-300 group-hover:border-copper/50 group-hover:bg-copper group-hover:text-paper">
                           <Icon
@@ -81,7 +82,7 @@ export function AboutServices() {
                           />
                         </span>
                         <h3 className={cn(type.h3, "mt-4 text-plan")}>
-                          {service}
+                          {service.title}
                         </h3>
                         <span
                           className="mt-4 h-px w-8 bg-ink/15 transition-all duration-300 group-hover:w-12 group-hover:bg-copper"

@@ -18,16 +18,17 @@ import { PhoneKeyPointsSection } from "@/components/telephonie/PhoneKeyPointsSec
 import {
   categoryLabel,
   formatPhoneMemory,
-  getPhoneById,
   getPhoneGallery,
-  phones,
+  getPublishedProduct,
+  getPublishedProducts,
 } from "@/data/telephonie";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const phones = await getPublishedProducts();
   return phones.map((phone) => ({ slug: phone.id }));
 }
 
@@ -35,7 +36,7 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const phone = getPhoneById(slug);
+  const phone = await getPublishedProduct(slug);
   if (!phone) return { title: "Produit" };
   return {
     title: phone.name,
@@ -48,7 +49,10 @@ export async function generateMetadata({
 
 export default async function PhoneProductPage({ params }: PageProps) {
   const { slug } = await params;
-  const phone = getPhoneById(slug);
+  const [phone, catalog] = await Promise.all([
+    getPublishedProduct(slug),
+    getPublishedProducts(),
+  ]);
   if (!phone) notFound();
 
   const gallery = getPhoneGallery(phone).filter((src) => src !== phone.hero);
@@ -61,7 +65,7 @@ export default async function PhoneProductPage({ params }: PageProps) {
     (design
       ? `/brand/telephonie/products/${phone.id}/video-6.webm`
       : undefined);
-  const related = phones.filter((item) => item.id !== phone.id).slice(0, 8);
+  const related = catalog.filter((item) => item.id !== phone.id).slice(0, 8);
   const hasHero = Boolean(phone.hero);
 
   return (
@@ -203,6 +207,24 @@ export default async function PhoneProductPage({ params }: PageProps) {
               </h2>
               {phone.tagline ? (
                 <p className="mt-3 text-lg text-ink/80">{phone.tagline}</p>
+              ) : null}
+              {phone.priceLabel ? (
+                <p className="mt-4 font-mono text-sm tracking-wide text-ink">
+                  {phone.compareLabel ? (
+                    <span className="mr-2 text-mute line-through">
+                      {phone.compareLabel}
+                    </span>
+                  ) : null}
+                  {phone.priceLabel}
+                  {phone.isPromo ? (
+                    <span className="ml-2 text-copper">Promotion</span>
+                  ) : null}
+                </p>
+              ) : null}
+              {phone.availability === "out_of_stock" ? (
+                <p className="mt-2 font-mono text-xs uppercase tracking-[0.14em] text-copper">
+                  Rupture de stock
+                </p>
               ) : null}
               {!hasHero ? (
                 <p className="mt-3 font-mono text-sm tracking-wide text-mute">

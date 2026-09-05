@@ -4,7 +4,13 @@ import { Container } from "@/components/ui/Container";
 import { NetworkGraph } from "@/components/home/NetworkGraph";
 import { site } from "@/data/site";
 
-export function Hero() {
+export function Hero({
+  title,
+  lead,
+}: {
+  title?: string;
+  lead?: string;
+}) {
   return (
     <section className="relative overflow-hidden tech-grid-dark text-paper">
       <div
@@ -14,10 +20,11 @@ export function Hero() {
       <Container className="relative grid min-h-[78vh] items-center gap-12 py-20 lg:grid-cols-[1.05fr_0.95fr]">
         <div>
           <h1 className="max-w-xl text-4xl font-medium leading-[1.12] tracking-tight sm:text-5xl lg:text-[56px]">
-            Partenaire technologique des entreprises en Mauritanie et en Afrique
+            {title ??
+              "Partenaire technologique des entreprises en Mauritanie et en Afrique"}
           </h1>
           <p className="mt-6 max-w-lg text-base leading-7 text-paper/75">
-            {site.mission}
+            {lead ?? site.mission}
           </p>
           <div className="mt-9">
             <Button href="#poles" variant="primary">

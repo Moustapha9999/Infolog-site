@@ -6,16 +6,21 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:cms": "npx tsx src/lib/cms/contact.test.ts",
+    "cms:seed": "npx tsx scripts/seed-cms.ts"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.12.6",
+    "@supabase/supabase-js": "^2.115.0",
     "clsx": "^2.1.1",
     "framer-motion": "^13.2.0",
     "lucide-react": "^1.39.0",
     "next": "16.3.4",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "tailwind-merge": "^3.6.0"
+    "tailwind-merge": "^3.6.0",
+    "zod": "^4.5.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

@@ -2,9 +2,16 @@ import Link from "next/link";
 import { poles } from "@/data/poles";
 import { site } from "@/data/site";
 import { Logo } from "@/components/ui/Logo";
+import { getPageSections, sectionValue } from "@/lib/cms/pages";
 
-export function Footer() {
+export async function Footer() {
   const year = new Date().getFullYear();
+  const sections = await getPageSections("footer");
+  const tagline = sectionValue(
+    sections,
+    "tagline",
+    "Des solutions technologiques au service de votre développement.",
+  );
 
   return (
     <footer className="border-t border-ink/10 bg-ink text-paper">
@@ -13,7 +20,7 @@ export function Footer() {
           <div className="max-w-md text-left">
             <Logo compact />
             <p className="mt-5 text-sm leading-6 text-paper/70">
-              Des solutions technologiques au service de votre développement.
+              {tagline}
             </p>
             <p className="mt-2 text-sm text-paper/55">
               {site.city}, {site.country}

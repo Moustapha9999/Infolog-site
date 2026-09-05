@@ -1,5 +1,6 @@
 import type { PhoneProduct } from "./telephonie/types";
 import { loadPhonesFromFolders } from "./telephonie/load-products";
+import { getPublishedProduct, getPublishedProducts } from "@/lib/cms/products";
 
 export type {
   PhoneCategory,
@@ -15,12 +16,14 @@ export {
   telephonieMedia,
 } from "./telephonie/constants";
 
-/** Chargé depuis public/brand/telephonie/products/{id}/ */
+/** Fallback fichiers — préférer getPublishedProducts() côté pages. */
 export const phones: PhoneProduct[] = loadPhonesFromFolders();
 
 export function getPhoneById(id: string) {
   return loadPhonesFromFolders().find((phone) => phone.id === id);
 }
+
+export { getPublishedProduct, getPublishedProducts };
 
 export function getPhoneGallery(phone: PhoneProduct) {
   const items = [phone.image, ...(phone.gallery ?? [])].filter(

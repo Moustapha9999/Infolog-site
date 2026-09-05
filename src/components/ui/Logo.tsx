@@ -11,14 +11,18 @@ const LOGO = {
 export function Logo({
   compact = false,
   large = false,
+  onDark = false,
+  href = "/",
 }: {
   inverted?: boolean;
   compact?: boolean;
   large?: boolean;
+  onDark?: boolean;
+  href?: string;
 }) {
   return (
     <Link
-      href="/"
+      href={href}
       className="inline-flex shrink-0 items-center focus-visible:outline-offset-4"
       aria-label="INFOLOG — accueil"
     >
@@ -27,10 +31,11 @@ export function Logo({
         alt="INFOLOG"
         width={LOGO.width}
         height={LOGO.height}
-        priority={large}
+        priority={large || onDark}
         className={cn(
           "w-auto",
           large ? "h-[68px]" : compact ? "h-11" : "h-14",
+          onDark && "mix-blend-screen",
         )}
       />
     </Link>

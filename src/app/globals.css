@@ -9,6 +9,30 @@
   --copper: #b85c2e;
   --mute: #5b6670;
   --line: color-mix(in srgb, var(--ink) 14%, transparent);
+  --admin-sidebar: #101820;
+  --admin-sidebar-fg: #eef1f4;
+}
+
+.admin-shell[data-admin-theme="dark"] {
+  --ink: #e8edf1;
+  --paper: #121820;
+  --paper-2: #1a222c;
+  --plan: #7a9fc4;
+  --plan-muted: #8aa8c4;
+  --copper: #d07a45;
+  --mute: #8b959e;
+  --line: color-mix(in srgb, var(--ink) 16%, transparent);
+  --admin-sidebar: #0b0f14;
+  --admin-sidebar-fg: #e8edf1;
+}
+
+.admin-shell .bg-copper {
+  color: #eef1f4;
+}
+
+.admin-sidebar {
+  background-color: var(--admin-sidebar);
+  color: var(--admin-sidebar-fg);
 }
 
 @theme inline {
@@ -61,6 +85,21 @@ body {
     linear-gradient(to right, color-mix(in srgb, var(--plan) 35%, transparent) 1px, transparent 1px),
     linear-gradient(to bottom, color-mix(in srgb, var(--plan) 35%, transparent) 1px, transparent 1px);
   background-size: 56px 56px;
+}
+
+.tech-grid-plan {
+  background-color: var(--plan);
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, white 14%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, white 14%, transparent) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.tech-grid-faint {
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--ink) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--ink) 5%, transparent) 1px, transparent 1px);
+  background-size: 40px 40px;
 }
 
 .frame-corners {

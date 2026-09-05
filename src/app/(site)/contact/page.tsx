@@ -1,4 +1,4 @@
-import { ContactForm } from "@/components/contact/ContactForm";
+import { ContactFormGate } from "@/components/contact/ContactFormGate";
 import { Container } from "@/components/ui/Container";
 import { TechnicalFrame } from "@/components/ui/TechnicalFrame";
 import { site } from "@/data/site";
@@ -27,7 +27,7 @@ export default function ContactPage() {
       </section>
       <Container className="grid gap-8 py-16 lg:grid-cols-[1.15fr_0.85fr]">
         <TechnicalFrame className="p-6 sm:p-8">
-          <ContactForm />
+          <ContactFormGate />
         </TechnicalFrame>
         <div className="space-y-6">
           <TechnicalFrame className="p-6">

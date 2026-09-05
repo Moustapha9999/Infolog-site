@@ -105,7 +105,7 @@ export function PhoneCarousel({ phones }: { phones: PhoneProduct[] }) {
                     aria-hidden
                   />
                   <span className="absolute left-3 top-3 z-10 border border-ink/10 bg-paper/90 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-plan backdrop-blur-sm">
-                    {categoryLabel[phone.category]}
+                    {phone.isNew ? "Nouveau" : categoryLabel[phone.category]}
                   </span>
                   {phone.image ? (
                     <Image
@@ -138,6 +138,16 @@ export function PhoneCarousel({ phones }: { phones: PhoneProduct[] }) {
                   <p className="mt-2 font-mono text-[11px] tracking-wide text-ink/70">
                     {formatPhoneMemory(phone)}
                   </p>
+                  {phone.priceLabel ? (
+                    <p className="mt-1 font-mono text-[12px] text-ink">
+                      {phone.compareLabel ? (
+                        <span className="mr-2 text-mute line-through">
+                          {phone.compareLabel}
+                        </span>
+                      ) : null}
+                      {phone.priceLabel}
+                    </p>
+                  ) : null}
                   <span className="mt-4 inline-flex w-fit items-center gap-2 border-b border-copper pb-0.5 text-sm font-medium text-copper transition-colors group-hover:border-ink group-hover:text-ink">
                     Découvrir
                     <span aria-hidden>→</span>

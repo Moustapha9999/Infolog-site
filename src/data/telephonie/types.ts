@@ -135,6 +135,11 @@ export type PhoneProduct = {
   cameras?: string[];
   colors?: PhoneColor[];
   sourceNote?: string;
+  priceLabel?: string | null;
+  compareLabel?: string | null;
+  isNew?: boolean;
+  isPromo?: boolean;
+  availability?: "available" | "out_of_stock" | "hidden";
 };
 
 export type PhoneInfoJson = {

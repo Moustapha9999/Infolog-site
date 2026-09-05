@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/Button";
 import { PhoneCarousel } from "@/components/telephonie/PhoneCarousel";
 import { TelephonieHeroVisual } from "@/components/telephonie/TelephonieHeroVisual";
 import { TelephonieServiceTabs } from "@/components/telephonie/TelephonieServiceTabs";
-import { phones, telephonie } from "@/data/telephonie";
+import { getPublishedProducts, telephonie } from "@/data/telephonie";
+import { getPageSections, sectionValue } from "@/lib/cms/pages";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
@@ -13,7 +14,11 @@ export const metadata = {
   description: telephonie.description,
 };
 
-export default function TelephoniePage() {
+export default async function TelephoniePage() {
+  const [phones, sections] = await Promise.all([
+    getPublishedProducts(),
+    getPageSections("telephonie"),
+  ]);
   return (
     <>
       <section className="relative isolate min-h-[78vh] overflow-hidden border-b border-ink/10 bg-ink">
@@ -24,7 +29,7 @@ export default function TelephoniePage() {
               Samsung Galaxy
             </SectionLabel>
             <h1 className={cn(type.h1, "mt-4 text-paper")}>
-              {telephonie.title}
+              {sectionValue(sections, "title", telephonie.title)}
             </h1>
             <p className={cn(type.h3, "mt-3 text-paper/90")}>
               {telephonie.heroTitle}

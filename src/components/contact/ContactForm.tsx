@@ -17,7 +17,7 @@ export function ContactForm({ variant = "default" }: ContactFormProps) {
   const searchParams = useSearchParams();
   const initialSubject = searchParams.get("subject") ?? "";
 
-  function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
@@ -39,10 +39,34 @@ export function ContactForm({ variant = "default" }: ContactFormProps) {
       return;
     }
 
+    const phone = String(data.get("phone") ?? "").trim();
+    const response = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name,
+        email,
+        phone,
+        subject,
+        message: body,
+        company: String(data.get("company") ?? ""),
+      }),
+    });
+
+    if (!response.ok) {
+      const payload = (await response.json().catch(() => null)) as {
+        error?: string;
+      } | null;
+      setStatus("error");
+      setMessage(
+        payload?.error ??
+          "Impossible d’envoyer le message. Réessayez dans un instant.",
+      );
+      return;
+    }
+
     setStatus("success");
-    setMessage(
-      "Formulaire validé. L'envoi e-mail sera branché dès que l'adresse de destination INFOLOG sera confirmée.",
-    );
+    setMessage("Message reçu. INFOLOG vous répondra sous 24–48 h ouvrées.");
     event.currentTarget.reset();
   }
 
