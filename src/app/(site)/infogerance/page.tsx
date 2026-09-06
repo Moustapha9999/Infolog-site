@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionLabel } from "@/components/sections/SectionLabel";
+import { TechnicalFrame } from "@/components/ui/TechnicalFrame";
 import { infogerance } from "@/data/infogerance";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
@@ -48,72 +49,81 @@ export default function InfogerancePage() {
             className="absolute inset-0 bg-[linear-gradient(180deg,rgba(16,24,32,0.35)_0%,rgba(16,24,32,0.55)_100%)]"
             aria-hidden
           />
-          <Container className="relative flex min-h-[240px] items-center justify-center py-16 sm:min-h-[300px] lg:min-h-[360px]">
-            <h1 className={cn(type.h1, "text-paper")}>
+          <Container
+            wide
+            className="relative flex min-h-[240px] items-center py-16 sm:min-h-[300px] lg:min-h-[360px]"
+          >
+            <h1 className={cn(type.h1, "border-l-2 border-paper pl-5 text-paper sm:pl-6")}>
               {infogerance.title}
             </h1>
           </Container>
         </div>
       </section>
 
-      <Container className="grid items-start gap-10 py-16 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14 lg:py-20">
-        <div>
-          <SectionLabel>Solutions IT</SectionLabel>
-          <h2 className={cn(type.h2, "mt-4 text-ink")}>
-            {infogerance.title}
-          </h2>
-          <div className={cn(type.body, "mt-6 space-y-4 text-ink/80")}>
-            {infogerance.paragraphs.map((paragraph) => (
-              <p key={paragraph.slice(0, 40)}>{paragraph}</p>
-            ))}
-          </div>
-        </div>
-
-        <div className="relative aspect-[3/2] overflow-hidden border border-ink/10 bg-paper-2 shadow-[0_18px_40px_rgba(16,24,32,0.1)]">
-          <Image
-            src="/brand/infogerance-content.jpg"
-            alt="Accompagnement Infogérance INFOLOG"
-            fill
-            quality={92}
-            sizes="(max-width: 1024px) 100vw, 40vw"
-            className="object-cover object-center"
-          />
-        </div>
-      </Container>
-
-      <section className="border-t border-ink/10 bg-paper-2/50 py-16 sm:py-20">
-        <Container>
-          <div className="mx-auto max-w-2xl text-center">
-            <div className="flex justify-center">
-              <SectionLabel>Offre</SectionLabel>
-            </div>
+      <section className="border-b border-ink/10 bg-paper">
+        <Container
+          wide
+          className="grid gap-10 py-16 lg:grid-cols-12 lg:items-start lg:gap-16 lg:py-20"
+        >
+          <header className="border-l-2 border-plan pl-5 sm:pl-6 lg:col-span-4">
+            <SectionLabel>Solutions IT</SectionLabel>
             <h2 className={cn(type.h2, "mt-4 text-ink")}>
-              {infogerance.servicesTitle}
+              {infogerance.title}
             </h2>
-            <p className={cn(type.body, "mt-4 text-mute")}>
+          </header>
+
+          <TechnicalFrame className="overflow-hidden lg:col-span-8">
+            <div className="relative">
+              <div
+                className="pointer-events-none absolute left-[16%] right-[16%] top-8 hidden h-px bg-plan/30 lg:block"
+                aria-hidden
+              />
+              <ul className="grid lg:grid-cols-3">
+                {infogerance.paragraphs.map((paragraph) => (
+                  <li
+                    key={paragraph.slice(0, 40)}
+                    className="border-b border-ink/10 px-6 py-7 last:border-b-0 sm:px-8 sm:py-8 lg:border-b-0 lg:border-r lg:last:border-r-0"
+                  >
+                    <span
+                      className="relative z-10 mb-5 block h-2.5 w-2.5 bg-plan"
+                      aria-hidden
+                    />
+                    <p className={cn(type.bodyCard, "text-ink/80")}>{paragraph}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </TechnicalFrame>
+        </Container>
+      </section>
+
+      <section className="bg-paper-2/50 py-16 sm:py-20">
+        <Container wide>
+          <div className="grid gap-6 border-l-2 border-plan pl-5 sm:pl-6 lg:grid-cols-12 lg:items-end lg:gap-16">
+            <div className="lg:col-span-5">
+              <SectionLabel>Offre</SectionLabel>
+              <h2 className={cn(type.h2, "mt-4 text-ink")}>
+                {infogerance.servicesTitle}
+              </h2>
+            </div>
+            <p className={cn(type.body, "text-mute lg:col-span-7")}>
               {infogerance.servicesIntro}
             </p>
           </div>
 
-          <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-12">
+          <ul className="mt-12 grid gap-px bg-ink/10 sm:grid-cols-2 lg:grid-cols-12">
             {infogerance.services.map((service, index) => {
               const Icon = serviceIcons[index] ?? Workflow;
               return (
                 <li
                   key={service}
-                  className={
-                    index < 4
-                      ? "lg:col-span-3"
-                      : "lg:col-span-4"
-                  }
+                  className={index < 4 ? "lg:col-span-3" : "lg:col-span-4"}
                 >
-                  <article className="group flex h-full min-h-[160px] flex-col items-center justify-center border border-ink/12 bg-paper px-5 py-8 text-center transition-[transform,border-color] duration-300 hover:-translate-y-0.5 hover:border-plan/40">
-                    <span className="grid h-12 w-12 place-items-center border border-plan/30 text-plan transition-colors duration-300 group-hover:border-copper/50 group-hover:bg-copper group-hover:text-paper">
+                  <article className="flex h-full min-h-[168px] flex-col bg-paper px-5 py-8 transition-colors duration-300 hover:bg-paper-2 motion-reduce:transition-none">
+                    <span className="grid h-11 w-11 place-items-center border border-plan/35 text-plan">
                       <Icon className="h-5 w-5" strokeWidth={1.6} aria-hidden />
                     </span>
-                    <h3 className={cn(type.h3, "mt-5 text-plan")}>
-                      {service}
-                    </h3>
+                    <h3 className={cn(type.h3, "mt-5 text-plan")}>{service}</h3>
                   </article>
                 </li>
               );

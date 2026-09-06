@@ -80,7 +80,7 @@ export function Stats() {
   }, []);
 
   return (
-    <section className="tech-grid-dark relative overflow-hidden text-paper">
+    <section className="relative overflow-hidden bg-ink text-paper">
       <Container className="py-16 sm:py-20">
         <SectionLabel tone="dark">Chiffres clés</SectionLabel>
         <div

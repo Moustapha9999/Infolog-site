@@ -38,7 +38,7 @@ export async function AboutServices() {
   const services = await getPublishedServices();
   return (
     <section className="border-t border-ink/10 bg-paper-2/40 pb-20 pt-16 sm:pb-24 sm:pt-20">
-      <Container>
+      <Container wide>
         <div className="relative">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:items-center lg:gap-12">
             <div className="max-w-md">

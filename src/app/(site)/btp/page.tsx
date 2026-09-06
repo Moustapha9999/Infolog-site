@@ -25,7 +25,7 @@ export default function BtpPage() {
       <section className="relative isolate overflow-hidden border-b border-ink/10">
         <div className="relative min-h-[240px] sm:min-h-[300px] lg:min-h-[360px]">
           <Image
-            src="/brand/btp-hero.jpg"
+            src="/brand/btp-hero.png"
             alt="Chantier BTP INFOLOG — construction et génie civil"
             fill
             priority

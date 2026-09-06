@@ -11,7 +11,11 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionLabel } from "@/components/sections/SectionLabel";
+import { TechnicalFrame } from "@/components/ui/TechnicalFrame";
+import { NationalCashStats } from "@/components/national-cash/NationalCashStats";
 import { nationalCash } from "@/data/site";
+import { type } from "@/lib/typography";
+import { cn } from "@/lib/utils";
 
 export const metadata = {
   title: "National Cash",
@@ -30,91 +34,90 @@ const productIcons: LucideIcon[] = [
 export default function NationalCashPage() {
   return (
     <>
-      <section className="relative isolate overflow-hidden border-b border-ink/10">
-        <div className="relative min-h-[280px] sm:min-h-[340px] lg:min-h-[400px]">
+      <section className="relative isolate overflow-hidden border-b border-ink/10 bg-ink">
+        <div className="relative h-[200px] w-full sm:h-[240px] lg:h-[280px]">
           <Image
             src="/brand/national-cash-hero.jpg"
             alt="Billets en ouguiya — National Cash"
             fill
             priority
-            quality={92}
+            quality={100}
             sizes="100vw"
-            className="object-cover object-[center_35%]"
+            className="object-cover object-center"
           />
           <div
-            className="absolute inset-0 bg-[linear-gradient(180deg,rgba(16,24,32,0.28)_0%,rgba(16,24,32,0.45)_100%)]"
+            className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,24,32,0.55)_0%,rgba(16,24,32,0.15)_45%,rgba(16,24,32,0.2)_100%)]"
             aria-hidden
           />
-          <Container className="relative flex min-h-[280px] items-center justify-center py-16 sm:min-h-[340px] lg:min-h-[400px]">
-            <div className="w-full max-w-3xl border border-paper/20 bg-ink/55 px-6 py-8 text-center backdrop-blur-sm sm:px-10 sm:py-10">
-              <h1 className="mt-4 text-3xl font-medium tracking-tight text-paper sm:text-4xl lg:text-5xl">
-                {nationalCash.title}
-              </h1>
-            </div>
+          <Container
+            wide
+            className="absolute inset-0 flex items-end pb-5 sm:pb-6 lg:pb-8"
+          >
+            <h1
+              className={cn(
+                type.h1,
+                "border-l-2 border-paper pl-5 text-paper sm:pl-6",
+              )}
+            >
+              {nationalCash.title}
+            </h1>
           </Container>
         </div>
       </section>
 
-      <Container className="py-16 lg:pb-10 lg:pt-20">
-        <div className="grid items-start gap-8 border border-ink/10 bg-paper p-5 shadow-[0_14px_36px_rgba(16,24,32,0.08)] sm:p-6 lg:grid-cols-2 lg:gap-10 lg:p-8">
-          <div className="relative aspect-[4/3] overflow-hidden border border-ink/10 bg-paper-2 sm:aspect-square">
-            <Image
-              src="/brand/national-cash-pos.jpg"
-              alt="Terminaux de paiement National Cash"
-              fill
-              quality={90}
-              sizes="(max-width: 1024px) 100vw, 45vw"
-              className="object-cover object-center"
-            />
-          </div>
-
-          <div className="space-y-5 text-base leading-7 text-ink/80 sm:text-[17px] sm:leading-8">
-            {nationalCash.paragraphs.map((paragraph) => (
-              <p key={paragraph.slice(0, 48)}>{paragraph}</p>
-            ))}
-          </div>
-        </div>
-      </Container>
-
-      <section className="pb-10 pt-2 sm:pb-12">
-        <Container>
-          <div className="frame-corners relative border border-ink/15 bg-paper px-3 py-8 shadow-[0_14px_36px_rgba(16,24,32,0.08)] sm:px-5 sm:py-10 lg:px-4">
-            <span className="frame-corners-bl" aria-hidden />
-            <span className="frame-corners-br" aria-hidden />
-            <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_1.35fr] lg:items-start lg:gap-0">
-              {nationalCash.stats.map((stat) => (
-                <li
-                  key={stat.label}
-                  className="px-2 text-center lg:border-r lg:border-ink/10 lg:px-4 lg:last:border-r-0"
-                >
-                  <p
-                    className={`whitespace-nowrap font-mono font-medium tracking-tight text-copper ${
-                      stat.value.length > 6
-                        ? "text-xl sm:text-2xl lg:text-[1.65rem]"
-                        : "text-3xl sm:text-4xl"
-                    }`}
+      <section className="border-b border-ink/10 bg-paper">
+        <Container wide className="py-16 lg:py-20">
+          <TechnicalFrame className="overflow-hidden">
+            <div className="relative">
+              <div
+                className="pointer-events-none absolute left-[16%] right-[16%] top-8 hidden h-px bg-plan/30 lg:block"
+                aria-hidden
+              />
+              <ul className="grid lg:grid-cols-2">
+                {nationalCash.paragraphs.map((paragraph) => (
+                  <li
+                    key={paragraph.slice(0, 48)}
+                    className="border-b border-ink/10 px-6 py-8 last:border-b-0 sm:px-8 sm:py-10 lg:border-b-0 lg:border-r lg:last:border-r-0"
                   >
-                    {stat.value}
-                  </p>
-                  <p className="mx-auto mt-3 max-w-[16ch] font-mono text-[11px] uppercase leading-5 tracking-[0.14em] text-ink">
-                    {stat.label}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </div>
+                    <span
+                      className="relative z-10 mb-5 block h-2.5 w-2.5 bg-plan"
+                      aria-hidden
+                    />
+                    <p className={cn(type.body, "text-ink/80")}>{paragraph}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </TechnicalFrame>
         </Container>
       </section>
 
-      <section className="pb-12 pt-2 sm:pb-16">
-        <Container className="max-w-7xl">
-          <div className="border border-plan/40 bg-plan px-6 py-8 text-base leading-7 text-paper shadow-[0_14px_36px_rgba(29,78,137,0.28)] sm:px-10 sm:py-10 sm:text-[17px] sm:leading-8">
-            <div className="space-y-5">
-              {nationalCash.highlight.map((paragraph) => (
-                <p key={paragraph.slice(0, 48)}>{paragraph}</p>
-              ))}
+      <NationalCashStats />
+
+      <section className="border-b border-ink/10 bg-paper">
+        <Container wide className="py-16 lg:py-20">
+          <TechnicalFrame className="overflow-hidden">
+            <div className="relative">
+              <div
+                className="pointer-events-none absolute left-[16%] right-[16%] top-8 hidden h-px bg-plan/30 lg:block"
+                aria-hidden
+              />
+              <ul className="grid lg:grid-cols-2">
+                {nationalCash.highlight.map((paragraph) => (
+                  <li
+                    key={paragraph.slice(0, 48)}
+                    className="border-b border-ink/10 px-6 py-8 last:border-b-0 sm:px-8 sm:py-10 lg:border-b-0 lg:border-r lg:last:border-r-0"
+                  >
+                    <span
+                      className="relative z-10 mb-5 block h-2.5 w-2.5 bg-plan"
+                      aria-hidden
+                    />
+                    <p className={cn(type.body, "text-ink/80")}>{paragraph}</p>
+                  </li>
+                ))}
+              </ul>
             </div>
-          </div>
+          </TechnicalFrame>
         </Container>
       </section>
 
@@ -176,30 +179,35 @@ export default function NationalCashPage() {
         </Container>
       </section>
 
-      <section className="bg-copper">
-        <Container className="grid max-w-7xl w-full items-stretch gap-8 py-14 sm:gap-10 lg:grid-cols-2 lg:gap-10 lg:py-16">
-          <div className="flex min-w-0 flex-col justify-center text-paper">
-            <h2 className="text-2xl font-medium tracking-tight sm:text-3xl lg:text-4xl">
+      <section className="border-b border-ink/10 bg-paper">
+        <Container
+          wide
+          className="grid items-start gap-10 py-16 lg:grid-cols-12 lg:gap-16 lg:py-20"
+        >
+          <header className="border-l-2 border-plan pl-5 sm:pl-6 lg:col-span-7">
+            <SectionLabel>Agences</SectionLabel>
+            <h2 className={cn(type.h2, "mt-4 text-ink")}>
               {nationalCash.agencies.title}
             </h2>
-            <p className="mt-5 text-sm leading-7 text-paper/90 sm:text-base sm:leading-8">
+            <p className={cn(type.body, "mt-5 text-ink/80")}>
               {nationalCash.agencies.text}
             </p>
-          </div>
-          <div className="relative min-h-[260px] w-full overflow-hidden border border-paper/20 bg-ink/20 shadow-[0_18px_40px_rgba(16,24,32,0.22)] lg:min-h-full">
+          </header>
+          <div className="overflow-hidden border border-ink/10 bg-ink lg:col-span-5">
             <Image
               src="/brand/national-cash-agences.jpg"
               alt="Retrait mobile Cash National Cash"
-              fill
-              quality={90}
-              sizes="(max-width: 1024px) 100vw, 45vw"
-              className="object-cover object-center"
+              width={982}
+              height={1226}
+              quality={92}
+              sizes="(max-width: 1024px) 100vw, 42vw"
+              className="h-auto w-full"
             />
           </div>
         </Container>
       </section>
 
-      <section className="relative overflow-hidden bg-plan pt-16 text-paper sm:pt-20">
+      <section className="relative overflow-hidden bg-ink pt-16 text-paper sm:pt-20">
         <Container className="relative z-10 max-w-7xl">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="text-3xl font-medium tracking-tight sm:text-4xl">

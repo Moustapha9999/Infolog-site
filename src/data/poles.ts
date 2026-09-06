@@ -242,8 +242,33 @@ export const poles: Pole[] = [
   },
 ];
 
+const activityPages: Record<string, string> = {
+  infogerance: "/infogerance",
+  "data-center": "/data-center",
+  securite: "/securite",
+  collaboration: "/collaboration",
+  ged: "/ged",
+  virtualisation: "/virtualisation-serveurs",
+  "transformation-it": "/transformation-it",
+  "affichage-dynamique": "/affichage-dynamique",
+  erp: "/progiciel-erp",
+  monetique: "/monetique",
+  "national-cash": "/qui-sommes-nous/national-cash",
+  "pearson-vue": "/pearson-vue",
+  "e-learning": "/pearson-vue#e-learning",
+  "centre-appel": "/centre-appel",
+  telephonie: "/telephonie",
+  btp: "/btp",
+  electromenager: "/electromenager",
+  energie: "/energie",
+};
+
 export function getPole(slug: string) {
   return poles.find((pole) => pole.slug === slug);
+}
+
+export function activityPageHref(slug: string) {
+  return activityPages[slug] ?? null;
 }
 
 export function getAllActivities() {

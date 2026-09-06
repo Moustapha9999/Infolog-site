@@ -234,6 +234,13 @@ export function loadPhonesFromFolders(): PhoneProduct[] {
     const fallback = productInfos[id];
     const dir = path.join(productsDiskRoot, id);
     const json = readInfoJson(dir);
+    const hasMedia = fs
+      .readdirSync(dir)
+      .some((file) =>
+        /\.(jpe?g|png|webp|avif|gif|mp4|webm|mov)$/i.test(file),
+      );
+
+    if (!fallback && !json && !hasMedia) return [];
 
     const name = String(json?.name ?? fallback?.name ?? id);
     const category = (json?.category ??

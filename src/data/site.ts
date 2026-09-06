@@ -69,10 +69,10 @@ export const nationalCash = {
     "A travers son partenariat exclusif avec Samsung Mauritanie, NC offre aussi à ses clients un prêt personnel pour financer leurs équipements numériques, informatiques ou électroménager de la marque Samsung tels que (Smartphones, Ordinateurs, tablettes, téléviseurs, climatiseurs, machine à laver et réfrigérateurs).",
   ],
   stats: [
-    { value: "550+", label: "Crédits décaissés" },
-    { value: "40%", label: "Des personnes financées sont des femmes" },
-    { value: "50%", label: "Des personnes financées sont des jeunes" },
-    { value: "2 300 185 856", label: "MRO décaissés" },
+    { value: 550, suffix: "+", label: "Crédits décaissés" },
+    { value: 40, suffix: "%", label: "Des personnes financées sont des femmes" },
+    { value: 50, suffix: "%", label: "Des personnes financées sont des jeunes" },
+    { value: 2_300_185_856, suffix: "", grouped: true, label: "MRO décaissés" },
   ],
   productsTitle: "Les produits d'épargnes",
   products: [

@@ -10,7 +10,7 @@ export function FinalCTA() {
   return (
     <section className="relative overflow-hidden border-t border-ink/10 bg-paper-2 py-20">
       <div
-        className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/3 border-l border-ink/10 tech-grid lg:block"
+        className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/3 border-l border-ink/10 lg:block"
         aria-hidden
       />
       <Container className="relative grid items-start gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">

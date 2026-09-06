@@ -24,7 +24,7 @@ export default async function AdminLoginPage({
   return (
     <div className="flex min-h-screen items-center justify-center bg-white px-4 py-8 sm:px-8 lg:px-12">
       <TechnicalFrame className="grid w-full max-w-7xl overflow-hidden bg-white lg:min-h-[720px] lg:grid-cols-2">
-        <section className="tech-grid-dark relative flex flex-col justify-between px-6 py-8 text-paper sm:px-10 lg:px-16 lg:py-14">
+        <section className="relative flex flex-col justify-between bg-ink px-6 py-8 text-paper sm:px-10 lg:px-16 lg:py-14">
           <div className="pointer-events-none absolute inset-0 opacity-20" aria-hidden>
             <NetworkGraph />
           </div>

@@ -117,12 +117,14 @@ export async function getPublishedProducts(): Promise<CatalogPhone[]> {
       .eq("entity_type", "product")
       .in("entity_id", ids);
 
-    return (data as ProductRecord[]).map((product) =>
-      mapProductToPhone(
-        product,
-        (links ?? []).filter((link) => link.entity_id === product.id),
-      ),
-    );
+    return (data as ProductRecord[])
+      .map((product) =>
+        mapProductToPhone(
+          product,
+          (links ?? []).filter((link) => link.entity_id === product.id),
+        ),
+      )
+      .filter((phone) => phone.id !== "galaxy-" && phone.name.trim() !== "galaxy-");
   } catch {
     return files();
   }

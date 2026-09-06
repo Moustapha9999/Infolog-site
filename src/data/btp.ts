@@ -73,11 +73,11 @@ export const btp = {
     title: "Notre savoir-faire",
     images: [
       {
-        src: "/brand/btp-gallery-1.jpg",
+        src: "/brand/btp-gallery-1.png",
         alt: "Chantier d'immeubles avec grues — réalisations BTP INFOLOG",
       },
       {
-        src: "/brand/btp-gallery-2.jpg",
+        src: "/brand/btp-gallery-2.png",
         alt: "Immeuble résidentiel livré — réalisations BTP INFOLOG",
       },
       {

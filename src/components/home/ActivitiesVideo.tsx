@@ -22,7 +22,7 @@ export function ActivitiesVideo() {
 
   return (
     <section className="bg-paper pb-16 pt-0">
-      <div className="tech-grid-dark relative overflow-hidden text-paper">
+      <div className="relative overflow-hidden bg-ink text-paper">
         <Container className="relative pb-28 pt-16 text-center sm:pb-36 sm:pt-20">
           <div className="flex justify-center">
             <SectionLabel tone="dark">Présentation</SectionLabel>

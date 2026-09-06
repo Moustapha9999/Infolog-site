@@ -9,6 +9,7 @@ import {
 import { Container } from "@/components/ui/Container";
 import { SectionLabel } from "@/components/sections/SectionLabel";
 import { TechnicalFrame } from "@/components/ui/TechnicalFrame";
+import { MonetiqueHero } from "@/components/monetique/MonetiqueHero";
 import { monetique } from "@/data/monetique";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
@@ -23,25 +24,9 @@ const sifcoIcons: LucideIcon[] = [Users, CreditCard, BookOpen, Building2];
 export default function MonetiquePage() {
   return (
     <>
-      <section className="relative isolate overflow-hidden border-b border-ink/10 bg-paper-2">
-        <Container className="pt-10 pb-4 sm:pt-12">
-          <h2 className={cn(type.h2, "text-center text-plan")}>
-            {monetique.network.title}
-          </h2>
-        </Container>
-        <Image
-          src="/brand/monetique-hero.png"
-          alt="Réseau et collaboration — sécurité et infrastructures"
-          width={1089}
-          height={264}
-          priority
-          quality={95}
-          sizes="100vw"
-          className="block h-auto w-full"
-        />
-      </section>
+      <MonetiqueHero />
 
-      <Container className="grid items-start gap-10 py-16 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14 lg:py-20">
+      <Container wide className="grid items-start gap-10 py-16 lg:grid-cols-[1.25fr_0.9fr] lg:gap-16 lg:py-20">
         <div>
           <SectionLabel>Finance</SectionLabel>
           <h1 className={cn(type.h1, "mt-4 text-ink")}>
@@ -64,7 +49,7 @@ export default function MonetiquePage() {
       </Container>
 
       <section className="border-y border-ink/10 bg-paper-2/40 py-14 sm:py-16">
-        <Container className="grid gap-5 md:grid-cols-2">
+        <Container wide className="grid gap-5 md:grid-cols-2">
           <TechnicalFrame className="p-6 sm:p-8">
             <SectionLabel>Engagement</SectionLabel>
             <h3 className={cn(type.h3, "mt-3 text-ink")}>
@@ -86,7 +71,7 @@ export default function MonetiquePage() {
         </Container>
       </section>
 
-      <Container className="grid items-center gap-10 py-16 lg:grid-cols-2 lg:gap-14 lg:py-20">
+      <Container wide className="grid items-center gap-10 py-16 lg:grid-cols-2 lg:gap-16 lg:py-20">
         <div className="relative aspect-[4/3] overflow-hidden border border-ink/10 bg-paper-2 shadow-[0_18px_40px_rgba(16,24,32,0.1)]">
           <Image
             src="/brand/monetique-gab.jpg"
@@ -108,7 +93,7 @@ export default function MonetiquePage() {
         </div>
       </Container>
 
-      <Container className="grid items-center gap-10 py-16 lg:grid-cols-2 lg:gap-14">
+      <Container wide className="grid items-center gap-10 py-16 lg:grid-cols-2 lg:gap-16">
         <div>
           <h2 className={cn(type.h2, "text-ink")}>
             {monetique.payment.title}
@@ -131,7 +116,7 @@ export default function MonetiquePage() {
         </div>
       </Container>
 
-      <Container className="pb-16 sm:pb-20">
+      <Container wide className="pb-16 sm:pb-20">
         <div className="mx-auto max-w-2xl text-center">
           <div className="flex justify-center">
             <SectionLabel>Solutions</SectionLabel>
@@ -144,7 +129,7 @@ export default function MonetiquePage() {
         <article className="frame-corners relative mt-12 border border-ink/15 bg-paper p-6 sm:p-8 lg:p-10">
           <span className="frame-corners-bl" aria-hidden />
           <span className="frame-corners-br" aria-hidden />
-          <div className="max-w-4xl">
+          <div className="max-w-5xl">
             <h3 className={cn(type.h3, "text-plan")}>
               {monetique.sifco.title}
             </h3>
@@ -193,7 +178,7 @@ export default function MonetiquePage() {
       </Container>
 
       <section className="border-t border-ink/10 bg-paper-2/50 py-16 sm:py-20">
-        <Container>
+        <Container wide>
           <div className="mx-auto max-w-2xl text-center">
             <div className="flex justify-center">
               <SectionLabel>Références</SectionLabel>

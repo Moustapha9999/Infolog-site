@@ -13,20 +13,19 @@ export const metadata = {
 export default function AboutPage() {
   return (
     <>
-      <section className="relative overflow-hidden border-b border-ink/10 bg-plan text-paper">
-        <div
-          className="pointer-events-none absolute inset-0 opacity-30 tech-grid"
-          aria-hidden
-        />
-        <Container className="relative py-20 sm:py-24">
+      <section className="border-b border-ink/10 bg-ink text-paper">
+        <Container wide className="py-16 sm:py-20 lg:py-24">
           <SectionLabel tone="dark">À propos</SectionLabel>
-          <h1 className="mt-4 max-w-3xl text-4xl font-medium tracking-tight sm:text-5xl">
+          <h1 className="mt-4 max-w-2xl text-4xl font-medium tracking-tight sm:text-5xl">
             Qui sommes-nous
           </h1>
         </Container>
       </section>
 
-      <Container className="grid gap-8 py-16 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12 lg:items-start">
+      <Container
+        wide
+        className="grid gap-8 py-16 lg:grid-cols-[1.35fr_0.85fr] lg:items-start lg:gap-12"
+      >
         <div className="space-y-10">
           <article className="frame-corners relative border border-ink/15 bg-paper p-6 sm:p-8">
             <span className="frame-corners-bl" aria-hidden />
@@ -62,7 +61,7 @@ export default function AboutPage() {
             <p className="mt-5 text-base leading-7 text-ink/80">
               {site.presenceText}
             </p>
-            <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+            <ul className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
               {site.presence.map((country) => (
                 <li
                   key={country}
