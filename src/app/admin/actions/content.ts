@@ -416,6 +416,28 @@ export async function linkMedia(formData: FormData) {
   await revalidatePublic();
 }
 
+async function syncBannerMedia(
+  supabase: Awaited<ReturnType<typeof createServerSupabaseClient>>,
+  bannerId: string,
+  role: string,
+  mediaId: string | null,
+) {
+  await supabase
+    .from("media_links")
+    .delete()
+    .eq("entity_type", "banner")
+    .eq("entity_id", bannerId)
+    .eq("role", role);
+  if (!mediaId) return;
+  await supabase.from("media_links").insert({
+    media_id: mediaId,
+    entity_type: "banner",
+    entity_id: bannerId,
+    role,
+    position: 0,
+  });
+}
+
 export async function saveBanner(formData: FormData) {
   const session = await requireAdminSession();
   const supabase = await createServerSupabaseClient();
@@ -446,33 +468,9 @@ export async function saveBanner(formData: FormData) {
   const mobile = text(formData, "mobile_media_id");
   const video = text(formData, "video_media_id");
   if (bannerId) {
-    if (desktop) {
-      await supabase.from("media_links").upsert({
-        media_id: desktop,
-        entity_type: "banner",
-        entity_id: bannerId,
-        role: "desktop",
-        position: 0,
-      });
-    }
-    if (mobile) {
-      await supabase.from("media_links").upsert({
-        media_id: mobile,
-        entity_type: "banner",
-        entity_id: bannerId,
-        role: "mobile",
-        position: 0,
-      });
-    }
-    if (video) {
-      await supabase.from("media_links").upsert({
-        media_id: video,
-        entity_type: "banner",
-        entity_id: bannerId,
-        role: "video",
-        position: 0,
-      });
-    }
+    await syncBannerMedia(supabase, bannerId, "desktop", desktop);
+    await syncBannerMedia(supabase, bannerId, "mobile", mobile);
+    await syncBannerMedia(supabase, bannerId, "video", video);
   }
 
   await writeAuditLog({

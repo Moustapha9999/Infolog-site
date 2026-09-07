@@ -7,10 +7,14 @@ import { Intro } from "@/components/home/Intro";
 import { Mission } from "@/components/home/Mission";
 import { PolesGrid } from "@/components/home/PolesGrid";
 import { Stats } from "@/components/home/Stats";
+import { getHomeHeroSlides } from "@/lib/cms/banners";
 import { getPageSections, sectionValue } from "@/lib/cms/pages";
 
 export default async function HomePage() {
-  const sections = await getPageSections("home");
+  const [sections, slides] = await Promise.all([
+    getPageSections("home"),
+    getHomeHeroSlides(),
+  ]);
   return (
     <>
       <HomeBanners />
@@ -21,6 +25,9 @@ export default async function HomePage() {
           "Partenaire technologique des entreprises en Mauritanie et en Afrique",
         )}
         lead={sections.get("hero.lead")}
+        slides={slides}
+        welcomeMs={sections.get("hero.welcome_ms")}
+        intervalMs={sections.get("hero.slide_ms")}
       />
       <Intro title={sections.get("intro.title")} lead={sections.get("intro.lead")} />
       <Stats />

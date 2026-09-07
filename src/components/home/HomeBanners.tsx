@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { getActiveBanners } from "@/lib/cms/banners";
+import { getNewsBanners } from "@/lib/cms/banners";
 
 export async function HomeBanners() {
-  const banners = await getActiveBanners();
+  const banners = await getNewsBanners();
   if (banners.length === 0) return null;
 
   return (

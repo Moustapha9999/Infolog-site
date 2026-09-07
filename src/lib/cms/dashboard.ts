@@ -25,6 +25,7 @@ export async function getDashboardStats() {
     videos,
     unread,
     pages,
+    banners,
   ] = await Promise.all([
     countRows("products"),
     countRows("products", { column: "is_active", value: true }),
@@ -35,6 +36,7 @@ export async function getDashboardStats() {
     countRows("media", { column: "kind", value: "video" }),
     countRows("contact_messages", { column: "read_at", value: null }),
     countRows("pages"),
+    countRows("banners"),
   ]);
 
   const supabase = await createServerSupabaseClient();
@@ -67,6 +69,7 @@ export async function getDashboardStats() {
     videos,
     unread,
     pages,
+    banners,
     latestProducts: latestProducts ?? [],
     latestMessages: latestMessages ?? [],
     latestLogs: latestLogs ?? [],

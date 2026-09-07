@@ -50,11 +50,13 @@ export function AdminSelect({
   label,
   name,
   defaultValue,
+  hint,
   children,
 }: {
   label: string;
   name: string;
   defaultValue?: string | number | null;
+  hint?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -69,6 +71,7 @@ export function AdminSelect({
       >
         {children}
       </select>
+      {hint ? <p className="mt-1 text-xs text-mute">{hint}</p> : null}
     </label>
   );
 }

@@ -26,6 +26,7 @@ export default async function AdminDashboardPage() {
     { label: "Marques", value: stats.brands },
     { label: "Services", value: stats.services },
     { label: "Pages", value: stats.pages },
+    { label: "Slides accueil", value: stats.banners },
     { label: "Images", value: stats.images },
   ];
   const mixMax = Math.max(...mix.map((item) => item.value), 1);

@@ -5,7 +5,7 @@ export const adminLinks = [
   { href: "/admin/categories", label: "Catégories" },
   { href: "/admin/media", label: "Médias" },
   { href: "/admin/videos", label: "Vidéos" },
-  { href: "/admin/banners", label: "Bannières" },
+  { href: "/admin/banners", label: "Carrousel accueil" },
   { href: "/admin/services", label: "Services" },
   { href: "/admin/pages", label: "Pages" },
   { href: "/admin/messages", label: "Messages" },

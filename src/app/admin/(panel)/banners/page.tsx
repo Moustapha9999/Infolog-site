@@ -7,41 +7,55 @@ import {
 } from "@/components/admin/AdminActions";
 import { AdminEmpty, AdminPageHeader, AdminPanel } from "@/components/admin/AdminChrome";
 import { AdminCheck, AdminField, AdminSelect, AdminSubmit } from "@/components/admin/AdminField";
-import { listAdminBanners } from "@/lib/cms/banners";
+import { listAdminBanners, type AdminBanner } from "@/lib/cms/banners";
 import { toDatetimeLocal } from "@/lib/cms/format";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
-import type { BannerRecord, MediaRecord } from "@/lib/cms/types";
+import type { MediaRecord } from "@/lib/cms/types";
 
 function BannerFields({
   banner,
   images,
   videos,
 }: {
-  banner?: BannerRecord;
+  banner?: AdminBanner;
   images: Pick<MediaRecord, "id" | "title" | "kind">[];
   videos: Pick<MediaRecord, "id" | "title" | "kind">[];
 }) {
   return (
     <>
-      <AdminField label="Titre" name="title" defaultValue={banner?.title} required />
+      <AdminField
+        label="Titre"
+        name="title"
+        defaultValue={banner?.title}
+        required
+        hint="Nom affiché sur le slide (ex. Infogérance)."
+      />
       <AdminField label="Sous-titre" name="subtitle" defaultValue={banner?.subtitle} />
       <AdminField
         label="Description"
         name="description"
         textarea
         defaultValue={banner?.description}
+        hint="Texte sous le titre du slide."
       />
       <AdminField
         label="Texte du bouton"
         name="button_label"
         defaultValue={banner?.button_label}
+        hint="Laisser vide pour « Découvrir » + titre."
       />
-      <AdminField label="URL du bouton" name="button_href" defaultValue={banner?.button_href} />
+      <AdminField
+        label="URL du bouton"
+        name="button_href"
+        defaultValue={banner?.button_href}
+        hint="Ex. /infogerance, /btp, /contact."
+      />
       <AdminField
         label="Ordre"
         name="sort_order"
         type="number"
         defaultValue={banner?.sort_order ?? 0}
+        hint="Du plus petit au plus grand dans le carrousel."
       />
       <AdminField
         label="Début"
@@ -55,7 +69,12 @@ function BannerFields({
         type="datetime-local"
         defaultValue={toDatetimeLocal(banner?.ends_at)}
       />
-      <AdminSelect label="Image desktop" name="desktop_media_id">
+      <AdminSelect
+        label="Image du slide"
+        name="desktop_media_id"
+        defaultValue={banner?.desktop_media_id}
+        hint="Obligatoire pour le carrousel d’accueil. Sans image, la bannière apparaît comme actualité au-dessus du hero."
+      >
         <option value="">—</option>
         {images.map((item) => (
           <option key={item.id} value={item.id}>
@@ -63,7 +82,11 @@ function BannerFields({
           </option>
         ))}
       </AdminSelect>
-      <AdminSelect label="Image mobile" name="mobile_media_id">
+      <AdminSelect
+        label="Image mobile"
+        name="mobile_media_id"
+        defaultValue={banner?.mobile_media_id}
+      >
         <option value="">—</option>
         {images.map((item) => (
           <option key={item.id} value={item.id}>
@@ -71,7 +94,11 @@ function BannerFields({
           </option>
         ))}
       </AdminSelect>
-      <AdminSelect label="Vidéo" name="video_media_id">
+      <AdminSelect
+        label="Vidéo (optionnel)"
+        name="video_media_id"
+        defaultValue={banner?.video_media_id}
+      >
         <option value="">—</option>
         {videos.map((item) => (
           <option key={item.id} value={item.id}>
@@ -98,10 +125,14 @@ export default async function AdminBannersPage() {
 
   return (
     <div className="space-y-8">
-      <AdminPageHeader eyebrow="Accueil" title="Bannières" />
+      <AdminPageHeader
+        eyebrow="Accueil"
+        title="Carrousel d’accueil"
+        description="Après l’écran d’accueil (texte + réseau), les bannières avec image défilent en haut du site. Sans bannière image active, le site affiche les 6 activités par défaut (Infogérance, Monétique, ERP, BTP, Téléphonie, Électroménager). Le texte du welcome se règle dans Pages → Accueil (hero.title, hero.lead, hero.welcome_ms, hero.slide_ms)."
+      />
       <AdminPanel title="Liste">
         {banners.length === 0 ? (
-          <AdminEmpty>Aucune bannière.</AdminEmpty>
+          <AdminEmpty>Aucune bannière. Le site utilise alors les 6 visuels d’activités par défaut.</AdminEmpty>
         ) : (
           <ul className="divide-y divide-ink/10">
             {banners.map((banner) => (
@@ -109,11 +140,27 @@ export default async function AdminBannersPage() {
                 key={banner.id}
                 className="flex items-center justify-between gap-4 py-4 first:pt-0 last:pb-0"
               >
-                <div>
-                  <p className="font-medium">{banner.title}</p>
-                  <p className="text-xs text-mute">
-                    {banner.is_active ? "Active" : "Inactive"} · ordre {banner.sort_order}
-                  </p>
+                <div className="flex min-w-0 items-center gap-3">
+                  {banner.desktopSrc ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={banner.desktopSrc}
+                      alt=""
+                      className="h-12 w-20 shrink-0 object-cover"
+                    />
+                  ) : (
+                    <span className="grid h-12 w-20 shrink-0 place-items-center border border-dashed border-ink/15 font-mono text-[10px] uppercase tracking-[0.12em] text-mute">
+                      Texte
+                    </span>
+                  )}
+                  <div className="min-w-0">
+                    <p className="font-medium">{banner.title}</p>
+                    <p className="text-xs text-mute">
+                      {banner.is_active ? "Active" : "Inactive"} ·{" "}
+                      {banner.desktopSrc ? "carrousel" : "actualité"} · ordre{" "}
+                      {banner.sort_order}
+                    </p>
+                  </div>
                 </div>
                 <AdminRowActions>
                   <AdminFormDialog action={saveBanner} title="Modifier la bannière" wide>

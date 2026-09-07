@@ -144,6 +144,13 @@ async function main() {
           value:
             "Partenaire technologique des entreprises en Mauritanie et en Afrique",
         },
+        {
+          key: "hero.lead",
+          value:
+            "Notre mission est de fournir aux entreprises en Mauritanie et en Afrique les outils technologiques nécessaires à leur développement. Nous accompagnons nos partenaires dans leur évolution numérique en proposant des solutions adaptées à leurs besoins et à leurs réalités.",
+        },
+        { key: "hero.welcome_ms", value: "2300" },
+        { key: "hero.slide_ms", value: "1900" },
       ],
     },
     { slug: "telephonie", title: "Téléphonie", sections: [{ key: "title", value: "Téléphonie" }] },

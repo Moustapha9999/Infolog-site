@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { deleteSection, savePage, saveSection } from "@/app/admin/actions/content";
 import {
@@ -21,6 +22,21 @@ export default async function AdminPageDetail({
   return (
     <div className="space-y-8">
       <AdminPageHeader eyebrow="Contenus" title={page.title} />
+      {page.slug === "home" ? (
+        <p className="max-w-2xl text-sm leading-6 text-mute">
+          Accueil : <code className="font-mono text-xs">hero.title</code> et{" "}
+          <code className="font-mono text-xs">hero.lead</code> alimentent
+          l’écran d’accueil.{" "}
+          <code className="font-mono text-xs">hero.welcome_ms</code> (durée du
+          welcome) et <code className="font-mono text-xs">hero.slide_ms</code>{" "}
+          (durée de chaque visuel) sont en millisecondes. Les images du
+          carrousel se gèrent dans{" "}
+          <Link href="/admin/banners" className="text-plan underline">
+            Carrousel accueil
+          </Link>
+          .
+        </p>
+      ) : null}
       <AdminPanel title="Métadonnées" className="max-w-xl">
         <form action={savePage} className="grid gap-4">
           <input type="hidden" name="id" value={page.id} />
