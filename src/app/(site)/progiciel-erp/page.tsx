@@ -14,6 +14,32 @@ export const metadata = {
 export default function ErpPage() {
   return (
     <>
+      <section className="relative isolate overflow-hidden border-b border-ink/10">
+        <div className="relative min-h-[240px] sm:min-h-[300px] lg:min-h-[360px]">
+          <Image
+            src="/brand/erp-hero.jpg"
+            alt="Modules interconnectés d'un progiciel ERP"
+            fill
+            priority
+            quality={95}
+            sizes="100vw"
+            className="object-cover object-right"
+          />
+          <div
+            className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,24,32,0.55)_0%,rgba(16,24,32,0.2)_50%,rgba(16,24,32,0.28)_100%)]"
+            aria-hidden
+          />
+          <Container
+            wide
+            className="relative flex min-h-[240px] items-center py-16 sm:min-h-[300px] lg:min-h-[360px]"
+          >
+            <h1 className={cn(type.h1, "border-l-2 border-paper pl-5 text-paper sm:pl-6")}>
+              {erp.title}
+            </h1>
+          </Container>
+        </div>
+      </section>
+
       <section className="border-b border-ink/10 bg-paper">
         <Container
           wide
@@ -21,7 +47,7 @@ export default function ErpPage() {
         >
           <header className="border-l-2 border-plan pl-5 sm:pl-6 lg:col-span-4">
             <SectionLabel>Solutions IT</SectionLabel>
-            <h1 className={cn(type.h1, "mt-4 text-ink")}>{erp.title}</h1>
+            <h2 className={cn(type.h2, "mt-4 text-ink")}>{erp.title}</h2>
             <p className={cn(type.body, "mt-4 text-mute")}>({erp.subtitle})</p>
           </header>
 
@@ -66,14 +92,14 @@ export default function ErpPage() {
             ))}
           </ul>
 
-          <div className="relative mt-8 aspect-[16/7] overflow-hidden border border-ink/10 bg-paper">
+          <div className="relative mt-8 aspect-[16/7] overflow-hidden border border-ink/10 bg-ink">
             <Image
-              src="/brand/erp-mocks.jpg"
-              alt="Interface progiciel ERP"
+              src="/brand/erp-hero.jpg"
+              alt="Modules interconnectés d'un progiciel ERP"
               fill
-              quality={90}
+              quality={92}
               sizes="100vw"
-              className="object-contain object-center p-4 sm:p-8"
+              className="object-cover object-right"
             />
           </div>
         </Container>

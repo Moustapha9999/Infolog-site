@@ -101,6 +101,8 @@ export function HeroSlider({
 
   if (!slide) return null;
 
+  const productRight = !isWelcome && slide.imageLayout === "right";
+
   return (
     <section
       role="region"
@@ -132,20 +134,42 @@ export function HeroSlider({
               !isWelcome && itemIndex === index ? "opacity-100" : "opacity-0",
             )}
           >
-            <Image
-              src={item.image}
-              alt=""
-              fill
-              priority={itemIndex === 0}
-              quality={90}
-              sizes="100vw"
-              className="object-cover"
-              style={{ objectPosition: item.objectPosition ?? "center" }}
-            />
+            <div
+              className={cn(
+                "absolute",
+                item.imageLayout === "right"
+                  ? "inset-y-0 right-0 w-[72%] sm:w-[64%] lg:w-[56%]"
+                  : "inset-0",
+              )}
+            >
+              <Image
+                src={item.image}
+                alt=""
+                fill
+                priority={itemIndex === 0}
+                quality={90}
+                sizes="(min-width: 1024px) 56vw, 100vw"
+                className={
+                  item.imageLayout === "right"
+                    ? "object-cover object-right"
+                    : "object-cover"
+                }
+                style={{ objectPosition: item.objectPosition ?? "center" }}
+              />
+            </div>
           </div>
         ))}
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,#101820_0%,rgba(16,24,32,0.9)_26%,rgba(16,24,32,0.5)_50%,rgba(16,24,32,0.18)_76%,rgba(16,24,32,0.32)_100%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(16,24,32,0.28)_0%,transparent_28%,transparent_72%,rgba(16,24,32,0.45)_100%)]" />
+        <div
+          className={cn(
+            "absolute inset-0",
+            productRight
+              ? "bg-[linear-gradient(90deg,#101820_0%,#101820_28%,rgba(16,24,32,0.82)_38%,rgba(16,24,32,0.28)_52%,transparent_68%)]"
+              : "bg-[linear-gradient(90deg,#101820_0%,rgba(16,24,32,0.9)_26%,rgba(16,24,32,0.5)_50%,rgba(16,24,32,0.18)_76%,rgba(16,24,32,0.32)_100%)]",
+          )}
+        />
+        {productRight ? null : (
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(16,24,32,0.28)_0%,transparent_28%,transparent_72%,rgba(16,24,32,0.45)_100%)]" />
+        )}
       </div>
 
       <div
@@ -205,7 +229,7 @@ export function HeroSlider({
       >
         <Container
           wide
-          className="flex min-h-[22rem] items-center py-16 sm:min-h-[26rem] lg:min-h-[28rem] lg:py-20"
+          className="flex min-h-[22rem] items-center py-16 sm:min-h-[28rem] lg:min-h-[32rem] lg:py-20"
         >
           <div className="max-w-xl lg:max-w-2xl">
             <p

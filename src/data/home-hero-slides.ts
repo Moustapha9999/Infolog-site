@@ -14,6 +14,8 @@ export type HomeHeroSlide = {
   imageAlt: string;
   ctaLabel?: string;
   objectPosition?: string;
+  /** `right` : le visuel reste lisible à droite, sans voile sombre. */
+  imageLayout?: "bleed" | "right";
 };
 
 /** Durée de l’écran d’accueil avant les visuels d’activités. */
@@ -55,7 +57,7 @@ export const homeHeroSlides: HomeHeroSlide[] = [
     lead: erp.description,
     image: "/brand/erp-hero.jpg",
     imageAlt: "Interface et modules d'un progiciel ERP",
-    objectPosition: "center",
+    objectPosition: "center right",
   },
   {
     id: "btp",
@@ -73,7 +75,8 @@ export const homeHeroSlides: HomeHeroSlide[] = [
     lead: telephonie.description,
     image: "/brand/telephonie/catalog/s26-series.png",
     imageAlt: "Téléphonie Samsung Galaxy chez INFOLOG",
-    objectPosition: "center 78%",
+    objectPosition: "right center",
+    imageLayout: "right",
   },
   {
     id: "electromenager",
