@@ -4,16 +4,30 @@ import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { isStaffRole } from "@/lib/cms/roles";
 import { createServerClient } from "@supabase/ssr";
 import { getSupabasePublishableKey, getSupabaseUrl } from "@/lib/supabase/env";
+import {
+  isPublicAdminAuthPath,
+  RESET_PASSWORD_PATH,
+} from "@/lib/cms/admin-path";
+import { PASSWORD_RECOVERY_COOKIE } from "@/lib/cms/password-recovery";
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const response = await updateSession(request);
+  const recovering = request.cookies.get(PASSWORD_RECOVERY_COOKIE)?.value === "1";
+
+  if (
+    recovering &&
+    pathname.startsWith("/admin") &&
+    !pathname.startsWith(RESET_PASSWORD_PATH)
+  ) {
+    return NextResponse.redirect(new URL(RESET_PASSWORD_PATH, request.url));
+  }
 
   if (!pathname.startsWith("/admin")) {
     return response;
   }
 
-  if (pathname.startsWith("/admin/login")) {
+  if (isPublicAdminAuthPath(pathname)) {
     return response;
   }
 
