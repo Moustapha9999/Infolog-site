@@ -139,6 +139,11 @@ export type PhoneCommerce = {
   isNew?: boolean;
   isPromo?: boolean;
   availability?: Availability;
+  brandName?: string | null;
+  categoryLabel?: string | null;
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  searchKeywords?: string[];
 };
 
 export type CatalogPhone = PhoneProduct & PhoneCommerce;

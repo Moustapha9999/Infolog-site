@@ -128,7 +128,7 @@ export default async function AdminBannersPage() {
       <AdminPageHeader
         eyebrow="Accueil"
         title="Carrousel d’accueil"
-        description="Après l’écran d’accueil (texte + réseau), les bannières avec image défilent en haut du site. Sans bannière image active, le site affiche les 6 activités par défaut (Infogérance, Monétique, ERP, BTP, Téléphonie, Électroménager). Le texte du welcome se règle dans Pages → Accueil (hero.title, hero.lead, hero.welcome_ms, hero.slide_ms)."
+        description="Après l’écran d’accueil (texte + réseau), les bannières avec image défilent en haut du site. Sans bannière image active, le site affiche les 6 activités par défaut (Infogérance, Monétique, ERP, BTP, Téléphonie, Électroménager). Les slides actives sont aussi indexées dans la recherche globale. Le texte du welcome se règle dans Pages → Accueil (hero.title, hero.lead, hero.welcome_ms, hero.slide_ms)."
       />
       <AdminPanel title="Liste">
         {banners.length === 0 ? (

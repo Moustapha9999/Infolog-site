@@ -13,7 +13,11 @@ export default async function AdminServicesPage() {
   const services = await listAdminServices();
   return (
     <div className="space-y-8">
-      <AdminPageHeader eyebrow="Contenus" title="Services" />
+      <AdminPageHeader
+        eyebrow="Contenus"
+        title="Services"
+        description="Services actifs indexés dans la recherche globale (lien vers Qui sommes-nous)."
+      />
       <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
         <AdminPanel title="Liste">
           {services.length === 0 ? (

@@ -28,6 +28,23 @@ export async function getPageSections(slug: string) {
   }
 }
 
+/** Pages CMS publiées — alimentent la recherche globale. */
+export async function getPublishedPages(): Promise<PageRecord[]> {
+  if (!isSupabaseConfigured()) return [];
+  try {
+    const supabase = await createServerSupabaseClient();
+    const { data, error } = await supabase
+      .from("pages")
+      .select("*")
+      .eq("is_published", true)
+      .order("title", { ascending: true });
+    if (error || !data?.length) return [];
+    return data as PageRecord[];
+  } catch {
+    return [];
+  }
+}
+
 export function sectionValue(
   sections: Map<string, string>,
   key: string,

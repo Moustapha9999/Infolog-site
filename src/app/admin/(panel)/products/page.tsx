@@ -17,6 +17,7 @@ export default async function AdminProductsPage() {
       <AdminPageHeader
         eyebrow="Catalogue"
         title="Produits"
+        description="Les produits actifs (non masqués) alimentent automatiquement la recherche globale du site."
         action={
           <Link
             href="/admin/products/new"

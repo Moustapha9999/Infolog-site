@@ -31,6 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/electromenager",
     ...phones.map((phone) => `/telephonie/${phone.id}`),
     "/contact",
+    "/recherche",
     ...poles.map((pole) => `/${pole.slug}`),
   ];
 

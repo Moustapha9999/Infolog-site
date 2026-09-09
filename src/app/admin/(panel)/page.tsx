@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Mail, MailOpen } from "lucide-react";
+import { Mail, MailOpen, Search } from "lucide-react";
 import { deleteMessage, deleteProduct, toggleMessageRead } from "@/app/admin/actions/content";
 import {
   AdminDeleteDialog,
@@ -39,6 +39,34 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="space-y-6">
+      <AdminPanel title="Recherche globale INFOLOG">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div className="max-w-2xl">
+            <p className="text-sm leading-6 text-mute">
+              Les contenus <span className="text-ink">actifs / publiés</span>{" "}
+              (produits, services, pages, catégories, marques, slides
+              d’accueil) alimentent automatiquement la barre « Rechercher sur
+              INFOLOG… » et la page{" "}
+              <span className="font-mono text-xs text-ink">/recherche</span>.
+            </p>
+            <p className="mt-2 text-sm leading-6 text-mute">
+              Un produit inactif ou masqué disparaît de la recherche. Vous
+              pouvez enrichir l’index avec des mots-clés dédiés sur chaque
+              fiche produit.
+            </p>
+          </div>
+          <Link
+            href="/recherche"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex shrink-0 items-center gap-2 border border-ink/15 px-4 py-2 text-sm text-ink hover:border-plan hover:text-plan"
+          >
+            <Search className="h-4 w-4" aria-hidden />
+            Tester la recherche
+          </Link>
+        </div>
+      </AdminPanel>
+
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {kpis.map((card) => (
           <div key={card.label} className="frame-corners border border-ink/10 bg-paper p-4">

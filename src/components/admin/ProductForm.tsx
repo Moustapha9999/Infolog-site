@@ -35,6 +35,9 @@ export function ProductForm({
   const variants = Array.isArray(details.variants)
     ? (details.variants as string[]).join("\n")
     : "";
+  const searchKeywords = Array.isArray(details.searchKeywords)
+    ? (details.searchKeywords as string[]).join(", ")
+    : "";
 
   return (
     <form action={saveProduct} className="grid max-w-3xl gap-5">
@@ -85,6 +88,14 @@ export function ProductForm({
         name="variants"
         textarea
         defaultValue={variants}
+      />
+      <AdminField
+        label="Mots-clés recherche"
+        name="search_keywords"
+        textarea
+        rows={3}
+        defaultValue={searchKeywords}
+        hint="Séparés par virgule ou ligne. Indexés dans la recherche globale du site dès que le produit est actif."
       />
       <AdminField
         label="Caractéristiques (libellé|valeur)"

@@ -23,7 +23,7 @@ export default async function AdminPagesPage() {
       <AdminPageHeader
         eyebrow="Contenus"
         title="Pages"
-        description="Coordonnées du site (téléphones, e-mail, adresse, carte) : page « Coordonnées » (slug contact)."
+        description="Pages publiées indexées dans la recherche globale. Coordonnées du site : page « Coordonnées » (slug contact)."
       />
       {!contactPage ? (
         <AdminPanel title="Coordonnées du site">

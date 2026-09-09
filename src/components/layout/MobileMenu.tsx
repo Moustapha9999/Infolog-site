@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
+import { SiteSearch } from "@/components/search/SiteSearch";
 import { mainNav } from "@/data/nav";
 import { site } from "@/data/site";
 import type { SiteContact } from "@/lib/cms/site-contact";
@@ -57,48 +58,58 @@ export function MobileMenu({
             }
 
             return (
-              <details key={item.id} className="group">
-                <summary className="cursor-pointer list-none text-xl text-ink">
-                  <span className="flex items-center justify-between border-b border-ink/10 pb-3">
-                    {item.label}
-                    <span className="font-mono text-xs text-mute">+</span>
-                  </span>
-                </summary>
-                <ul className="space-y-2 py-3 pl-1">
-                  {item.type === "mega"
-                    ? item.groups.map((group) => (
-                        <li key={group.label}>
-                          <p className="pt-2 font-mono text-[11px] uppercase tracking-[0.22em] text-plan">
-                            {group.label}
-                          </p>
-                          <ul className="mt-2 space-y-2">
-                            {group.items.map((child) => (
-                              <li key={`${child.href}-${child.label}`}>
-                                <Link
-                                  href={child.href}
-                                  onClick={onClose}
-                                  className="text-sm text-mute"
-                                >
-                                  {child.label}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </li>
-                      ))
-                    : item.items.map((child) => (
-                        <li key={child.href}>
-                          <Link
-                            href={child.href}
-                            onClick={onClose}
-                            className="text-sm text-mute"
-                          >
-                            {child.label}
-                          </Link>
-                        </li>
-                      ))}
-                </ul>
-              </details>
+              <div key={item.id}>
+                <details className="group">
+                  <summary className="cursor-pointer list-none text-xl text-ink">
+                    <span className="flex items-center justify-between border-b border-ink/10 pb-3">
+                      {item.label}
+                      <span className="font-mono text-xs text-mute">+</span>
+                    </span>
+                  </summary>
+                  <ul className="space-y-2 py-3 pl-1">
+                    {item.type === "mega"
+                      ? item.groups.map((group) => (
+                          <li key={group.label}>
+                            <p className="pt-2 font-mono text-[11px] uppercase tracking-[0.22em] text-plan">
+                              {group.label}
+                            </p>
+                            <ul className="mt-2 space-y-2">
+                              {group.items.map((child) => (
+                                <li key={`${child.href}-${child.label}`}>
+                                  <Link
+                                    href={child.href}
+                                    onClick={onClose}
+                                    className="text-sm text-mute"
+                                  >
+                                    {child.label}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </li>
+                        ))
+                      : item.items.map((child) => (
+                          <li key={child.href}>
+                            <Link
+                              href={child.href}
+                              onClick={onClose}
+                              className="text-sm text-mute"
+                            >
+                              {child.label}
+                            </Link>
+                          </li>
+                        ))}
+                  </ul>
+                </details>
+                {item.type === "mega" && item.id === "services" ? (
+                  <div className="mt-4">
+                    <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.22em] text-plan">
+                      Recherche
+                    </p>
+                    <SiteSearch variant="mobile" onNavigate={onClose} />
+                  </div>
+                ) : null}
+              </div>
             );
           })}
           <Link

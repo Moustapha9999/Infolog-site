@@ -85,6 +85,8 @@ async function revalidatePublic() {
   revalidatePath("/qui-sommes-nous");
   revalidatePath("/qui-sommes-nous/national-cash");
   revalidatePath("/contact");
+  revalidatePath("/recherche");
+  revalidatePath("/api/search");
   revalidatePath("/admin");
 }
 
@@ -189,6 +191,10 @@ export async function saveProduct(formData: FormData) {
     .split("\n")
     .map((line) => line.trim())
     .filter(Boolean);
+  const searchKeywords = String(formData.get("search_keywords") ?? "")
+    .split(/[\n,;]+/)
+    .map((line) => line.trim())
+    .filter(Boolean);
 
   let previousDetails: Record<string, unknown> = {};
   if (id) {
@@ -207,7 +213,13 @@ export async function saveProduct(formData: FormData) {
     category_id: text(formData, "category_id"),
     tagline: text(formData, "tagline"),
     description: text(formData, "description"),
-    details: { ...previousDetails, specs, highlights, variants },
+    details: {
+      ...previousDetails,
+      specs,
+      highlights,
+      variants,
+      searchKeywords,
+    },
     is_active: bool(formData, "is_active"),
     is_featured: bool(formData, "is_featured"),
     is_new: bool(formData, "is_new"),

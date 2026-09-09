@@ -45,9 +45,16 @@ export function mapProductToPhone(
   const stories = linksByRole(links, "story");
   const designVideos = linksByRole(links, "design");
 
-  const fallback = details as Partial<PhoneProduct>;
+  const fallback = details as Partial<PhoneProduct> & {
+    searchKeywords?: unknown;
+  };
   const hero = heroes[0] ?? fallback.hero;
   const image = covers[0] ?? fallback.image ?? hero;
+  const searchKeywords = Array.isArray(fallback.searchKeywords)
+    ? fallback.searchKeywords.filter(
+        (item): item is string => typeof item === "string" && item.trim() !== "",
+      )
+    : [];
 
   return {
     id: product.slug,
@@ -89,6 +96,11 @@ export function mapProductToPhone(
     isNew: product.is_new,
     isPromo: promo,
     availability: product.availability,
+    brandName: product.brands?.name ?? null,
+    categoryLabel: product.categories?.name ?? null,
+    metaTitle: product.meta_title,
+    metaDescription: product.meta_description,
+    searchKeywords,
   };
 }
 

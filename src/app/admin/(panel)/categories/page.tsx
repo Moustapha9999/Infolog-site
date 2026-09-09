@@ -17,7 +17,11 @@ export default async function AdminCategoriesPage() {
 
   return (
     <div className="space-y-8">
-      <AdminPageHeader eyebrow="Référentiel" title="Catégories" />
+      <AdminPageHeader
+        eyebrow="Référentiel"
+        title="Catégories"
+        description="Catégories actives visibles dans la recherche globale (renvoi vers Téléphonie)."
+      />
       <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
         <AdminPanel title="Liste">
           {categories.length === 0 ? (

@@ -17,7 +17,11 @@ export default async function AdminBrandsPage() {
 
   return (
     <div className="space-y-8">
-      <AdminPageHeader eyebrow="Référentiel" title="Marques" />
+      <AdminPageHeader
+        eyebrow="Référentiel"
+        title="Marques"
+        description="Marques actives indexées dans la recherche globale (renvoi vers Téléphonie)."
+      />
       <div className="grid gap-8 lg:grid-cols-[1fr_300px]">
         <AdminPanel title="Liste">
           {brands.length === 0 ? (
