@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { contactSchema } from "@/lib/cms/contact";
+import { notifyContactEmail } from "@/lib/cms/notify-contact";
 import { clientKey, rateLimit } from "@/lib/cms/rate-limit";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
@@ -48,6 +49,8 @@ export async function POST(request: Request) {
       { status: 500 },
     );
   }
+
+  await notifyContactEmail(parsed.data);
 
   return NextResponse.json({ ok: true });
 }

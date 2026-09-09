@@ -1,5 +1,6 @@
 import Image from "next/image";
 import {
+  ArrowUpRight,
   BarChart3,
   Briefcase,
   CircleDollarSign,
@@ -11,7 +12,9 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionLabel } from "@/components/sections/SectionLabel";
+import { OutboundCta } from "@/components/sections/OutboundCta";
 import { TechnicalFrame } from "@/components/ui/TechnicalFrame";
+import { Button } from "@/components/ui/Button";
 import { NationalCashStats } from "@/components/national-cash/NationalCashStats";
 import { nationalCash } from "@/data/site";
 import { type } from "@/lib/typography";
@@ -35,7 +38,7 @@ export default function NationalCashPage() {
   return (
     <>
       <section className="relative isolate overflow-hidden border-b border-ink/10 bg-ink">
-        <div className="relative h-[200px] w-full sm:h-[240px] lg:h-[280px]">
+        <div className="relative h-[240px] w-full sm:h-[280px] lg:h-[320px]">
           <Image
             src="/brand/national-cash-hero.jpg"
             alt="Billets en ouguiya — National Cash"
@@ -53,14 +56,17 @@ export default function NationalCashPage() {
             wide
             className="absolute inset-0 flex items-end pb-5 sm:pb-6 lg:pb-8"
           >
-            <h1
-              className={cn(
-                type.h1,
-                "border-l-2 border-paper pl-5 text-paper sm:pl-6",
-              )}
-            >
-              {nationalCash.title}
-            </h1>
+            <div className="border-l-2 border-paper pl-5 sm:pl-6">
+              <h1 className={cn(type.h1, "text-paper")}>
+                {nationalCash.title}
+              </h1>
+              <div className="mt-5">
+                <Button href={nationalCash.website.href}>
+                  {nationalCash.website.cta}
+                  <ArrowUpRight className="h-4 w-4" aria-hidden />
+                </Button>
+              </div>
+            </div>
           </Container>
         </div>
       </section>
@@ -250,6 +256,15 @@ export default function NationalCashPage() {
           </svg>
         </div>
       </section>
+
+      <OutboundCta
+        title="National Cash en ligne"
+        lead="Retrouvez l'offre, les services et les démarches sur le site officiel National Cash."
+        primary={{
+          href: nationalCash.website.href,
+          label: nationalCash.website.cta,
+        }}
+      />
     </>
   );
 }

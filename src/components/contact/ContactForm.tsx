@@ -130,7 +130,7 @@ export function ContactForm({ variant = "default" }: ContactFormProps) {
             type="submit"
             className="bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.16em] text-paper transition-colors hover:bg-[#a34f27]"
           >
-            Envoi
+            Envoyer
           </button>
         </div>
         {status !== "idle" ? (
@@ -184,7 +184,7 @@ export function ContactForm({ variant = "default" }: ContactFormProps) {
       </label>
       <button
         type="submit"
-        className="bg-copper px-5 py-3 text-sm text-paper hover:bg-[#a34f27]"
+        className="bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.16em] text-paper transition-colors hover:bg-[#a34f27]"
       >
         Envoyer
       </button>

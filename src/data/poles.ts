@@ -258,6 +258,7 @@ const activityPages: Record<string, string> = {
   "e-learning": "/pearson-vue#e-learning",
   "centre-appel": "/centre-appel",
   telephonie: "/telephonie",
+  "izi-shop": "/telephonie/izi-shop",
   btp: "/btp",
   electromenager: "/electromenager",
   energie: "/energie",

@@ -1,27 +1,36 @@
+import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
 import { ContactFormGate } from "@/components/contact/ContactFormGate";
+import { ContactMap } from "@/components/contact/ContactMap";
+import { SectionLabel } from "@/components/sections/SectionLabel";
 import { Container } from "@/components/ui/Container";
 import { TechnicalFrame } from "@/components/ui/TechnicalFrame";
 import { site } from "@/data/site";
+import { getSiteContact } from "@/lib/cms/site-contact";
+import { type } from "@/lib/typography";
+import { cn } from "@/lib/utils";
 
-export const metadata = {
-  title: "Contact",
-  description: "Contacter INFOLOG à Nouakchott.",
-};
+export async function generateMetadata() {
+  const contact = await getSiteContact();
+  return {
+    title: "Contact",
+    description: `Contacter INFOLOG à Nouakchott — ${contact.phones.map((item) => item.display).join(" · ")}, ${contact.email}.`,
+  };
+}
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const contact = await getSiteContact();
+
   return (
     <>
       <section className="border-b border-ink/10 bg-paper-2 py-16">
         <Container>
-          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-plan">
-            05 — Contact
-          </p>
+          <SectionLabel>Contact</SectionLabel>
           <h1 className="mt-4 text-4xl font-medium tracking-tight text-ink sm:text-5xl">
             Nous contacter
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-7 text-mute">
-            Décrivez votre besoin ci-dessous. Les coordonnées officielles (téléphone, e-mail, adresse) 
-            seront rendues accessibles dès la validation de votre demande par &quot;l&apos;équipe INFOLOG&quot;.
+            Décrivez votre besoin ci-dessous. Notre équipe commerciale vous
+            répond depuis {site.city}.
           </p>
         </Container>
       </section>
@@ -30,27 +39,92 @@ export default function ContactPage() {
           <ContactFormGate />
         </TechnicalFrame>
         <div className="space-y-6">
-          <TechnicalFrame className="p-6">
+          <TechnicalFrame className="p-6 sm:p-8">
             <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-plan">
-              Localisation
+              Coordonnées
             </p>
-            <p className="mt-4 text-sm leading-7 text-mute">
-              {site.city}, {site.country}
-            </p>
-            <p className="mt-2 font-mono text-xs text-mute">
-              Adresse complète — à confirmer
-            </p>
-          </TechnicalFrame>
-          <TechnicalFrame className="p-6">
-            <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-plan">
-              À fournir
-            </p>
-            <ul className="mt-4 space-y-2 font-mono text-xs leading-6 text-mute">
-              <li>Téléphone officiel</li>
-              <li>E-mail de destination du formulaire</li>
-              <li>Adresse et carte</li>
-              <li>Réseaux sociaux</li>
+            <ul className="mt-5 space-y-4">
+              <li className="flex items-start gap-3">
+                <Phone
+                  className="mt-0.5 h-4 w-4 shrink-0 text-copper"
+                  aria-hidden
+                />
+                <div>
+                  <p className={cn(type.label, "tracking-[0.2em] text-plan")}>
+                    Téléphone
+                  </p>
+                  <div className="mt-1 space-y-1">
+                    {contact.phones.map((item) => (
+                      <a
+                        key={item.href}
+                        href={item.href}
+                        className={cn(
+                          type.bodyCard,
+                          "block text-ink hover:text-plan",
+                        )}
+                      >
+                        {item.display}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </li>
+              <li className="flex items-start gap-3">
+                <Mail
+                  className="mt-0.5 h-4 w-4 shrink-0 text-copper"
+                  aria-hidden
+                />
+                <div>
+                  <p className={cn(type.label, "tracking-[0.2em] text-plan")}>
+                    E-mail
+                  </p>
+                  <a
+                    href={contact.emailHref}
+                    className={cn(type.bodyCard, "mt-1 block text-ink hover:text-plan")}
+                  >
+                    {contact.email}
+                  </a>
+                </div>
+              </li>
+              <li className="flex items-start gap-3">
+                <MapPin
+                  className="mt-0.5 h-4 w-4 shrink-0 text-copper"
+                  aria-hidden
+                />
+                <div>
+                  <p className={cn(type.label, "tracking-[0.2em] text-plan")}>
+                    Adresse
+                  </p>
+                  <p className={cn(type.bodyCard, "mt-1 text-ink")}>
+                    {contact.address}
+                  </p>
+                  <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.16em] text-mute">
+                    {contact.plusCode}
+                  </p>
+                </div>
+              </li>
             </ul>
+          </TechnicalFrame>
+          <TechnicalFrame className="overflow-hidden">
+            <div className="flex items-center justify-between gap-3 border-b border-ink/10 px-6 py-4">
+              <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-plan">
+                Carte
+              </p>
+              <a
+                href={contact.mapsHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-copper hover:text-ink"
+              >
+                Google Maps
+                <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
+              </a>
+            </div>
+            <ContactMap
+              className="border-0"
+              embedSrc={contact.mapsEmbed}
+              street={contact.street}
+            />
           </TechnicalFrame>
         </div>
       </Container>

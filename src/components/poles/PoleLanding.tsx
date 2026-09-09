@@ -27,14 +27,22 @@ function PoleWide({
 }
 
 function extraLinks(slug: string) {
-  if (slug !== "virtualisation") return [];
-  return [
-    { href: "/virtualisation-serveurs", label: "Virtualisation de serveurs" },
-    {
-      href: "/virtualisation-postes",
-      label: "Virtualisation de postes et d'applications",
-    },
-  ];
+  if (slug === "virtualisation") {
+    return [
+      { href: "/virtualisation-serveurs", label: "Virtualisation de serveurs" },
+      {
+        href: "/virtualisation-postes",
+        label: "Virtualisation de postes et d'applications",
+      },
+    ];
+  }
+  if (slug === "telephonie") {
+    return [
+      { href: "/telephonie", label: "Téléphonie" },
+      { href: "/telephonie/izi-shop", label: "IZI SHOP" },
+    ];
+  }
+  return [];
 }
 
 function ActivityLinks({

@@ -1,10 +1,13 @@
+import { ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionLabel } from "@/components/sections/SectionLabel";
 import { Button } from "@/components/ui/Button";
+import { TechnicalFrame } from "@/components/ui/TechnicalFrame";
 import { PhoneCarousel } from "@/components/telephonie/PhoneCarousel";
 import { TelephonieHeroVisual } from "@/components/telephonie/TelephonieHeroVisual";
 import { TelephonieServiceTabs } from "@/components/telephonie/TelephonieServiceTabs";
 import { getPublishedProducts, telephonie } from "@/data/telephonie";
+import { iziShop } from "@/data/izi-shop";
 import { getPageSections, sectionValue } from "@/lib/cms/pages";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
@@ -57,6 +60,31 @@ export default async function TelephoniePage() {
               <p key={paragraph.slice(0, 40)}>{paragraph}</p>
             ))}
           </div>
+        </Container>
+      </section>
+
+      <section className="border-b border-ink/10 bg-paper-2/40 py-10 sm:py-12">
+        <Container>
+          <TechnicalFrame className="overflow-hidden">
+            <div className="flex flex-col gap-6 px-6 py-8 sm:px-8 lg:flex-row lg:items-center lg:justify-between">
+              <div className="max-w-xl">
+                <SectionLabel>{iziShop.title}</SectionLabel>
+                <h2 className={cn(type.h3, "mt-3 text-ink")}>
+                  {iziShop.heroTitle}
+                </h2>
+                <p className={cn(type.bodyCard, "mt-3 text-ink/80")}>
+                  {iziShop.heroLead}
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <Button href="/telephonie/izi-shop">Découvrir IZI SHOP</Button>
+                <Button href={iziShop.website.href} variant="outline">
+                  {iziShop.website.host}
+                  <ArrowUpRight className="h-4 w-4" aria-hidden />
+                </Button>
+              </div>
+            </div>
+          </TechnicalFrame>
         </Container>
       </section>
 

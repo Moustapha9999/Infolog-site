@@ -1,7 +1,7 @@
 export const site = {
   name: "INFOLOG",
   legalName: "INFOLOG",
-  url: "https://infolog.digital",
+  url: "https://infolog.mr",
   locale: "fr",
   city: "Nouakchott",
   country: "Mauritanie",
@@ -21,9 +21,27 @@ export const site = {
   presenceText:
     "INFOLOG s'appuie sur une présence en Mauritanie et dans plusieurs pays de la sous-région, notamment au Sénégal, en Côte d'Ivoire et au Mali. Cette implantation nous permet de mieux comprendre les enjeux des entreprises locales et de construire des solutions adaptées aux différents marchés africains.",
   foundedNote: "Présente depuis 15 ans sur la Mauritanie.",
-  phone: null as string | null,
-  email: null as string | null,
-  address: null as string | null,
+  phone: "+222 45 25 42 79",
+  phoneTel: "+22245254279",
+  phoneHref: "tel:+22245254279",
+  phones: [
+    { display: "+222 45 25 42 79", href: "tel:+22245254279" },
+    { display: "+222 47 94 00 56", href: "tel:+22247940056" },
+  ],
+  email: "commercial@infolog.mr",
+  address: "BP 1953, Rue Mohamed Lemine Ould Eye, Nouakchott, Mauritanie",
+  street: "Rue Mohamed Lemine Ould Eye",
+  postalBox: "BP 1953",
+  plusCode: "32Q6+X6 Nouakchott, Mauritanie",
+  geo: {
+    lat: 18.089889,
+    lng: -15.989528,
+  },
+  emailHref: "mailto:commercial@infolog.mr",
+  mapsHref:
+    "https://www.google.com/maps/search/?api=1&query=32Q6%2BX6+Nouakchott,+Mauritanie",
+  mapsEmbed:
+    "https://maps.google.com/maps?q=18.089889,-15.989528&hl=fr&z=17&output=embed",
   socials: [] as { label: string; href: string }[],
   /**
    * Vidéo « Nos activités » — à remplacer par l'URL YouTube officielle INFOLOG.
@@ -60,6 +78,11 @@ export const nationalCash = {
   title: "National Cash (NC)",
   description:
     "Société anonyme de microfinance mauritanienne agréée par la Banque Centrale de Mauritanie, créée en février 2018.",
+  website: {
+    href: "https://nationalcash.mr",
+    host: "nationalcash.mr",
+    cta: "Accéder au site National Cash",
+  },
   paragraphs: [
     "National Cash (NC) est une société anonyme de microfinance mauritanienne agréée par la Banque Centrale de Mauritanie (BCM). Créée en février 2018 et leader du secteur en Mauritanie, NC a pour objectif de favoriser l'inclusion économique et sociale des populations vulnérables (notamment les femmes, les jeunes et les populations rurales) et de contribuer au développement économique du pays. Elle œuvre en particulier pour la promotion de l'entrepreneuriat et contribue ainsi à l'effort national pour l'auto-emploi dans les quartiers et zones rurales défavorisés.",
     "National Cash offre à ses clients des services diversifiés et adaptés aux besoins de chaque micro-entrepreneur grâce à un réseau d'agences réparties sur l'ensemble du territoire. Elle les accompagne ainsi dans le maintien et le développement de leur activité pour améliorer durablement leurs conditions de vie.",

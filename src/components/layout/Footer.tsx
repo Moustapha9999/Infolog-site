@@ -3,10 +3,14 @@ import { poles } from "@/data/poles";
 import { site } from "@/data/site";
 import { Logo } from "@/components/ui/Logo";
 import { getPageSections, sectionValue } from "@/lib/cms/pages";
+import { getSiteContact } from "@/lib/cms/site-contact";
 
 export async function Footer() {
   const year = new Date().getFullYear();
-  const sections = await getPageSections("footer");
+  const [sections, contact] = await Promise.all([
+    getPageSections("footer"),
+    getSiteContact(),
+  ]);
   const tagline = sectionValue(
     sections,
     "tagline",
@@ -73,14 +77,21 @@ export async function Footer() {
               Coordonnées
             </p>
             <ul className="mt-4 space-y-2 text-sm text-paper/80">
+              <li>{contact.address}</li>
+              <li className="font-mono text-xs text-paper/50">
+                {contact.plusCode}
+              </li>
+              {contact.phones.map((item) => (
+                <li key={item.href}>
+                  <a href={item.href} className="hover:text-paper">
+                    {item.display}
+                  </a>
+                </li>
+              ))}
               <li>
-                {site.city}, {site.country}
-              </li>
-              <li className="font-mono text-xs text-paper/50">
-                Téléphone — à confirmer par INFOLOG
-              </li>
-              <li className="font-mono text-xs text-paper/50">
-                E-mail — à confirmer par INFOLOG
+                <a href={contact.emailHref} className="hover:text-paper">
+                  {contact.email}
+                </a>
               </li>
             </ul>
           </div>

@@ -42,7 +42,15 @@ export const mainNav: NavItem[] = [
   { type: "link", href: "/monetique", label: "Monétique" },
   { type: "link", href: "/progiciel-erp", label: "Progiciel ERP" },
   { type: "link", href: "/btp", label: "BTP" },
-  { type: "link", href: "/telephonie", label: "Téléphonie" },
+  {
+    type: "dropdown",
+    id: "telephonie",
+    label: "Téléphonie",
+    items: [
+      { href: "/telephonie", label: "Téléphonie" },
+      { href: "/telephonie/izi-shop", label: "IZI SHOP" },
+    ],
+  },
   { type: "link", href: "/electromenager", label: "Électroménager" },
   {
     type: "mega",

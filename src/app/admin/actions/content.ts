@@ -81,7 +81,9 @@ export async function setRecordActive(formData: FormData) {
 async function revalidatePublic() {
   revalidatePath("/", "layout");
   revalidatePath("/telephonie");
+  revalidatePath("/telephonie/izi-shop");
   revalidatePath("/qui-sommes-nous");
+  revalidatePath("/qui-sommes-nous/national-cash");
   revalidatePath("/contact");
   revalidatePath("/admin");
 }
@@ -575,6 +577,66 @@ export async function deletePage(formData: FormData) {
   });
   await revalidatePublic();
   redirect(adminNext(formData, "/admin/pages"));
+}
+
+export async function ensureContactPage() {
+  const session = await requireAdminSession();
+  const supabase = await createServerSupabaseClient();
+  const { CONTACT_PAGE_SECTIONS } = await import("@/lib/cms/site-contact");
+
+  const { data: existing } = await supabase
+    .from("pages")
+    .select("id")
+    .eq("slug", "contact")
+    .maybeSingle();
+
+  let pageId = existing?.id as string | undefined;
+  if (!pageId) {
+    const { data: created, error } = await supabase
+      .from("pages")
+      .insert({
+        slug: "contact",
+        title: "Coordonnées",
+        is_published: true,
+        meta_title: "Coordonnées INFOLOG",
+        meta_description:
+          "Téléphones, e-mail, adresse et carte du site INFOLOG.",
+      })
+      .select("id")
+      .single();
+    if (error || !created) {
+      redirect("/admin/pages?error=contact");
+    }
+    pageId = created.id;
+  }
+
+  for (const [index, section] of CONTACT_PAGE_SECTIONS.entries()) {
+    const { data: existingSection } = await supabase
+      .from("page_sections")
+      .select("id")
+      .eq("page_id", pageId)
+      .eq("key", section.key)
+      .maybeSingle();
+
+    if (existingSection) continue;
+
+    await supabase.from("page_sections").insert({
+      page_id: pageId,
+      key: section.key,
+      kind: "paragraph",
+      value: section.value,
+      sort_order: index,
+    });
+  }
+
+  await writeAuditLog({
+    actorId: session.userId,
+    action: "upsert",
+    entityType: "page",
+    entityId: pageId,
+  });
+  await revalidatePublic();
+  redirect(`/admin/pages/${pageId}`);
 }
 
 export async function saveSection(formData: FormData) {

@@ -7,6 +7,7 @@ import { partners } from "../src/data/partners";
 import { aboutServices } from "../src/data/site";
 import { loadPhonesFromFolders } from "../src/data/telephonie/load-products";
 import { slugify } from "../src/lib/cms/format";
+import { CONTACT_PAGE_SECTIONS } from "../src/lib/cms/site-contact";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const key =
@@ -163,6 +164,14 @@ async function main() {
           value: "Des solutions technologiques au service de votre développement.",
         },
       ],
+    },
+    {
+      slug: "contact",
+      title: "Coordonnées",
+      sections: CONTACT_PAGE_SECTIONS.map((section) => ({
+        key: section.key,
+        value: section.value,
+      })),
     },
   ];
 

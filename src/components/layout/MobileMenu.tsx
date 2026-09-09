@@ -4,13 +4,16 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { mainNav } from "@/data/nav";
 import { site } from "@/data/site";
+import type { SiteContact } from "@/lib/cms/site-contact";
 
 export function MobileMenu({
   open,
   onClose,
+  contact,
 }: {
   open: boolean;
   onClose: () => void;
+  contact: SiteContact;
 }) {
   useEffect(() => {
     if (!open) return;
@@ -106,9 +109,25 @@ export function MobileMenu({
             Nous contacter
           </Link>
         </nav>
-        <p className="mt-auto pt-12 font-mono text-[11px] uppercase tracking-[0.22em] text-mute">
-          {site.city} · {site.country}
-        </p>
+        <div className="mt-auto pt-12">
+          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-mute">
+            {site.city} · {site.country}
+          </p>
+          <div className="mt-3 space-y-1 font-mono text-[11px] tracking-[0.08em] text-mute">
+            {contact.phones.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="block hover:text-ink"
+              >
+                {item.display}
+              </a>
+            ))}
+            <a href={contact.emailHref} className="block hover:text-ink">
+              {contact.email}
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -44,7 +44,7 @@ export const telephonieServiceTabs: TelephonieServiceTab[] = [
       {
         title: "Sites e-commerce",
         description:
-          "www.samsunggalaxy.ci — www.samsunggalaxy.sn — www.samsunggalaxy-mr.com",
+          "www.samsunggalaxy.ci — www.samsunggalaxy.sn — www.samsunggalaxy-mr.com — izicall.shop",
       },
       {
         title: "Revendeurs agréés en téléphonie / distributeurs indépendants",

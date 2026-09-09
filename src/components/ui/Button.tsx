@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
+function isExternalHref(href: string) {
+  return /^https?:\/\//.test(href);
+}
+
 const variants = {
   primary:
     "bg-copper text-paper hover:bg-[#a34f27] border border-copper",
@@ -24,9 +28,13 @@ export function Button({
   variant = "primary",
   className,
 }: ButtonProps) {
+  const external = isExternalHref(href);
+
   return (
     <Link
       href={href}
+      target={external ? "_blank" : undefined}
+      rel={external ? "noopener noreferrer" : undefined}
       className={cn(
         "inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-medium tracking-wide transition-colors",
         variants[variant],

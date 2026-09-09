@@ -8,6 +8,7 @@ import { Logo } from "@/components/ui/Logo";
 import { MegaMenu } from "@/components/layout/MegaMenu";
 import { MobileMenu } from "@/components/layout/MobileMenu";
 import { isNavActive, mainNav } from "@/data/nav";
+import type { SiteContact } from "@/lib/cms/site-contact";
 import { cn } from "@/lib/utils";
 
 function navClass(active: boolean) {
@@ -17,7 +18,7 @@ function navClass(active: boolean) {
   );
 }
 
-export function Header() {
+export function Header({ contact }: { contact: SiteContact }) {
   const pathname = usePathname();
   const [openId, setOpenId] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -184,7 +185,11 @@ export function Header() {
           />
         </div>
       ) : null}
-      <MobileMenu open={mobileOpen} onClose={() => setMobileOpen(false)} />
+      <MobileMenu
+        open={mobileOpen}
+        onClose={() => setMobileOpen(false)}
+        contact={contact}
+      />
     </header>
   );
 }

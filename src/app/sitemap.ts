@@ -27,6 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/progiciel-erp",
     "/btp",
     "/telephonie",
+    "/telephonie/izi-shop",
     "/electromenager",
     ...phones.map((phone) => `/telephonie/${phone.id}`),
     "/contact",
@@ -37,6 +38,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: `${site.url}${path}`,
     lastModified: now,
     changeFrequency: path === "" ? "weekly" : "monthly",
-    priority: path === "" ? 1 : path.startsWith("/telephonie/") ? 0.6 : 0.7,
+    priority:
+      path === ""
+        ? 1
+        : path === "/telephonie/izi-shop"
+          ? 0.7
+          : path.startsWith("/telephonie/")
+            ? 0.6
+            : 0.7,
   }));
 }

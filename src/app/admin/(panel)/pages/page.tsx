@@ -1,4 +1,8 @@
-import { deletePage, savePage } from "@/app/admin/actions/content";
+import {
+  deletePage,
+  ensureContactPage,
+  savePage,
+} from "@/app/admin/actions/content";
 import {
   AdminDeleteDialog,
   AdminEditLink,
@@ -12,9 +16,46 @@ import { listAdminPages } from "@/lib/cms/pages";
 
 export default async function AdminPagesPage() {
   const pages = await listAdminPages();
+  const contactPage = pages.find((page) => page.slug === "contact");
+
   return (
     <div className="space-y-8">
-      <AdminPageHeader eyebrow="Contenus" title="Pages" />
+      <AdminPageHeader
+        eyebrow="Contenus"
+        title="Pages"
+        description="Coordonnées du site (téléphones, e-mail, adresse, carte) : page « Coordonnées » (slug contact)."
+      />
+      {!contactPage ? (
+        <AdminPanel title="Coordonnées du site">
+          <p className="text-sm leading-6 text-mute">
+            La page CMS des coordonnées n’existe pas encore. Créez-la pour
+            contrôler téléphones, e-mail, adresse et carte depuis le
+            back-office.
+          </p>
+          <form action={ensureContactPage} className="mt-4">
+            <AdminSubmit>Initialiser les coordonnées</AdminSubmit>
+          </form>
+        </AdminPanel>
+      ) : (
+        <AdminPanel title="Coordonnées du site">
+          <p className="text-sm leading-6 text-mute">
+            Page prête :{" "}
+            <span className="font-medium text-ink">{contactPage.title}</span>{" "}
+            ({contactPage.is_published ? "publiée" : "brouillon"}).
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <AdminEditLink href={`/admin/pages/${contactPage.id}`} />
+            <form action={ensureContactPage}>
+              <button
+                type="submit"
+                className="border border-ink/15 px-4 py-2 text-sm text-ink hover:border-plan hover:text-plan"
+              >
+                Compléter les sections manquantes
+              </button>
+            </form>
+          </div>
+        </AdminPanel>
+      )}
       <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
         <AdminPanel title="Liste">
           {pages.length === 0 ? (

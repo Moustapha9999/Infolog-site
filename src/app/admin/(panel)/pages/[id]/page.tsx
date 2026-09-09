@@ -37,6 +37,25 @@ export default async function AdminPageDetail({
           .
         </p>
       ) : null}
+      {page.slug === "contact" ? (
+        <p className="max-w-2xl text-sm leading-6 text-mute">
+          Coordonnées affichées sur l’accueil, le pied de page, le menu mobile
+          et la page Contact. Clés :{" "}
+          <code className="font-mono text-xs">phone_1</code>,{" "}
+          <code className="font-mono text-xs">phone_2</code>,{" "}
+          <code className="font-mono text-xs">phone_1_href</code> /{" "}
+          <code className="font-mono text-xs">phone_2_href</code> (ex.{" "}
+          <code className="font-mono text-xs">tel:+222…</code>),{" "}
+          <code className="font-mono text-xs">email</code>,{" "}
+          <code className="font-mono text-xs">address</code>,{" "}
+          <code className="font-mono text-xs">plus_code</code>,{" "}
+          <code className="font-mono text-xs">maps_href</code>,{" "}
+          <code className="font-mono text-xs">maps_embed</code>,{" "}
+          <code className="font-mono text-xs">geo_lat</code> /{" "}
+          <code className="font-mono text-xs">geo_lng</code>. Laissez la page
+          publiée pour que le site vitrine les utilise.
+        </p>
+      ) : null}
       <AdminPanel title="Métadonnées" className="max-w-xl">
         <form action={savePage} className="grid gap-4">
           <input type="hidden" name="id" value={page.id} />
