@@ -1,18 +1,23 @@
+import { AlertTriangle, Check, X } from "lucide-react";
 import { localeMeta } from "@/lib/i18n/config";
 import type { TranslationStatus } from "@/lib/i18n/content";
 import { cn } from "@/lib/utils";
-
-const STATUS_ICON: Record<TranslationStatus, string> = {
-  complete: "✅",
-  partial: "⚠️",
-  missing: "❌",
-};
 
 const STATUS_LABEL: Record<TranslationStatus, string> = {
   complete: "complet",
   partial: "partiel",
   missing: "manquant",
 };
+
+function StatusIcon({ status }: { status: TranslationStatus }) {
+  if (status === "complete") {
+    return <Check className="h-3 w-3" strokeWidth={2.25} aria-hidden />;
+  }
+  if (status === "partial") {
+    return <AlertTriangle className="h-3 w-3" strokeWidth={2.25} aria-hidden />;
+  }
+  return <X className="h-3 w-3" strokeWidth={2.25} aria-hidden />;
+}
 
 type TranslationStatusBadgesProps = {
   status: Record<"fr" | "en" | "ar", TranslationStatus>;
@@ -35,14 +40,14 @@ export function TranslationStatusBadges({
             key={locale}
             title={`${localeMeta[locale].label} : ${STATUS_LABEL[value]}`}
             className={cn(
-              "inline-flex items-center gap-1 border px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.08em]",
-              value === "complete" && "border-plan/30 bg-plan/5 text-plan",
-              value === "partial" && "border-copper/35 bg-copper/5 text-copper",
+              "inline-flex items-center gap-1 border px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em]",
+              value === "complete" && "border-plan/35 bg-plan/8 text-plan",
+              value === "partial" && "border-copper/40 bg-copper/8 text-copper",
               value === "missing" && "border-ink/15 bg-paper-2 text-mute",
             )}
           >
-            <span aria-hidden>{localeMeta[locale].flag}</span>
-            <span aria-hidden>{STATUS_ICON[value]}</span>
+            <span className="font-medium">{localeMeta[locale].short}</span>
+            <StatusIcon status={value} />
             <span className="sr-only">
               {localeMeta[locale].label} : {STATUS_LABEL[value]}
             </span>

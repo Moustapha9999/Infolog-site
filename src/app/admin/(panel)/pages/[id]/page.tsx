@@ -54,8 +54,11 @@ export default async function AdminPageDetail({
           <code className="font-mono text-xs">maps_href</code>,{" "}
           <code className="font-mono text-xs">maps_embed</code>,{" "}
           <code className="font-mono text-xs">geo_lat</code> /{" "}
-          <code className="font-mono text-xs">geo_lng</code>. Laissez la page
-          publiée pour que le site vitrine les utilise.
+          <code className="font-mono text-xs">geo_lng</code>,{" "}
+          <code className="font-mono text-xs">social_facebook</code> /{" "}
+          <code className="font-mono text-xs">social_tiktok</code> (URL
+          complètes du footer). Laissez la page publiée pour que le site
+          vitrine les utilise.
         </p>
       ) : null}
       <AdminPanel title="Métadonnées" className="max-w-xl">

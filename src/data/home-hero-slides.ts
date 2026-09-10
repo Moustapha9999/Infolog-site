@@ -96,7 +96,7 @@ export function getHomeHeroSlidesFallback(
       lead: erp.description,
       image: "/brand/erp-hero.jpg",
       imageAlt: alts.erp,
-      objectPosition: "center right",
+      objectPosition: "center center",
     },
     {
       id: "btp",
@@ -112,19 +112,18 @@ export function getHomeHeroSlidesFallback(
       title: telephonie.title,
       href: "/telephonie",
       lead: telephonie.description,
-      image: "/brand/telephonie/catalog/s26-series.png",
+      image: "/brand/telephonie/catalog/galaxy-s26-hero.jpg",
       imageAlt: alts.telephonie,
-      objectPosition: "right center",
-      imageLayout: "right",
+      objectPosition: "center center",
     },
     {
       id: "electromenager",
       title: electromenager.title,
       href: "/electromenager",
       lead: electromenager.description,
-      image: "/brand/electromenager/catalog/hero-poster.jpg",
+      image: "/brand/electromenager/catalog/hero-lineup.jpg",
       imageAlt: alts.electromenager,
-      objectPosition: "center",
+      objectPosition: "center center",
     },
   ];
 }

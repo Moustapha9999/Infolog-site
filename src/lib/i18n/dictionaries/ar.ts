@@ -126,6 +126,7 @@ export const ar: Dictionary = {
   },
   footer: {
     taglineFallback: "حلول تكنولوجية في خدمة تطوركم.",
+    socials: "الشبكات الاجتماعية",
   },
   contact: {
     title: "اتصل",

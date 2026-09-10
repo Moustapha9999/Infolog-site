@@ -6,6 +6,13 @@ export type SitePhone = {
   href: string;
 };
 
+export type SiteSocial = {
+  id: string;
+  label: string;
+  href: string;
+  icon: string;
+};
+
 export type SiteContact = {
   phones: SitePhone[];
   phone: string;
@@ -48,6 +55,10 @@ export const CONTACT_PAGE_SECTIONS = [
     value:
       "https://maps.google.com/maps?q=18.089889,-15.989528&hl=fr&z=17&output=embed",
   },
+  /** URL profil Facebook (footer). Vide = icône affichée sans lien. */
+  { key: "social_facebook", value: "" },
+  /** URL profil TikTok (footer). Vide = icône affichée sans lien. */
+  { key: "social_tiktok", value: "" },
 ] as const;
 
 function toTelHref(display: string, fallback?: string) {
@@ -126,4 +137,20 @@ export async function getSiteContact(): Promise<SiteContact> {
     mapsHref: sectionValue(sections, "maps_href", site.mapsHref),
     mapsEmbed: sectionValue(sections, "maps_embed", site.mapsEmbed),
   };
+}
+
+/** Réseaux sociaux footer : CMS page `contact` avec repli sur `site.socials`. */
+export async function getSiteSocials(): Promise<SiteSocial[]> {
+  const sections = await getPageSections("contact");
+  const hrefById: Record<string, string> = {
+    facebook: sectionValue(sections, "social_facebook", "").trim(),
+    tiktok: sectionValue(sections, "social_tiktok", "").trim(),
+  };
+
+  return site.socials.map((social) => ({
+    id: social.id,
+    label: social.label,
+    icon: social.icon,
+    href: hrefById[social.id] || social.href || "",
+  }));
 }

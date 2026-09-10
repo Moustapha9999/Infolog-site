@@ -44,7 +44,25 @@ export const site = {
     "https://www.google.com/maps/search/?api=1&query=32Q6%2BX6+Nouakchott,+Mauritanie",
   mapsEmbed:
     "https://maps.google.com/maps?q=18.089889,-15.989528&hl=fr&z=17&output=embed",
-  socials: [] as { label: string; href: string }[],
+  socials: [
+    {
+      id: "facebook",
+      label: "Facebook",
+      href: "",
+      icon: "/brand/social/facebook.png",
+    },
+    {
+      id: "tiktok",
+      label: "TikTok",
+      href: "",
+      icon: "/brand/social/tiktok.png",
+    },
+  ] as {
+    id: string;
+    label: string;
+    href: string;
+    icon: string;
+  }[],
   /**
    * Vidéo « Nos activités » — à remplacer par l'URL YouTube officielle INFOLOG.
    * Exemple attendu : "https://www.youtube.com/watch?v=XXXX" ou l'ID seul.

@@ -101,6 +101,7 @@ export type Dictionary = {
   };
   footer: {
     taglineFallback: string;
+    socials: string;
   };
   contact: {
     title: string;

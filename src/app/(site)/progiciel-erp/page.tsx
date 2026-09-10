@@ -33,7 +33,7 @@ export default async function ErpPage() {
             priority
             quality={95}
             sizes="100vw"
-            className="object-cover object-right"
+            className="object-cover object-center"
           />
           <div
             className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,24,32,0.55)_0%,rgba(16,24,32,0.2)_50%,rgba(16,24,32,0.28)_100%)]"
@@ -104,12 +104,12 @@ export default async function ErpPage() {
 
           <div className="relative mt-8 aspect-[16/7] overflow-hidden border border-ink/10 bg-ink">
             <Image
-              src="/brand/erp-hero.jpg"
+              src="/brand/erp-modules.jpg"
               alt="Modules interconnectés d'un progiciel ERP"
               fill
-              quality={92}
+              quality={95}
               sizes="100vw"
-              className="object-cover object-right"
+              className="object-cover object-center"
             />
           </div>
         </Container>

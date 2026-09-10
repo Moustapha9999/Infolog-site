@@ -79,8 +79,8 @@ export default async function AdminPagesPage() {
         <AdminPanel title="Coordonnées du site">
           <p className="text-sm leading-6 text-mute">
             La page CMS des coordonnées n’existe pas encore. Créez-la pour
-            contrôler téléphones, e-mail, adresse et carte depuis le
-            back-office.
+            contrôler téléphones, e-mail, adresse, carte et réseaux sociaux
+            depuis le back-office.
           </p>
           <form action={ensureContactPage} className="mt-4">
             <AdminSubmit>Initialiser les coordonnées</AdminSubmit>

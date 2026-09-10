@@ -132,6 +132,7 @@ export const fr: Dictionary = {
   footer: {
     taglineFallback:
       "Des solutions technologiques au service de votre développement.",
+    socials: "Réseaux sociaux",
   },
   contact: {
     title: "Contact",
