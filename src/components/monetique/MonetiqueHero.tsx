@@ -8,11 +8,14 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
-import { monetique } from "@/data/monetique";
+import { getMonetique } from "@/data/monetique";
+import { getLocale } from "@/lib/i18n/get-locale";
 
 const icons: LucideIcon[] = [MoveDiagonal, Database, GitFork, Wifi, Eye, Lock];
 
-export function MonetiqueHero() {
+export async function MonetiqueHero() {
+  const locale = await getLocale();
+  const monetique = getMonetique(locale);
   return (
     <section className="border-b border-ink/10 bg-white">
       <Container wide className="py-12 sm:py-16 lg:py-20">

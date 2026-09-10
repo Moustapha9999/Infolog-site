@@ -2,20 +2,25 @@ import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { ScrollToTop } from "@/components/layout/ScrollToTop";
 import { site } from "@/data/site";
+import { getSiteCopy } from "@/data/site-copy";
 import { getSiteContact } from "@/lib/cms/site-contact";
+import { localeMeta } from "@/lib/i18n/config";
+import { getLocale } from "@/lib/i18n/get-locale";
 
 export default async function SiteLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const contact = await getSiteContact();
+  const [contact, locale] = await Promise.all([getSiteContact(), getLocale()]);
+  const copy = getSiteCopy(locale);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": ["Organization", "LocalBusiness"],
     name: site.name,
     url: site.url,
-    description: site.description,
+    description: copy.description,
+    inLanguage: localeMeta[locale].htmlLang,
     telephone: contact.phones.map((item) => item.display),
     email: contact.email,
     address: {

@@ -6,31 +6,40 @@ import { Container } from "@/components/ui/Container";
 import { TechnicalFrame } from "@/components/ui/TechnicalFrame";
 import { site } from "@/data/site";
 import { getSiteContact } from "@/lib/cms/site-contact";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { buildLocaleMetadata } from "@/lib/i18n/seo";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
 export async function generateMetadata() {
+  const locale = await getLocale();
+  const dictionary = getDictionary(locale);
   const contact = await getSiteContact();
-  return {
-    title: "Contact",
-    description: `Contacter INFOLOG à Nouakchott — ${contact.phones.map((item) => item.display).join(" · ")}, ${contact.email}.`,
-  };
+  return buildLocaleMetadata({
+    locale,
+    title: dictionary.contact.title,
+    description: `${dictionary.contactPage.heading} INFOLOG — ${contact.phones.map((item) => item.display).join(" · ")}, ${contact.email}.`,
+    path: "/contact",
+  });
 }
 
 export default async function ContactPage() {
+  const locale = await getLocale();
+  const dictionary = getDictionary(locale);
   const contact = await getSiteContact();
+  const lead = dictionary.contactPage.lead.replace("{city}", site.city);
 
   return (
     <>
       <section className="border-b border-ink/10 bg-paper-2 py-16">
         <Container>
-          <SectionLabel>Contact</SectionLabel>
+          <SectionLabel>{dictionary.contact.title}</SectionLabel>
           <h1 className="mt-4 text-4xl font-medium tracking-tight text-ink sm:text-5xl">
-            Nous contacter
+            {dictionary.contactPage.heading}
           </h1>
-          <p className="mt-6 max-w-2xl text-base leading-7 text-mute">
-            Décrivez votre besoin ci-dessous. Notre équipe commerciale vous
-            répond depuis {site.city}.
+          <p className="mt-6 max-w-2xl text-base leading-7 text-mute text-start">
+            {lead}
           </p>
         </Container>
       </section>
@@ -41,7 +50,7 @@ export default async function ContactPage() {
         <div className="space-y-6">
           <TechnicalFrame className="p-6 sm:p-8">
             <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-plan">
-              Coordonnées
+              {dictionary.common.coordinates}
             </p>
             <ul className="mt-5 space-y-4">
               <li className="flex items-start gap-3">
@@ -51,7 +60,7 @@ export default async function ContactPage() {
                 />
                 <div>
                   <p className={cn(type.label, "tracking-[0.2em] text-plan")}>
-                    Téléphone
+                    {dictionary.contact.phone}
                   </p>
                   <div className="mt-1 space-y-1">
                     {contact.phones.map((item) => (
@@ -76,7 +85,7 @@ export default async function ContactPage() {
                 />
                 <div>
                   <p className={cn(type.label, "tracking-[0.2em] text-plan")}>
-                    E-mail
+                    {dictionary.contact.email}
                   </p>
                   <a
                     href={contact.emailHref}
@@ -93,7 +102,7 @@ export default async function ContactPage() {
                 />
                 <div>
                   <p className={cn(type.label, "tracking-[0.2em] text-plan")}>
-                    Adresse
+                    {dictionary.contactPage.address}
                   </p>
                   <p className={cn(type.bodyCard, "mt-1 text-ink")}>
                     {contact.address}
@@ -108,7 +117,7 @@ export default async function ContactPage() {
           <TechnicalFrame className="overflow-hidden">
             <div className="flex items-center justify-between gap-3 border-b border-ink/10 px-6 py-4">
               <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-plan">
-                Carte
+                {dictionary.contactPage.map}
               </p>
               <a
                 href={contact.mapsHref}

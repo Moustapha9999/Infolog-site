@@ -15,14 +15,22 @@ import {
   SecuriteCta,
   SecuriteStack,
 } from "@/components/securite/SecuriteStack";
-import { securite } from "@/data/securite";
+import { getSecurite } from "@/data/securite";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { buildLocaleMetadata } from "@/lib/i18n/seo";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export const metadata = {
-  title: "Sécurité",
-  description: securite.description,
-};
+export async function generateMetadata() {
+  const locale = await getLocale();
+  const securite = getSecurite(locale);
+  return buildLocaleMetadata({
+    locale,
+    title: securite.shortTitle,
+    description: securite.description,
+    path: "/securite",
+  });
+}
 
 const concreteIcons: LucideIcon[] = [
   Network,
@@ -33,11 +41,13 @@ const concreteIcons: LucideIcon[] = [
   Bell,
 ];
 
-export default function SecuritePage() {
+export default async function SecuritePage() {
+  const locale = await getLocale();
+  const securite = getSecurite(locale);
   return (
     <>
       <SecuriteHero />
-      <SecuriteApproche />
+      <SecuriteApproche securite={securite} />
 
       <section className="border-b border-ink/10 bg-paper py-14 sm:py-16 lg:py-20">
         <Container>

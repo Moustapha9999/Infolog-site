@@ -7,12 +7,19 @@ import {
 } from "@/components/admin/AdminActions";
 import { AdminEmpty, AdminPageHeader, AdminPanel } from "@/components/admin/AdminChrome";
 import { AdminCheck, AdminField, AdminSubmit } from "@/components/admin/AdminField";
+import { TranslationFields } from "@/components/admin/TranslationFields";
+import { TranslationStatusBadges } from "@/components/admin/TranslationStatusBadges";
+import { cmsTranslationStatus } from "@/lib/i18n/content";
+import { parseTranslations } from "@/lib/i18n/localize";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import type { CategoryRecord } from "@/lib/cms/types";
 
 export default async function AdminCategoriesPage() {
   const supabase = await createServerSupabaseClient();
-  const { data } = await supabase.from("categories").select("*").order("sort_order");
+  const { data } = await supabase
+    .from("categories")
+    .select("*")
+    .order("sort_order");
   const categories = (data ?? []) as CategoryRecord[];
 
   return (
@@ -20,9 +27,9 @@ export default async function AdminCategoriesPage() {
       <AdminPageHeader
         eyebrow="Référentiel"
         title="Catégories"
-        description="Catégories actives visibles dans la recherche globale (renvoi vers Téléphonie)."
+        description="Catégories actives visibles dans la recherche globale. Traductions FR / EN / AR."
       />
-      <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
+      <div className="grid gap-8 lg:grid-cols-[1fr_340px]">
         <AdminPanel title="Liste">
           {categories.length === 0 ? (
             <AdminEmpty>Aucune catégorie.</AdminEmpty>
@@ -39,17 +46,50 @@ export default async function AdminCategoriesPage() {
                       {category.description || category.slug} ·{" "}
                       {category.is_active ? "active" : "inactive"}
                     </p>
+                    <TranslationStatusBadges
+                      status={cmsTranslationStatus(
+                        {
+                          name: category.name,
+                          description: category.description,
+                        },
+                        parseTranslations(category.translations),
+                        ["name", "description"],
+                      )}
+                    />
                   </div>
                   <AdminRowActions>
-                    <AdminFormDialog action={saveCategory} title="Modifier la catégorie">
+                    <AdminFormDialog
+                      action={saveCategory}
+                      title="Modifier la catégorie"
+                    >
                       <input type="hidden" name="id" value={category.id} />
-                      <AdminField label="Nom" name="name" defaultValue={category.name} required />
-                      <AdminField label="Slug" name="slug" defaultValue={category.slug} />
+                      <TranslationFields
+                        translations={parseTranslations(category.translations)}
+                        fields={[
+                          {
+                            key: "name",
+                            frName: "name",
+                            labelFr: "Nom (FR)",
+                            labelEn: "Name (EN)",
+                            labelAr: "الاسم (AR)",
+                            required: true,
+                            frDefault: category.name,
+                          },
+                          {
+                            key: "description",
+                            frName: "description",
+                            labelFr: "Description (FR)",
+                            labelEn: "Description (EN)",
+                            labelAr: "الوصف (AR)",
+                            textarea: true,
+                            frDefault: category.description,
+                          },
+                        ]}
+                      />
                       <AdminField
-                        label="Description"
-                        name="description"
-                        textarea
-                        defaultValue={category.description}
+                        label="Slug"
+                        name="slug"
+                        defaultValue={category.slug}
                       />
                       <AdminField
                         label="Ordre"
@@ -69,7 +109,10 @@ export default async function AdminCategoriesPage() {
                       entity="categories"
                       id={category.id}
                     />
-                    <AdminDeleteDialog action={deleteCategory} name={category.name}>
+                    <AdminDeleteDialog
+                      action={deleteCategory}
+                      name={category.name}
+                    >
                       <input type="hidden" name="id" value={category.id} />
                     </AdminDeleteDialog>
                   </AdminRowActions>
@@ -80,10 +123,33 @@ export default async function AdminCategoriesPage() {
         </AdminPanel>
         <AdminPanel title="Ajouter">
           <form action={saveCategory} className="space-y-4">
-            <AdminField label="Nom" name="name" required />
+            <TranslationFields
+              fields={[
+                {
+                  key: "name",
+                  frName: "name",
+                  labelFr: "Nom (FR)",
+                  labelEn: "Name (EN)",
+                  labelAr: "الاسم (AR)",
+                  required: true,
+                },
+                {
+                  key: "description",
+                  frName: "description",
+                  labelFr: "Description (FR)",
+                  labelEn: "Description (EN)",
+                  labelAr: "الوصف (AR)",
+                  textarea: true,
+                },
+              ]}
+            />
             <AdminField label="Slug" name="slug" />
-            <AdminField label="Description" name="description" textarea />
-            <AdminField label="Ordre" name="sort_order" type="number" defaultValue={0} />
+            <AdminField
+              label="Ordre"
+              name="sort_order"
+              type="number"
+              defaultValue={0}
+            />
             <AdminCheck label="Active" name="is_active" defaultChecked />
             <AdminSubmit>Enregistrer</AdminSubmit>
           </form>

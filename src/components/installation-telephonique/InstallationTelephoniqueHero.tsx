@@ -1,9 +1,12 @@
 import { Container } from "@/components/ui/Container";
-import { installationTelephonique as content } from "@/data/installation-telephonique";
+import { getInstallationTelephonique } from "@/data/installation-telephonique";
+import { getLocale } from "@/lib/i18n/get-locale";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export function InstallationTelephoniqueHero() {
+export async function InstallationTelephoniqueHero() {
+  const locale = await getLocale();
+  const content = getInstallationTelephonique(locale);
   return (
     <section className="relative isolate overflow-hidden border-b border-ink/10 bg-paper-2/60">
       <div

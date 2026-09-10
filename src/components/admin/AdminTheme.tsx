@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useSyncExternalStore,
+} from "react";
 import { Moon, Sun } from "lucide-react";
 
 const THEME_KEY = "infolog-admin-theme";
@@ -25,33 +31,39 @@ export function useAdminUi() {
   return value;
 }
 
-export function AdminThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("light");
-  const [collapsed, setCollapsedState] = useState(false);
+function subscribe(onStoreChange: () => void) {
+  window.addEventListener("storage", onStoreChange);
+  return () => window.removeEventListener("storage", onStoreChange);
+}
 
-  useEffect(() => {
-    const storedTheme = window.localStorage.getItem(THEME_KEY);
-    if (storedTheme === "dark" || storedTheme === "light") {
-      setThemeState(storedTheme);
-    } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      setThemeState("dark");
-    }
-    setCollapsedState(window.localStorage.getItem(COLLAPSE_KEY) === "1");
+function readTheme(): Theme {
+  const stored = window.localStorage.getItem(THEME_KEY);
+  if (stored === "dark" || stored === "light") return stored;
+  if (window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark";
+  return "light";
+}
+
+function readCollapsed(): boolean {
+  return window.localStorage.getItem(COLLAPSE_KEY) === "1";
+}
+
+export function AdminThemeProvider({ children }: { children: React.ReactNode }) {
+  const theme = useSyncExternalStore(subscribe, readTheme, () => "light" as Theme);
+  const collapsed = useSyncExternalStore(subscribe, readCollapsed, () => false);
+
+  const setTheme = useCallback((next: Theme) => {
+    window.localStorage.setItem(THEME_KEY, next);
+    window.dispatchEvent(new Event("storage"));
   }, []);
 
-  function setTheme(next: Theme) {
-    setThemeState(next);
-    window.localStorage.setItem(THEME_KEY, next);
-  }
-
-  function setCollapsed(value: boolean) {
-    setCollapsedState(value);
+  const setCollapsed = useCallback((value: boolean) => {
     window.localStorage.setItem(COLLAPSE_KEY, value ? "1" : "0");
-  }
+    window.dispatchEvent(new Event("storage"));
+  }, []);
 
   const value = useMemo(
     () => ({ theme, setTheme, collapsed, setCollapsed }),
-    [theme, collapsed],
+    [theme, collapsed, setTheme, setCollapsed],
   );
 
   return (

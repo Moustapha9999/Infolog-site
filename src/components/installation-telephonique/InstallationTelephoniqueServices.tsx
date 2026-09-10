@@ -8,7 +8,8 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
-import { installationTelephonique as content } from "@/data/installation-telephonique";
+import { getInstallationTelephonique } from "@/data/installation-telephonique";
+import { getLocale } from "@/lib/i18n/get-locale";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
@@ -21,7 +22,9 @@ const icons: LucideIcon[] = [
   Headset,
 ];
 
-export function InstallationTelephoniqueServices() {
+export async function InstallationTelephoniqueServices() {
+  const locale = await getLocale();
+  const content = getInstallationTelephonique(locale);
   return (
     <section className="relative isolate overflow-hidden border-b border-ink/10 bg-paper-2/50 py-14 sm:py-16 lg:py-20">
       <div

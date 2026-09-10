@@ -1,11 +1,14 @@
 import { ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
-import { virtualisationServeurs as content } from "@/data/virtualisation-serveurs";
+import { getVirtualisationServeurs } from "@/data/virtualisation-serveurs";
+import { getLocale } from "@/lib/i18n/get-locale";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export function VirtualisationServeursCta() {
+export async function VirtualisationServeursCta() {
+  const locale = await getLocale();
+  const content = getVirtualisationServeurs(locale);
   return (
     <section className="relative isolate overflow-hidden border-b border-ink/10 bg-paper py-14 sm:py-16 lg:py-20">
       <Container className="relative max-w-7xl">

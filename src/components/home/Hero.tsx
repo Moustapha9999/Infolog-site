@@ -5,9 +5,11 @@ import {
   parseHeroMs,
   type HomeHeroSlide,
 } from "@/data/home-hero-slides";
-import { site } from "@/data/site";
+import { getSiteCopy } from "@/data/site-copy";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getLocale } from "@/lib/i18n/get-locale";
 
-export function Hero({
+export async function Hero({
   title,
   lead,
   slides,
@@ -20,13 +22,14 @@ export function Hero({
   welcomeMs?: string;
   intervalMs?: string;
 }) {
+  const locale = await getLocale();
+  const dictionary = getDictionary(locale);
+  const copy = getSiteCopy(locale);
+
   return (
     <HeroSlider
-      title={
-        title ??
-        "Partenaire technologique des entreprises en Mauritanie et en Afrique"
-      }
-      lead={lead ?? site.mission}
+      title={title ?? dictionary.home.heroTitleFallback}
+      lead={lead ?? copy.mission}
       slides={slides}
       welcomeMs={parseHeroMs(welcomeMs, HOME_HERO_WELCOME_MS)}
       intervalMs={parseHeroMs(intervalMs, HOME_HERO_INTERVAL_MS)}

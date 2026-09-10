@@ -5,16 +5,26 @@ import { Button } from "@/components/ui/Button";
 import { AutoPlayVideo } from "@/components/telephonie/AutoPlayVideo";
 import { DataCenterAtouts } from "@/components/data-center/DataCenterAtouts";
 import { DataCenterSolution } from "@/components/data-center/DataCenterSolution";
-import { dataCenter, dataCenterMedia } from "@/data/data-center";
+import { dataCenterMedia, getDataCenter } from "@/data/data-center";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { buildLocaleMetadata } from "@/lib/i18n/seo";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export const metadata = {
-  title: "Data Center",
-  description: dataCenter.description,
-};
+export async function generateMetadata() {
+  const locale = await getLocale();
+  const dataCenter = getDataCenter(locale);
+  return buildLocaleMetadata({
+    locale,
+    title: dataCenter.title,
+    description: dataCenter.description,
+    path: "/data-center",
+  });
+}
 
-export default function DataCenterPage() {
+export default async function DataCenterPage() {
+  const locale = await getLocale();
+  const dataCenter = getDataCenter(locale);
   return (
     <>
       <section className="relative isolate overflow-hidden border-b border-ink/10">

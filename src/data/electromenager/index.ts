@@ -1,2 +1,10 @@
-export { electromenager, electromenagerMedia } from "./constants";
-export type { ElectromenagerFamily } from "./constants";
+export {
+  electromenager,
+  electromenagerMedia,
+  getElectromenager,
+} from "./constants";
+export type {
+  ElectromenagerContent,
+  ElectromenagerFamiliesContent,
+  ElectromenagerFamily,
+} from "./constants";

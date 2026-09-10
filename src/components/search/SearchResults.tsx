@@ -1,17 +1,23 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Search } from "lucide-react";
-import {
-  contentTypeLabel,
-  type SearchHit,
-  type SearchResponse,
+import type {
+  SearchContentType,
+  SearchHit,
+  SearchResponse,
 } from "@/components/search/client-types";
 import { SiteSearch } from "@/components/search/SiteSearch";
 import { SectionLabel } from "@/components/sections/SectionLabel";
+import { useDictionary } from "@/lib/i18n/LocaleProvider";
 
 function ResultCard({ item }: { item: SearchHit }) {
+  const dictionary = useDictionary();
   const external = item.url.startsWith("http");
   const href = item.url;
+  const typeLabel =
+    dictionary.search.types[item.type as SearchContentType] ?? item.type;
 
   return (
     <article className="group flex flex-col border border-ink/10 bg-paper transition-colors hover:border-plan/40">
@@ -32,7 +38,7 @@ function ResultCard({ item }: { item: SearchHit }) {
       </div>
       <div className="flex flex-1 flex-col gap-3 p-5">
         <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-plan">
-          {contentTypeLabel(item.type)} · {item.category}
+          {typeLabel} · {item.category}
         </p>
         <h2 className="text-xl font-medium text-ink">{item.title}</h2>
         <p className="line-clamp-3 text-sm leading-relaxed text-mute">
@@ -58,7 +64,7 @@ function ResultCard({ item }: { item: SearchHit }) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-sm font-medium text-copper hover:underline"
             >
-              Ouvrir
+              {dictionary.searchResults.open}
               <ArrowUpRight className="h-4 w-4" aria-hidden />
             </a>
           ) : (
@@ -66,7 +72,7 @@ function ResultCard({ item }: { item: SearchHit }) {
               href={href}
               className="inline-flex items-center gap-2 text-sm font-medium text-copper hover:underline"
             >
-              Accéder
+              {dictionary.searchResults.access}
               <ArrowUpRight className="h-4 w-4" aria-hidden />
             </Link>
           )}
@@ -83,42 +89,39 @@ export function SearchResults({
   data: SearchResponse;
   query: string;
 }) {
+  const dictionary = useDictionary();
+  const ui = dictionary.searchResults;
+  const resultsLabel =
+    data.total === 1
+      ? ui.resultSingular
+      : ui.resultPlural.replace("{n}", String(data.total));
+
   return (
     <div className="mx-auto max-w-[1200px] px-5 py-12 sm:px-8 sm:py-16">
-      <SectionLabel>Recherche globale</SectionLabel>
+      <SectionLabel>{ui.label}</SectionLabel>
       <h1 className="mt-4 max-w-3xl text-3xl font-medium tracking-tight text-ink sm:text-4xl">
-        Résultats de recherche
+        {ui.title}
       </h1>
       <div className="mt-8">
         <SiteSearch variant="page" initialQuery={query} autoFocus={!query} />
       </div>
 
       {query.trim().length < 2 ? (
-        <p className="mt-10 text-mute">
-          Saisissez au moins 2 caractères pour rechercher sur INFOLOG.
-        </p>
+        <p className="mt-10 text-mute">{ui.minChars}</p>
       ) : (
         <>
           <p className="mt-8 font-mono text-xs uppercase tracking-[0.18em] text-mute">
-            Recherche : « {data.query} » —{" "}
-            <span className="text-ink">
-              {data.total} résultat{data.total === 1 ? "" : "s"} trouvé
-              {data.total === 1 ? "" : "s"}
-            </span>
+            {ui.queryPrefix} « {data.query} » —{" "}
+            <span className="text-ink">{resultsLabel}</span>
           </p>
 
           {data.total === 0 ? (
             <div className="mt-10 border border-ink/10 bg-paper-2 p-8">
-              <p className="text-lg text-ink">
-                Aucun résultat trouvé pour votre recherche.
-              </p>
-              <p className="mt-3 text-sm text-mute">
-                Essayez avec un autre mot-clé ou consultez nos principales
-                catégories.
-              </p>
+              <p className="text-lg text-ink">{ui.noResults}</p>
+              <p className="mt-3 text-sm text-mute">{ui.noResultsHint}</p>
               {data.didYouMean ? (
                 <p className="mt-5 text-sm text-ink">
-                  Voulez-vous dire :{" "}
+                  {ui.didYouMean}{" "}
                   <Link
                     href={`/recherche?q=${encodeURIComponent(data.didYouMean)}`}
                     className="font-medium text-copper underline-offset-2 hover:underline"
@@ -130,13 +133,13 @@ export function SearchResults({
               ) : null}
               <ul className="mt-6 flex flex-wrap gap-3">
                 {[
-                  { href: "/btp", label: "BTP" },
-                  { href: "/telephonie", label: "Téléphonie" },
+                  { href: "/btp", label: dictionary.nav.btp },
+                  { href: "/telephonie", label: dictionary.nav.telephonie },
                   {
                     href: "/qui-sommes-nous/national-cash",
-                    label: "National Cash",
+                    label: dictionary.nav.aboutNationalCash,
                   },
-                  { href: "/contact", label: "Contact" },
+                  { href: "/contact", label: dictionary.common.contact },
                 ].map((item) => (
                   <li key={item.href}>
                     <Link
@@ -157,7 +160,7 @@ export function SearchResults({
                     id={`group-${group.type}`}
                     className="border-b border-ink/10 pb-3 font-mono text-xs uppercase tracking-[0.22em] text-plan"
                   >
-                    {group.label}
+                    {dictionary.search.types[group.type] ?? group.label}
                   </h2>
                   <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                     {group.items.map((item) => (

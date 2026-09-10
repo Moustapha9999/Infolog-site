@@ -4,16 +4,29 @@ import { SectionLabel } from "@/components/sections/SectionLabel";
 import { Button } from "@/components/ui/Button";
 import { ElectromenagerHeroVisual } from "@/components/electromenager/ElectromenagerHeroVisual";
 import { ElectromenagerFamilies } from "@/components/electromenager/ElectromenagerFamilies";
-import { electromenager } from "@/data/electromenager";
+import { getElectromenager } from "@/data/electromenager";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { buildLocaleMetadata } from "@/lib/i18n/seo";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export const metadata: Metadata = {
-  title: "Électroménager",
-  description: electromenager.description,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const electromenager = getElectromenager(locale);
+  return buildLocaleMetadata({
+    locale,
+    title: electromenager.title,
+    description: electromenager.description,
+    path: "/electromenager",
+  });
+}
 
-export default function ElectromenagerPage() {
+export default async function ElectromenagerPage() {
+  const locale = await getLocale();
+  const electromenager = getElectromenager(locale);
+  const dictionary = getDictionary(locale);
+
   return (
     <>
       <section className="relative isolate min-h-[78vh] overflow-hidden border-b border-ink/10 bg-ink">
@@ -30,9 +43,9 @@ export default function ElectromenagerPage() {
               {electromenager.heroLead}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button href="#familles">Découvrir</Button>
+              <Button href="#familles">{dictionary.home.discover}</Button>
               <Button href="/contact" variant="secondary">
-                Nous contacter
+                {dictionary.common.contactUs}
               </Button>
             </div>
           </div>
@@ -44,7 +57,12 @@ export default function ElectromenagerPage() {
           <div className="flex justify-center">
             <SectionLabel>INFOLOG</SectionLabel>
           </div>
-          <div className={cn(type.body, "mt-5 space-y-4 text-left text-ink/80 sm:text-center")}>
+          <div
+            className={cn(
+              type.body,
+              "mt-5 space-y-4 text-left text-ink/80 sm:text-center",
+            )}
+          >
             {electromenager.intro.split("\n\n").map((paragraph) => (
               <p key={paragraph.slice(0, 48)}>{paragraph}</p>
             ))}
@@ -52,7 +70,7 @@ export default function ElectromenagerPage() {
         </Container>
       </section>
 
-      <ElectromenagerFamilies />
+      <ElectromenagerFamilies content={electromenager} />
 
       <section
         id="catalogue"
@@ -61,7 +79,7 @@ export default function ElectromenagerPage() {
         <Container>
           <div className="mx-auto max-w-2xl text-center">
             <div className="flex justify-center">
-              <SectionLabel>Catalogue</SectionLabel>
+              <SectionLabel>{electromenager.catalogLabel}</SectionLabel>
             </div>
             <h2 className={cn(type.h2, "mt-4 text-ink")}>
               {electromenager.showcaseTitle}
@@ -73,17 +91,19 @@ export default function ElectromenagerPage() {
 
           <div className="mx-auto mt-12 max-w-2xl border border-dashed border-ink/15 bg-paper px-6 py-14 text-center">
             <p className={cn(type.label, "tracking-[0.14em] text-plan")}>
-              Produits
+              {electromenager.productsLabel}
             </p>
             <p className={cn(type.h3, "mt-3 text-ink")}>
-              Catalogue à venir
+              {electromenager.catalogComingTitle}
             </p>
             <p className={cn(type.bodyCard, "mt-2 text-mute")}>
-              Les fiches produits seront ajoutées ici prochainement.
+              {electromenager.catalogComingLead}
             </p>
             <div className="mt-8 flex justify-center">
-              <Button href="/contact?subject=Électroménager">
-                Demander un produit
+              <Button
+                href={`/contact?subject=${encodeURIComponent(electromenager.title)}`}
+              >
+                {electromenager.requestProduct}
               </Button>
             </div>
           </div>
@@ -99,7 +119,7 @@ export default function ElectromenagerPage() {
             {electromenager.ctaLead}
           </p>
           <div className="mt-8 flex justify-center">
-            <Button href="/contact">Contact</Button>
+            <Button href="/contact">{dictionary.common.contact}</Button>
           </div>
         </Container>
       </section>

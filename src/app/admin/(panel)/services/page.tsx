@@ -7,7 +7,47 @@ import {
 } from "@/components/admin/AdminActions";
 import { AdminEmpty, AdminPageHeader, AdminPanel } from "@/components/admin/AdminChrome";
 import { AdminCheck, AdminField, AdminSubmit } from "@/components/admin/AdminField";
+import { TranslationFields } from "@/components/admin/TranslationFields";
+import { TranslationStatusBadges } from "@/components/admin/TranslationStatusBadges";
 import { listAdminServices } from "@/lib/cms/services";
+import { cmsTranslationStatus } from "@/lib/i18n/content";
+import { parseTranslations } from "@/lib/i18n/localize";
+
+function ServiceTranslationFields({
+  title,
+  description,
+  translations,
+}: {
+  title?: string;
+  description?: string | null;
+  translations?: unknown;
+}) {
+  return (
+    <TranslationFields
+      translations={parseTranslations(translations)}
+      fields={[
+        {
+          key: "title",
+          frName: "title",
+          labelFr: "Titre (FR)",
+          labelEn: "Title (EN)",
+          labelAr: "العنوان (AR)",
+          required: true,
+          frDefault: title,
+        },
+        {
+          key: "description",
+          frName: "description",
+          labelFr: "Description (FR)",
+          labelEn: "Description (EN)",
+          labelAr: "الوصف (AR)",
+          textarea: true,
+          frDefault: description,
+        },
+      ]}
+    />
+  );
+}
 
 export default async function AdminServicesPage() {
   const services = await listAdminServices();
@@ -16,9 +56,9 @@ export default async function AdminServicesPage() {
       <AdminPageHeader
         eyebrow="Contenus"
         title="Services"
-        description="Services actifs indexés dans la recherche globale (lien vers Qui sommes-nous)."
+        description="Services actifs indexés dans la recherche globale (lien vers Qui sommes-nous). Traductions FR / EN / AR gérées ci-dessous."
       />
-      <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
+      <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
         <AdminPanel title="Liste">
           {services.length === 0 ? (
             <AdminEmpty>Aucun service.</AdminEmpty>
@@ -35,18 +75,26 @@ export default async function AdminServicesPage() {
                       {service.description || service.slug} ·{" "}
                       {service.is_active ? "actif" : "inactif"}
                     </p>
+                    <TranslationStatusBadges
+                      status={cmsTranslationStatus(
+                        {
+                          title: service.title,
+                          description: service.description,
+                        },
+                        parseTranslations(service.translations),
+                        ["title", "description"],
+                      )}
+                    />
                   </div>
                   <AdminRowActions>
                     <AdminFormDialog action={saveService} title="Modifier le service">
                       <input type="hidden" name="id" value={service.id} />
-                      <AdminField label="Titre" name="title" defaultValue={service.title} required />
-                      <AdminField label="Slug" name="slug" defaultValue={service.slug} />
-                      <AdminField
-                        label="Description"
-                        name="description"
-                        textarea
-                        defaultValue={service.description}
+                      <ServiceTranslationFields
+                        title={service.title}
+                        description={service.description}
+                        translations={service.translations}
                       />
+                      <AdminField label="Slug" name="slug" defaultValue={service.slug} />
                       <AdminField label="Icône (nom lucide)" name="icon" defaultValue={service.icon} />
                       <AdminField
                         label="Ordre"
@@ -77,9 +125,8 @@ export default async function AdminServicesPage() {
         </AdminPanel>
         <AdminPanel title="Ajouter">
           <form action={saveService} className="space-y-4">
-            <AdminField label="Titre" name="title" required />
+            <ServiceTranslationFields />
             <AdminField label="Slug" name="slug" />
-            <AdminField label="Description" name="description" textarea />
             <AdminField label="Icône (nom lucide)" name="icon" />
             <AdminField label="Ordre" name="sort_order" type="number" defaultValue={0} />
             <AdminCheck label="Actif" name="is_active" defaultChecked />

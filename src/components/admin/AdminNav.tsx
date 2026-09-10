@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Clapperboard,
   FolderTree,
@@ -105,10 +105,12 @@ export function AdminNav({
   const pathname = usePathname();
   const { collapsed } = useAdminUi();
   const [open, setOpen] = useState(false);
+  const [navPath, setNavPath] = useState(pathname);
 
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
+  if (navPath !== pathname) {
+    setNavPath(pathname);
+    if (open) setOpen(false);
+  }
 
   return (
     <>

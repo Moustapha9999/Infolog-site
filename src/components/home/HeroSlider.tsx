@@ -15,6 +15,7 @@ import { NetworkGraph } from "@/components/home/NetworkGraph";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import type { HomeHeroSlide } from "@/data/home-hero-slides";
+import { useDictionary } from "@/lib/i18n/LocaleProvider";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
@@ -38,6 +39,8 @@ export function HeroSlider({
   intervalMs: number;
 }) {
   const reduce = useReducedMotion();
+  const dictionary = useDictionary();
+  const home = dictionary.home;
   const [index, setIndex] = useState(WELCOME);
   const pointerX = useRef<number | null>(null);
 
@@ -107,7 +110,7 @@ export function HeroSlider({
     <section
       role="region"
       aria-roledescription="carrousel"
-      aria-label="Présentation INFOLOG"
+      aria-label={home.heroAriaLabel}
       tabIndex={0}
       onKeyDown={onKeyDown}
       onPointerDown={onPointerDown}
@@ -138,7 +141,7 @@ export function HeroSlider({
               className={cn(
                 "absolute",
                 item.imageLayout === "right"
-                  ? "inset-y-0 right-0 w-[72%] sm:w-[64%] lg:w-[56%]"
+                  ? "inset-y-0 end-0 w-[72%] sm:w-[64%] lg:w-[56%]"
                   : "inset-0",
               )}
             >
@@ -199,7 +202,7 @@ export function HeroSlider({
             </p>
             <div className="mt-7">
               <Button href="#poles" variant="primary">
-                Découvrir nos solutions
+                {home.heroDiscoverSolutions}
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
@@ -207,11 +210,11 @@ export function HeroSlider({
           <div className="relative flex items-center lg:col-span-7">
             <div className="relative aspect-[430/270] w-full">
               <NetworkGraph />
-              <div className="pointer-events-none absolute left-[7%] top-[11%] font-mono text-[9px] uppercase tracking-[0.28em] text-paper/55">
-                Réseau
+              <div className="pointer-events-none absolute start-[7%] top-[11%] font-mono text-[9px] uppercase tracking-[0.28em] text-paper/55">
+                {home.heroNetworkLabel}
               </div>
-              <div className="pointer-events-none absolute bottom-[11%] left-[7%] font-mono text-[9px] uppercase tracking-[0.22em] text-paper/50">
-                IT · Finance · Formation · BTP
+              <div className="pointer-events-none absolute bottom-[11%] start-[7%] font-mono text-[9px] uppercase tracking-[0.22em] text-paper/50">
+                {home.heroNetworkDomains}
               </div>
             </div>
           </div>
@@ -247,12 +250,12 @@ export function HeroSlider({
               {slide.lead}
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
-            <Button href={slide.href} variant="primary">
-              {slide.ctaLabel ?? `Découvrir ${slide.title}`}
-              <ArrowRight className="h-4 w-4" />
-            </Button>
+              <Button href={slide.href} variant="primary">
+                {slide.ctaLabel ?? `${home.heroDiscoverPrefix} ${slide.title}`}
+                <ArrowRight className="h-4 w-4" />
+              </Button>
               <Button href="#poles" variant="secondary">
-                Toutes les solutions
+                {home.heroAllSolutions}
               </Button>
             </div>
           </div>

@@ -1,5 +1,7 @@
 import { loadPhonesFromFolders } from "@/data/telephonie/load-products";
 import type { PhoneProduct } from "@/data/telephonie/types";
+import type { Locale } from "@/lib/i18n/config";
+import { applyTranslations, parseTranslations } from "@/lib/i18n/localize";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { formatMoney, isPromoActive } from "./format";
@@ -20,6 +22,15 @@ function linksByRole(
     .sort((a, b) => a.position - b.position)
     .map((link) => link.media?.public_url || link.media?.external_url)
     .filter((src): src is string => Boolean(src));
+}
+
+function localizeProductRecord(product: ProductRecord, locale: Locale) {
+  return applyTranslations(
+    locale,
+    product,
+    parseTranslations(product.translations),
+    ["name", "tagline", "description", "meta_title", "meta_description"],
+  );
 }
 
 export function mapProductToPhone(
@@ -101,10 +112,13 @@ export function mapProductToPhone(
     metaTitle: product.meta_title,
     metaDescription: product.meta_description,
     searchKeywords,
+    translations: product.translations ?? null,
   };
 }
 
-export async function getPublishedProducts(): Promise<CatalogPhone[]> {
+export async function getPublishedProducts(
+  locale: Locale = "fr",
+): Promise<CatalogPhone[]> {
   const files = (): CatalogPhone[] => loadPhonesFromFolders();
 
   if (!isSupabaseConfigured()) return files();
@@ -132,7 +146,7 @@ export async function getPublishedProducts(): Promise<CatalogPhone[]> {
     return (data as ProductRecord[])
       .map((product) =>
         mapProductToPhone(
-          product,
+          localizeProductRecord(product, locale),
           (links ?? []).filter((link) => link.entity_id === product.id),
         ),
       )
@@ -142,8 +156,11 @@ export async function getPublishedProducts(): Promise<CatalogPhone[]> {
   }
 }
 
-export async function getPublishedProduct(slug: string) {
-  const all = await getPublishedProducts();
+export async function getPublishedProduct(
+  slug: string,
+  locale: Locale = "fr",
+) {
+  const all = await getPublishedProducts(locale);
   return all.find((phone) => phone.id === slug);
 }
 

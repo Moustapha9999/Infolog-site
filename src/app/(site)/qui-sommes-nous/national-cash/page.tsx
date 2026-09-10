@@ -16,14 +16,12 @@ import { OutboundCta } from "@/components/sections/OutboundCta";
 import { TechnicalFrame } from "@/components/ui/TechnicalFrame";
 import { Button } from "@/components/ui/Button";
 import { NationalCashStats } from "@/components/national-cash/NationalCashStats";
-import { nationalCash } from "@/data/site";
+import { getNationalCash } from "@/data/national-cash";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { buildLocaleMetadata } from "@/lib/i18n/seo";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
-
-export const metadata = {
-  title: "National Cash",
-  description: nationalCash.description,
-};
 
 const productIcons: LucideIcon[] = [
   PenLine,
@@ -34,14 +32,29 @@ const productIcons: LucideIcon[] = [
   Wallet,
 ];
 
-export default function NationalCashPage() {
+export async function generateMetadata() {
+  const locale = await getLocale();
+  const nationalCash = getNationalCash(locale);
+  return buildLocaleMetadata({
+    locale,
+    title: "National Cash",
+    description: nationalCash.description,
+    path: "/qui-sommes-nous/national-cash",
+  });
+}
+
+export default async function NationalCashPage() {
+  const locale = await getLocale();
+  const dictionary = getDictionary(locale);
+  const nationalCash = getNationalCash(locale);
+
   return (
     <>
       <section className="relative isolate overflow-hidden border-b border-ink/10 bg-ink">
         <div className="relative h-[240px] w-full sm:h-[280px] lg:h-[320px]">
           <Image
             src="/brand/national-cash-hero.jpg"
-            alt="Billets en ouguiya — National Cash"
+            alt="National Cash"
             fill
             priority
             quality={100}
@@ -56,7 +69,7 @@ export default function NationalCashPage() {
             wide
             className="absolute inset-0 flex items-end pb-5 sm:pb-6 lg:pb-8"
           >
-            <div className="border-l-2 border-paper pl-5 sm:pl-6">
+            <div className="border-s-2 border-paper ps-5 sm:ps-6">
               <h1 className={cn(type.h1, "text-paper")}>
                 {nationalCash.title}
               </h1>
@@ -76,20 +89,22 @@ export default function NationalCashPage() {
           <TechnicalFrame className="overflow-hidden">
             <div className="relative">
               <div
-                className="pointer-events-none absolute left-[16%] right-[16%] top-8 hidden h-px bg-plan/30 lg:block"
+                className="pointer-events-none absolute start-[16%] end-[16%] top-8 hidden h-px bg-plan/30 lg:block"
                 aria-hidden
               />
               <ul className="grid lg:grid-cols-2">
                 {nationalCash.paragraphs.map((paragraph) => (
                   <li
                     key={paragraph.slice(0, 48)}
-                    className="border-b border-ink/10 px-6 py-8 last:border-b-0 sm:px-8 sm:py-10 lg:border-b-0 lg:border-r lg:last:border-r-0"
+                    className="border-b border-ink/10 px-6 py-8 last:border-b-0 sm:px-8 sm:py-10 lg:border-b-0 lg:border-e lg:last:border-e-0"
                   >
                     <span
                       className="relative z-10 mb-5 block h-2.5 w-2.5 bg-plan"
                       aria-hidden
                     />
-                    <p className={cn(type.body, "text-ink/80")}>{paragraph}</p>
+                    <p className={cn(type.body, "text-start text-ink/80")}>
+                      {paragraph}
+                    </p>
                   </li>
                 ))}
               </ul>
@@ -98,27 +113,32 @@ export default function NationalCashPage() {
         </Container>
       </section>
 
-      <NationalCashStats />
+      <NationalCashStats
+        stats={nationalCash.stats}
+        label={dictionary.home.statsLabel}
+      />
 
       <section className="border-b border-ink/10 bg-paper">
         <Container wide className="py-16 lg:py-20">
           <TechnicalFrame className="overflow-hidden">
             <div className="relative">
               <div
-                className="pointer-events-none absolute left-[16%] right-[16%] top-8 hidden h-px bg-plan/30 lg:block"
+                className="pointer-events-none absolute start-[16%] end-[16%] top-8 hidden h-px bg-plan/30 lg:block"
                 aria-hidden
               />
               <ul className="grid lg:grid-cols-2">
                 {nationalCash.highlight.map((paragraph) => (
                   <li
                     key={paragraph.slice(0, 48)}
-                    className="border-b border-ink/10 px-6 py-8 last:border-b-0 sm:px-8 sm:py-10 lg:border-b-0 lg:border-r lg:last:border-r-0"
+                    className="border-b border-ink/10 px-6 py-8 last:border-b-0 sm:px-8 sm:py-10 lg:border-b-0 lg:border-e lg:last:border-e-0"
                   >
                     <span
                       className="relative z-10 mb-5 block h-2.5 w-2.5 bg-plan"
                       aria-hidden
                     />
-                    <p className={cn(type.body, "text-ink/80")}>{paragraph}</p>
+                    <p className={cn(type.body, "text-start text-ink/80")}>
+                      {paragraph}
+                    </p>
                   </li>
                 ))}
               </ul>
@@ -154,7 +174,7 @@ export default function NationalCashPage() {
                     <h3 className="mt-5 text-base font-medium leading-snug text-plan sm:text-lg">
                       {product.title}
                     </h3>
-                    <p className="mt-4 text-sm leading-7 text-mute">
+                    <p className="mt-4 text-sm leading-7 text-mute text-start sm:text-center">
                       {product.description}
                     </p>
                   </article>
@@ -190,19 +210,19 @@ export default function NationalCashPage() {
           wide
           className="grid items-start gap-10 py-16 lg:grid-cols-12 lg:gap-16 lg:py-20"
         >
-          <header className="border-l-2 border-plan pl-5 sm:pl-6 lg:col-span-7">
+          <header className="border-s-2 border-plan ps-5 sm:ps-6 lg:col-span-7">
             <SectionLabel>Agences</SectionLabel>
             <h2 className={cn(type.h2, "mt-4 text-ink")}>
               {nationalCash.agencies.title}
             </h2>
-            <p className={cn(type.body, "mt-5 text-ink/80")}>
+            <p className={cn(type.body, "mt-5 text-start text-ink/80")}>
               {nationalCash.agencies.text}
             </p>
           </header>
           <div className="overflow-hidden border border-ink/10 bg-ink lg:col-span-5">
             <Image
               src="/brand/national-cash-agences.jpg"
-              alt="Retrait mobile Cash National Cash"
+              alt="National Cash"
               width={982}
               height={1226}
               quality={92}
@@ -231,7 +251,7 @@ export default function NationalCashPage() {
                   <h3 className="font-mono text-[12px] uppercase tracking-[0.16em] text-plan sm:text-[13px]">
                     {card.title}
                   </h3>
-                  <p className="mt-4 flex-1 text-sm leading-7 text-mute">
+                  <p className="mt-4 flex-1 text-sm leading-7 text-mute text-start sm:text-center">
                     {card.description}
                   </p>
                 </article>
@@ -258,8 +278,8 @@ export default function NationalCashPage() {
       </section>
 
       <OutboundCta
-        title="National Cash en ligne"
-        lead="Retrouvez l'offre, les services et les démarches sur le site officiel National Cash."
+        title="National Cash"
+        lead={nationalCash.description}
         primary={{
           href: nationalCash.website.href,
           label: nationalCash.website.cta,

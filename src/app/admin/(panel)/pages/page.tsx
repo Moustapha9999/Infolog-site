@@ -12,7 +12,57 @@ import {
 } from "@/components/admin/AdminActions";
 import { AdminEmpty, AdminPageHeader, AdminPanel } from "@/components/admin/AdminChrome";
 import { AdminCheck, AdminField, AdminSubmit } from "@/components/admin/AdminField";
+import { TranslationFields } from "@/components/admin/TranslationFields";
+import { TranslationStatusBadges } from "@/components/admin/TranslationStatusBadges";
 import { listAdminPages } from "@/lib/cms/pages";
+import { cmsTranslationStatus } from "@/lib/i18n/content";
+import { parseTranslations } from "@/lib/i18n/localize";
+
+function PageTranslationFields({
+  title,
+  metaTitle,
+  metaDescription,
+  translations,
+}: {
+  title?: string;
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  translations?: unknown;
+}) {
+  return (
+    <TranslationFields
+      translations={parseTranslations(translations)}
+      fields={[
+        {
+          key: "title",
+          frName: "title",
+          labelFr: "Titre (FR)",
+          labelEn: "Title (EN)",
+          labelAr: "العنوان (AR)",
+          required: true,
+          frDefault: title,
+        },
+        {
+          key: "meta_title",
+          frName: "meta_title",
+          labelFr: "Meta title (FR)",
+          labelEn: "Meta title (EN)",
+          labelAr: "Meta title (AR)",
+          frDefault: metaTitle,
+        },
+        {
+          key: "meta_description",
+          frName: "meta_description",
+          labelFr: "Meta description (FR)",
+          labelEn: "Meta description (EN)",
+          labelAr: "Meta description (AR)",
+          textarea: true,
+          frDefault: metaDescription,
+        },
+      ]}
+    />
+  );
+}
 
 export default async function AdminPagesPage() {
   const pages = await listAdminPages();
@@ -72,24 +122,29 @@ export default async function AdminPagesPage() {
                     <p className="font-mono text-[11px] text-mute">
                       {page.slug} · {page.is_published ? "publiée" : "brouillon"}
                     </p>
+                    <TranslationStatusBadges
+                      status={cmsTranslationStatus(
+                        {
+                          title: page.title,
+                          meta_title: page.meta_title,
+                          meta_description: page.meta_description,
+                        },
+                        parseTranslations(page.translations),
+                        ["title"],
+                      )}
+                    />
                   </div>
                   <AdminRowActions>
                     <AdminEditLink href={`/admin/pages/${page.id}`} />
                     <AdminFormDialog action={savePage} title="Modifier la page">
                       <input type="hidden" name="id" value={page.id} />
-                      <AdminField label="Titre" name="title" defaultValue={page.title} required />
+                      <PageTranslationFields
+                        title={page.title}
+                        metaTitle={page.meta_title}
+                        metaDescription={page.meta_description}
+                        translations={page.translations}
+                      />
                       <AdminField label="Slug" name="slug" defaultValue={page.slug} />
-                      <AdminField
-                        label="Meta title"
-                        name="meta_title"
-                        defaultValue={page.meta_title}
-                      />
-                      <AdminField
-                        label="Meta description"
-                        name="meta_description"
-                        textarea
-                        defaultValue={page.meta_description}
-                      />
                       <AdminCheck
                         label="Publiée"
                         name="is_published"
@@ -117,10 +172,8 @@ export default async function AdminPagesPage() {
         </AdminPanel>
         <AdminPanel title="Nouvelle page">
           <form action={savePage} className="space-y-4">
-            <AdminField label="Titre" name="title" required />
+            <PageTranslationFields />
             <AdminField label="Slug" name="slug" />
-            <AdminField label="Meta title" name="meta_title" />
-            <AdminField label="Meta description" name="meta_description" textarea />
             <AdminCheck label="Publiée" name="is_published" defaultChecked />
             <AdminSubmit>Créer</AdminSubmit>
           </form>

@@ -2,6 +2,8 @@ import { Play } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionLabel } from "@/components/sections/SectionLabel";
 import { site } from "@/data/site";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getLocale } from "@/lib/i18n/get-locale";
 
 function getYoutubeId(url: string | null) {
   if (!url) return null;
@@ -17,7 +19,10 @@ function getYoutubeId(url: string | null) {
   }
 }
 
-export function ActivitiesVideo() {
+export async function ActivitiesVideo() {
+  const locale = await getLocale();
+  const dictionary = getDictionary(locale);
+  const copy = dictionary.home;
   const videoId = getYoutubeId(site.activitiesVideoUrl);
 
   return (
@@ -25,10 +30,10 @@ export function ActivitiesVideo() {
       <div className="relative overflow-hidden bg-ink text-paper">
         <Container className="relative pb-28 pt-16 text-center sm:pb-36 sm:pt-20">
           <div className="flex justify-center">
-            <SectionLabel tone="dark">Présentation</SectionLabel>
+            <SectionLabel tone="dark">{copy.videoLabel}</SectionLabel>
           </div>
           <h2 className="mt-4 text-3xl font-medium tracking-tight text-paper sm:text-4xl">
-            Nos activités
+            {copy.videoTitle}
           </h2>
         </Container>
       </div>
@@ -41,7 +46,7 @@ export function ActivitiesVideo() {
           {videoId ? (
             <div className="aspect-video w-full">
               <iframe
-                title="Nos activités — INFOLOG"
+                title={copy.videoIframeTitle}
                 src={`https://www.youtube.com/embed/${videoId}`}
                 className="h-full w-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -54,12 +59,10 @@ export function ActivitiesVideo() {
                 <Play className="h-7 w-7" aria-hidden />
               </span>
               <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-copper">
-                Vidéo à confirmer par INFOLOG
+                {copy.videoPlaceholderLabel}
               </p>
               <p className="max-w-md text-sm leading-6 text-paper/75">
-                Emplacement réservé pour la vidéo de présentation des activités.
-                Dès que le lien YouTube officiel sera fourni, il remplacera ce
-                bloc.
+                {copy.videoPlaceholderBody}
               </p>
             </div>
           )}

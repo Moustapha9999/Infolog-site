@@ -1,10 +1,14 @@
 "use client";
 
 import { X } from "lucide-react";
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { TechnicalFrame } from "@/components/ui/TechnicalFrame";
 import { cn } from "@/lib/utils";
+
+function subscribe() {
+  return () => undefined;
+}
 
 export function AdminDialog({
   open,
@@ -22,11 +26,7 @@ export function AdminDialog({
   wide?: boolean;
 }) {
   const titleId = useId();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(subscribe, () => true, () => false);
 
   useEffect(() => {
     if (!open) return;

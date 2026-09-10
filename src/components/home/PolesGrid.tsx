@@ -1,10 +1,13 @@
 import Link from "next/link";
 import { Building2, CreditCard, GraduationCap, Server } from "lucide-react";
-import { poles, type Pole } from "@/data/poles";
+import type { Pole } from "@/data/poles";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/sections/Reveal";
 import { SectionLabel } from "@/components/sections/SectionLabel";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { getLocalizedPoles } from "@/lib/i18n/localized-poles";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
@@ -15,16 +18,20 @@ const poleIcon: Record<Pole["id"], typeof Server> = {
   industrie: Building2,
 };
 
-export function PolesGrid() {
+export async function PolesGrid() {
+  const locale = await getLocale();
+  const dictionary = getDictionary(locale);
+  const localizedPoles = getLocalizedPoles(locale);
+
   return (
     <section id="poles" className="scroll-mt-40 py-20">
       <Container>
-        <SectionLabel>Domaines d&apos;expertise</SectionLabel>
+        <SectionLabel>{dictionary.home.polesLabel}</SectionLabel>
         <h2 className={cn(type.h2, "mt-4 max-w-xl text-ink")}>
-          Quatre pôles, une même entreprise
+          {dictionary.home.polesTitle}
         </h2>
         <div className="mt-12 grid gap-5 lg:grid-cols-2">
-          {poles.map((pole, index) => {
+          {localizedPoles.map((pole, index) => {
             const Icon = poleIcon[pole.id];
             return (
               <Reveal key={pole.id} delay={index * 0.06} className="h-full">
@@ -32,7 +39,7 @@ export function PolesGrid() {
                   <span className="frame-corners-bl" aria-hidden />
                   <span className="frame-corners-br" aria-hidden />
                   <span
-                    className="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 bg-copper transition-transform duration-500 ease-out group-hover:scale-x-100"
+                    className="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 bg-copper transition-transform duration-500 ease-out group-hover:scale-x-100 rtl:origin-right"
                     aria-hidden
                   />
                   <div className="flex items-start">
@@ -58,7 +65,7 @@ export function PolesGrid() {
                   </ul>
                   <div className="relative z-10 mt-auto pt-8">
                     <Button href={`/${pole.slug}`} variant="primary">
-                      Découvrir
+                      {dictionary.home.discover}
                     </Button>
                   </div>
                 </article>

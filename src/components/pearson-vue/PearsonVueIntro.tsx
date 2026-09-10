@@ -1,9 +1,12 @@
 import { Container } from "@/components/ui/Container";
-import { pearsonVue as content } from "@/data/pearson-vue";
+import { getPearsonVue } from "@/data/pearson-vue";
+import { getLocale } from "@/lib/i18n/get-locale";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export function PearsonVueIntro() {
+export async function PearsonVueIntro() {
+  const locale = await getLocale();
+  const content = getPearsonVue(locale);
   const { presentation, leader } = content;
 
   return (

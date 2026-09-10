@@ -15,19 +15,29 @@ import { SectionLabel } from "@/components/sections/SectionLabel";
 import { OutboundCta } from "@/components/sections/OutboundCta";
 import { TechnicalFrame } from "@/components/ui/TechnicalFrame";
 import { Button } from "@/components/ui/Button";
-import { iziShop } from "@/data/izi-shop";
+import { getIziShop } from "@/data/izi-shop";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { buildLocaleMetadata } from "@/lib/i18n/seo";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export const metadata = {
-  title: "IZI SHOP",
-  description: iziShop.description,
-};
+export async function generateMetadata() {
+  const locale = await getLocale();
+  const iziShop = getIziShop(locale);
+  return buildLocaleMetadata({
+    locale,
+    title: iziShop.title,
+    description: iziShop.description,
+    path: "/telephonie/izi-shop",
+  });
+}
 
 const highlightIcons: LucideIcon[] = [CreditCard, BadgeCheck, Wrench];
 const stepIcons: LucideIcon[] = [UserRound, Smartphone, IdCard, MessageCircle];
 
-export default function IziShopPage() {
+export default async function IziShopPage() {
+  const locale = await getLocale();
+  const iziShop = getIziShop(locale);
   return (
     <>
       <section className="relative isolate overflow-hidden border-b border-ink/10 bg-ink">

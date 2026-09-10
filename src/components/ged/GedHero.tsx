@@ -1,10 +1,13 @@
 import { Container } from "@/components/ui/Container";
-import { ged } from "@/data/ged";
 import { GedHeroIcon } from "@/components/ged/GedHeroIcon";
+import { getGed } from "@/data/ged";
+import { getLocale } from "@/lib/i18n/get-locale";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export function GedHero() {
+export async function GedHero() {
+  const locale = await getLocale();
+  const ged = getGed(locale);
   return (
     <section className="relative isolate overflow-hidden border-b border-ink/10 bg-paper-2/60">
       <div

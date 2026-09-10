@@ -1,10 +1,13 @@
 import Image from "next/image";
 import { Container } from "@/components/ui/Container";
-import { centreAppel as content } from "@/data/centre-appel";
+import { getCentreAppel } from "@/data/centre-appel";
+import { getLocale } from "@/lib/i18n/get-locale";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export function CentreAppelHero() {
+export async function CentreAppelHero() {
+  const locale = await getLocale();
+  const content = getCentreAppel(locale);
   return (
     <section className="relative isolate overflow-hidden border-b border-ink/10 bg-paper-2/60">
       <div

@@ -11,23 +11,28 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionLabel } from "@/components/sections/SectionLabel";
-import { dataCenter } from "@/data/data-center";
+import { getDataCenter, type DataCenterContent } from "@/data/data-center";
+import { getLocale } from "@/lib/i18n/get-locale";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-const icons: Record<(typeof dataCenter.solutions)[number]["icon"], LucideIcon> =
-  {
-    network: Network,
-    server: Server,
-    storage: Database,
-    backup: HardDrive,
-    hyper: Settings2,
-    security: Shield,
-    pra: RefreshCcw,
-    services: Users,
-  };
+const icons: Record<
+  DataCenterContent["solutions"][number]["icon"],
+  LucideIcon
+> = {
+  network: Network,
+  server: Server,
+  storage: Database,
+  backup: HardDrive,
+  hyper: Settings2,
+  security: Shield,
+  pra: RefreshCcw,
+  services: Users,
+};
 
-export function DataCenterSolution() {
+export async function DataCenterSolution() {
+  const locale = await getLocale();
+  const dataCenter = getDataCenter(locale);
   return (
     <section className="border-b border-ink/10 bg-paper-2/40 py-16 sm:py-20">
       <Container>

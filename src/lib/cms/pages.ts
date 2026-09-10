@@ -1,8 +1,10 @@
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
+import type { Locale } from "@/lib/i18n/config";
+import { applyTranslations, parseTranslations } from "@/lib/i18n/localize";
 import type { PageRecord, PageSectionRecord } from "./types";
 
-export async function getPageSections(slug: string) {
+export async function getPageSections(slug: string, locale: Locale = "fr") {
   const map = new Map<string, string>();
   if (!isSupabaseConfigured()) return map;
   try {
@@ -20,7 +22,13 @@ export async function getPageSections(slug: string) {
       .eq("page_id", page.id)
       .order("sort_order", { ascending: true });
     for (const section of (sections ?? []) as PageSectionRecord[]) {
-      if (section.value) map.set(section.key, section.value);
+      const localized = applyTranslations(
+        locale,
+        section,
+        parseTranslations(section.translations),
+        ["value"],
+      );
+      if (localized.value) map.set(section.key, localized.value);
     }
     return map;
   } catch {

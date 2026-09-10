@@ -12,14 +12,22 @@ import {
 import { Container } from "@/components/ui/Container";
 import { SectionLabel } from "@/components/sections/SectionLabel";
 import { TechnicalFrame } from "@/components/ui/TechnicalFrame";
-import { infogerance } from "@/data/infogerance";
+import { getInfogerance } from "@/data/infogerance";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { buildLocaleMetadata } from "@/lib/i18n/seo";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export const metadata = {
-  title: "Infogérance",
-  description: infogerance.description,
-};
+export async function generateMetadata() {
+  const locale = await getLocale();
+  const infogerance = getInfogerance(locale);
+  return buildLocaleMetadata({
+    locale,
+    title: infogerance.title,
+    description: infogerance.description,
+    path: "/infogerance",
+  });
+}
 
 const serviceIcons: LucideIcon[] = [
   Workflow,
@@ -31,7 +39,9 @@ const serviceIcons: LucideIcon[] = [
   LifeBuoy,
 ];
 
-export default function InfogerancePage() {
+export default async function InfogerancePage() {
+  const locale = await getLocale();
+  const infogerance = getInfogerance(locale);
   return (
     <>
       <section className="relative isolate overflow-hidden border-b border-ink/10">

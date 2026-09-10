@@ -1,11 +1,11 @@
-/** Normalisation FR : accents, casse, ponctuation. */
+/** Normalisation multilingue : accents latins + conservation de l’arabe. */
 export function normalizeSearchText(value: string) {
   return value
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .replace(/['’]/g, " ")
-    .replace(/[^a-z0-9\s+]/g, " ")
+    .replace(/[^\p{L}\p{N}\s+]/gu, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -39,6 +39,10 @@ export function isFuzzyMatch(queryToken: string, candidate: string) {
   if (!queryToken || !candidate) return false;
   if (candidate.includes(queryToken) || queryToken.includes(candidate)) {
     return true;
+  }
+  // Fuzzy Latin only — Arabic script matching stays exact/substring.
+  if (/[\u0600-\u06FF]/.test(queryToken) || /[\u0600-\u06FF]/.test(candidate)) {
+    return false;
   }
   const maxDist =
     queryToken.length <= 4 ? 1 : queryToken.length <= 7 ? 2 : 3;

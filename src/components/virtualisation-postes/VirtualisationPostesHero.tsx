@@ -1,10 +1,13 @@
 import { Container } from "@/components/ui/Container";
-import { virtualisationPostes as content } from "@/data/virtualisation-postes";
 import { VirtualisationPostesHeroIcon } from "@/components/virtualisation-postes/VirtualisationPostesHeroIcon";
+import { getVirtualisationPostes } from "@/data/virtualisation-postes";
+import { getLocale } from "@/lib/i18n/get-locale";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export function VirtualisationPostesHero() {
+export async function VirtualisationPostesHero() {
+  const locale = await getLocale();
+  const content = getVirtualisationPostes(locale);
   return (
     <section className="relative isolate overflow-hidden border-b border-ink/10 bg-paper-2/60">
       <div

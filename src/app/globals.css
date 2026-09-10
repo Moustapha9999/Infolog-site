@@ -62,6 +62,19 @@ body {
   font-family: var(--font-grotesk), system-ui, sans-serif;
 }
 
+html[dir="rtl"] body,
+html[lang="ar"] body {
+  font-family:
+    var(--font-arabic),
+    var(--font-grotesk),
+    system-ui,
+    sans-serif;
+}
+
+html[dir="rtl"] .font-mono {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+}
+
 ::selection {
   background: color-mix(in srgb, var(--plan) 28%, white);
   color: var(--ink);

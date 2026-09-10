@@ -34,6 +34,7 @@ export type BrandRecord = {
   slug: string;
   logo_id: string | null;
   is_active: boolean;
+  translations?: import("@/lib/i18n/localize").ContentTranslations | null;
 };
 
 export type CategoryRecord = {
@@ -44,6 +45,7 @@ export type CategoryRecord = {
   image_id: string | null;
   is_active: boolean;
   sort_order: number;
+  translations?: import("@/lib/i18n/localize").ContentTranslations | null;
 };
 
 export type PriceRecord = {
@@ -77,6 +79,40 @@ export type ProductRecord = {
   brands?: BrandRecord | null;
   categories?: CategoryRecord | null;
   product_prices?: PriceRecord | PriceRecord[] | null;
+  translations?: import("@/lib/i18n/localize").ContentTranslations | null;
+};
+
+export type ServiceRecord = {
+  id: string;
+  title: string;
+  slug: string;
+  description: string | null;
+  icon: string | null;
+  sort_order: number;
+  is_active: boolean;
+  translations?: import("@/lib/i18n/localize").ContentTranslations | null;
+};
+
+export type PageRecord = {
+  id: string;
+  slug: string;
+  title: string;
+  meta_title: string | null;
+  meta_description: string | null;
+  is_published: boolean;
+  translations?: import("@/lib/i18n/localize").ContentTranslations | null;
+};
+
+export type PageSectionRecord = {
+  id: string;
+  page_id: string;
+  key: string;
+  kind: string;
+  value: string | null;
+  href: string | null;
+  media_id: string | null;
+  sort_order: number;
+  translations?: import("@/lib/i18n/localize").ContentTranslations | null;
 };
 
 export type BannerRecord = {
@@ -90,36 +126,7 @@ export type BannerRecord = {
   is_active: boolean;
   starts_at: string | null;
   ends_at: string | null;
-};
-
-export type ServiceRecord = {
-  id: string;
-  title: string;
-  slug: string;
-  description: string | null;
-  icon: string | null;
-  sort_order: number;
-  is_active: boolean;
-};
-
-export type PageRecord = {
-  id: string;
-  slug: string;
-  title: string;
-  meta_title: string | null;
-  meta_description: string | null;
-  is_published: boolean;
-};
-
-export type PageSectionRecord = {
-  id: string;
-  page_id: string;
-  key: string;
-  kind: string;
-  value: string | null;
-  href: string | null;
-  media_id: string | null;
-  sort_order: number;
+  translations?: import("@/lib/i18n/localize").ContentTranslations | null;
 };
 
 export type ContactMessage = {
@@ -144,6 +151,7 @@ export type PhoneCommerce = {
   metaTitle?: string | null;
   metaDescription?: string | null;
   searchKeywords?: string[];
+  translations?: import("@/lib/i18n/localize").ContentTranslations | null;
 };
 
 export type CatalogPhone = PhoneProduct & PhoneCommerce;

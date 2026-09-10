@@ -16,16 +16,49 @@ import { PhoneFeatureHighlightSection } from "@/components/telephonie/PhoneFeatu
 import { PhoneFeatureSuiteSection } from "@/components/telephonie/PhoneFeatureSuite";
 import { PhoneKeyPointsSection } from "@/components/telephonie/PhoneKeyPointsSection";
 import {
-  categoryLabel,
   formatPhoneMemory,
+  getCategoryLabel,
   getPhoneGallery,
   getPublishedProduct,
   getPublishedProducts,
+  getTelephonie,
 } from "@/data/telephonie";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { applyTranslations, parseTranslations } from "@/lib/i18n/localize";
+import { buildLocaleMetadata } from "@/lib/i18n/seo";
+import type { CatalogPhone } from "@/lib/cms/types";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
+
+function localizeCatalogPhone(
+  phone: CatalogPhone,
+  locale: Awaited<ReturnType<typeof getLocale>>,
+): CatalogPhone {
+  if (!phone.translations) return phone;
+  const localized = applyTranslations(
+    locale,
+    {
+      name: phone.name,
+      tagline: phone.tagline ?? null,
+      description: phone.description ?? null,
+      meta_title: phone.metaTitle ?? null,
+      meta_description: phone.metaDescription ?? null,
+    },
+    parseTranslations(phone.translations),
+    ["name", "tagline", "description", "meta_title", "meta_description"],
+  );
+  return {
+    ...phone,
+    name: localized.name,
+    tagline: localized.tagline ?? phone.tagline,
+    description: localized.description ?? phone.description,
+    metaTitle: localized.meta_title ?? phone.metaTitle,
+    metaDescription: localized.meta_description ?? phone.metaDescription,
+  };
+}
 
 export async function generateStaticParams() {
   const phones = await getPublishedProducts();
@@ -36,24 +69,42 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const phone = await getPublishedProduct(slug);
-  if (!phone) return { title: "Produit" };
-  return {
-    title: phone.name,
+  const locale = await getLocale();
+  const raw = await getPublishedProduct(slug, locale);
+  const phone = raw ? localizeCatalogPhone(raw, locale) : null;
+  if (!phone) {
+    return buildLocaleMetadata({
+      locale,
+      title: "Produit",
+      description: "Produit INFOLOG",
+      path: `/telephonie/${slug}`,
+    });
+  }
+  return buildLocaleMetadata({
+    locale,
+    title: phone.metaTitle || phone.name,
     description:
-      phone.description ??
-      phone.tagline ??
+      phone.metaDescription ||
+      phone.description ||
+      phone.tagline ||
       `${phone.name} — disponible chez INFOLOG. ${phone.variants.join(" · ")}`,
-  };
+    path: `/telephonie/${slug}`,
+  });
 }
 
 export default async function PhoneProductPage({ params }: PageProps) {
   const { slug } = await params;
-  const [phone, catalog] = await Promise.all([
-    getPublishedProduct(slug),
-    getPublishedProducts(),
+  const locale = await getLocale();
+  const [rawPhone, catalog] = await Promise.all([
+    getPublishedProduct(slug, locale),
+    getPublishedProducts(locale),
   ]);
-  if (!phone) notFound();
+  if (!rawPhone) notFound();
+
+  const phone = localizeCatalogPhone(rawPhone, locale);
+  const telephonie = getTelephonie(locale);
+  const categoryLabels = getCategoryLabel(locale);
+  const dictionary = getDictionary(locale);
 
   const gallery = getPhoneGallery(phone).filter((src) => src !== phone.hero);
   const storyVideos = (phone.storyVideos ?? []).filter(
@@ -76,7 +127,7 @@ export default async function PhoneProductPage({ params }: PageProps) {
         <section className="border-b border-ink/10 bg-paper-2/40 py-4">
           <Container className="flex flex-wrap items-center gap-2 text-sm text-mute">
             <Link href="/telephonie" className="hover:text-plan">
-              Téléphonie
+              {telephonie.title}
             </Link>
             <span aria-hidden>/</span>
             <span className="text-ink">{phone.name}</span>
@@ -200,10 +251,10 @@ export default async function PhoneProductPage({ params }: PageProps) {
             <div>
               <SectionLabel>Samsung Galaxy</SectionLabel>
               <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.14em] text-plan">
-                {categoryLabel[phone.category]}
+                {categoryLabels[phone.category]}
               </p>
               <h2 className="mt-2 text-3xl font-medium tracking-tight text-ink sm:text-4xl">
-                {hasHero ? "Présentation" : phone.name}
+                {hasHero ? telephonie.presentationLabel : phone.name}
               </h2>
               {phone.tagline ? (
                 <p className="mt-3 text-lg text-ink/80">{phone.tagline}</p>
@@ -217,13 +268,13 @@ export default async function PhoneProductPage({ params }: PageProps) {
                   ) : null}
                   {phone.priceLabel}
                   {phone.isPromo ? (
-                    <span className="ml-2 text-copper">Promotion</span>
+                    <span className="ml-2 text-copper">{telephonie.promotion}</span>
                   ) : null}
                 </p>
               ) : null}
               {phone.availability === "out_of_stock" ? (
                 <p className="mt-2 font-mono text-xs uppercase tracking-[0.14em] text-copper">
-                  Rupture de stock
+                  {telephonie.outOfStock}
                 </p>
               ) : null}
               {!hasHero ? (
@@ -256,10 +307,10 @@ export default async function PhoneProductPage({ params }: PageProps) {
                 <Button
                   href={`/contact?subject=${encodeURIComponent(`Demande de modèle — ${phone.name}`)}`}
                 >
-                  Demander ce modèle
+                  {telephonie.requestModel}
                 </Button>
                 <Button href="/telephonie#catalogue" variant="outline">
-                  Retour au catalogue
+                  {telephonie.backToCatalog}
                 </Button>
               </div>
             </div>
@@ -270,10 +321,10 @@ export default async function PhoneProductPage({ params }: PageProps) {
             <div className="mt-14 border-t border-ink/10 pt-12">
               <div className="mx-auto max-w-2xl text-center">
                 <div className="flex justify-center">
-                  <SectionLabel>Caractéristiques</SectionLabel>
+                  <SectionLabel>{telephonie.specsLabel}</SectionLabel>
                 </div>
                 <h3 className="mt-4 text-2xl font-medium tracking-tight text-ink sm:text-3xl">
-                  Fiche technique
+                  {telephonie.specsTitle}
                 </h3>
               </div>
 
@@ -296,7 +347,7 @@ export default async function PhoneProductPage({ params }: PageProps) {
               {phone.cameras && phone.cameras.length > 0 ? (
                 <div className="mx-auto mt-8 max-w-4xl border border-ink/10 bg-paper p-5 sm:p-6">
                   <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-mute">
-                    Caméra principale
+                    {telephonie.mainCamera}
                   </p>
                   <ul className="mt-3 space-y-1.5 text-sm leading-6 text-ink/80 sm:text-base">
                     {phone.cameras.map((cam) => (
@@ -313,13 +364,23 @@ export default async function PhoneProductPage({ params }: PageProps) {
         <Container>
           <div className="mx-auto max-w-2xl text-center">
             <div className="flex justify-center">
-              <SectionLabel>Catalogue</SectionLabel>
+              <SectionLabel>{telephonie.relatedLabel}</SectionLabel>
             </div>
             <h2 className="mt-4 text-2xl font-medium tracking-tight text-ink sm:text-3xl">
-              Autres modèles
+              {telephonie.relatedTitle}
             </h2>
           </div>
-          <PhoneCarousel phones={related} />
+          <PhoneCarousel
+            phones={related}
+            discoverLabel={dictionary.home.discover}
+            newBadge={telephonie.newBadge}
+            categoryLabels={categoryLabels}
+            productInfoSheet={telephonie.productInfoSheet}
+            visualComing={telephonie.visualComing}
+            carouselProgress={telephonie.carouselProgress}
+            scrollLeft={telephonie.scrollLeft}
+            scrollRight={telephonie.scrollRight}
+          />
         </Container>
       </section>
 
@@ -327,17 +388,16 @@ export default async function PhoneProductPage({ params }: PageProps) {
         <Container>
           <div className="mx-auto max-w-3xl border border-ink/10 bg-ink px-6 py-12 text-center sm:px-10 sm:py-14">
             <h2 className="text-2xl font-medium tracking-tight text-paper sm:text-3xl">
-              Intéressé par le {phone.name} ?
+              {telephonie.interestedTitle.replace("{name}", phone.name)}
             </h2>
             <p className="mt-3 text-base leading-7 text-paper/70">
-              Contactez INFOLOG pour la disponibilité, les configurations et un
-              devis.
+              {telephonie.interestedLead}
             </p>
             <div className="mt-8 flex justify-center">
               <Button
-                href={`/contact?subject=${encodeURIComponent(`Intéressé — ${phone.name}`)}`}
+                href={`/contact?subject=${encodeURIComponent(`${telephonie.requestModel} — ${phone.name}`)}`}
               >
-                Contact
+                {dictionary.common.contact}
               </Button>
             </div>
           </div>

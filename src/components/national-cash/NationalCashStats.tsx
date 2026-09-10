@@ -5,7 +5,9 @@ import { useReducedMotion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/sections/Reveal";
 import { SectionLabel } from "@/components/sections/SectionLabel";
-import { nationalCash } from "@/data/site";
+import type { NationalCashCopy } from "@/data/national-cash";
+
+type CashStat = NationalCashCopy["stats"][number];
 
 function useCount(target: number, active: boolean, reduce: boolean | null) {
   const [value, setValue] = useState(reduce ? target : 0);
@@ -43,7 +45,7 @@ function StatItem({
   stat,
   active,
 }: {
-  stat: (typeof nationalCash.stats)[number];
+  stat: CashStat;
   active: boolean;
 }) {
   const reduce = useReducedMotion();
@@ -52,7 +54,7 @@ function StatItem({
 
   return (
     <article className="relative border border-plan/35 bg-ink/50 p-6 sm:p-7">
-      <span className="absolute right-4 top-4 h-1.5 w-1.5 bg-copper" aria-hidden />
+      <span className="absolute end-4 top-4 h-1.5 w-1.5 bg-copper" aria-hidden />
       <p
         className={`font-mono leading-none tracking-tight text-paper ${
           grouped
@@ -71,7 +73,13 @@ function StatItem({
   );
 }
 
-export function NationalCashStats() {
+export function NationalCashStats({
+  stats,
+  label,
+}: {
+  stats: NationalCashCopy["stats"];
+  label: string;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(false);
 
@@ -91,12 +99,12 @@ export function NationalCashStats() {
   return (
     <section className="relative overflow-hidden bg-ink text-paper">
       <Container wide className="py-16 sm:py-20">
-        <SectionLabel tone="dark">Chiffres clés</SectionLabel>
+        <SectionLabel tone="dark">{label}</SectionLabel>
         <div
           ref={ref}
           className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
         >
-          {nationalCash.stats.map((stat, index) => (
+          {stats.map((stat, index) => (
             <Reveal key={stat.label} delay={index * 0.08}>
               <StatItem stat={stat} active={active} />
             </Reveal>

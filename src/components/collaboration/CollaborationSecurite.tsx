@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { Shield, Settings2 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
-import { collaboration } from "@/data/collaboration";
+import type { CollaborationContent } from "@/data/collaboration";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
@@ -14,7 +14,11 @@ const icons = {
   operationnel: Settings2,
 } as const;
 
-export function CollaborationSecurite() {
+export function CollaborationSecurite({
+  collaboration,
+}: {
+  collaboration: CollaborationContent;
+}) {
   const reduce = useReducedMotion();
   const { networkSecurity } = collaboration;
   const [activeId, setActiveId] = useState<string>(

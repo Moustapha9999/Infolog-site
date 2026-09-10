@@ -1,9 +1,12 @@
 import { Container } from "@/components/ui/Container";
-import { pearsonVue as content } from "@/data/pearson-vue";
+import { getPearsonVue } from "@/data/pearson-vue";
+import { getLocale } from "@/lib/i18n/get-locale";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export function PearsonVueFeatures() {
+export async function PearsonVueFeatures() {
+  const locale = await getLocale();
+  const content = getPearsonVue(locale);
   return (
     <section className="relative isolate overflow-hidden border-b border-ink/10 bg-paper-2/50 py-14 sm:py-16 lg:py-20">
       <div

@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { getPublishedServices } from "@/lib/cms/services";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getLocale } from "@/lib/i18n/get-locale";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
@@ -35,7 +37,10 @@ const serviceIcons: LucideIcon[] = [
 ];
 
 export async function AboutServices() {
-  const services = await getPublishedServices();
+  const locale = await getLocale();
+  const dictionary = getDictionary(locale);
+  const services = await getPublishedServices(locale);
+
   return (
     <section className="border-t border-ink/10 bg-paper-2/40 pb-20 pt-16 sm:pb-24 sm:pt-20">
       <Container wide>
@@ -43,10 +48,10 @@ export async function AboutServices() {
           <div className="grid gap-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:items-center lg:gap-12">
             <div className="max-w-md">
               <h2 className={cn(type.h2, "text-ink")}>
-                Nos services
+                {dictionary.about.servicesTitle}
               </h2>
-              <p className={cn(type.lead, "mt-4 text-mute")}>
-                Nous offrons un large éventail de services
+              <p className={cn(type.lead, "mt-4 text-mute text-start")}>
+                {dictionary.about.servicesLead}
               </p>
             </div>
 
@@ -54,7 +59,7 @@ export async function AboutServices() {
               <div className="relative aspect-[16/10] overflow-hidden border border-ink/10 sm:aspect-[2/1] lg:aspect-[16/8] lg:min-h-[280px]">
                 <Image
                   src="/brand/about-services.jpg"
-                  alt="Équipe INFOLOG en session de travail technique"
+                  alt={dictionary.about.servicesImageAlt}
                   fill
                   quality={90}
                   sizes="(max-width: 1024px) 100vw, 70vw"

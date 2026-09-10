@@ -2,16 +2,26 @@ import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { SectionLabel } from "@/components/sections/SectionLabel";
 import { TechnicalFrame } from "@/components/ui/TechnicalFrame";
-import { erp } from "@/data/erp";
+import { getErp } from "@/data/erp";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { buildLocaleMetadata } from "@/lib/i18n/seo";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export const metadata = {
-  title: "Progiciel ERP",
-  description: erp.description,
-};
+export async function generateMetadata() {
+  const locale = await getLocale();
+  const erp = getErp(locale);
+  return buildLocaleMetadata({
+    locale,
+    title: erp.title,
+    description: erp.description,
+    path: "/progiciel-erp",
+  });
+}
 
-export default function ErpPage() {
+export default async function ErpPage() {
+  const locale = await getLocale();
+  const erp = getErp(locale);
   return (
     <>
       <section className="relative isolate overflow-hidden border-b border-ink/10">

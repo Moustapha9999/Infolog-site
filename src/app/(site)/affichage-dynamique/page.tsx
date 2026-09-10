@@ -1,14 +1,22 @@
 import { AffichageDynamiqueHero } from "@/components/affichage-dynamique/AffichageDynamiqueHero";
 import { AffichageDynamiqueDuo } from "@/components/affichage-dynamique/AffichageDynamiqueDuo";
 import { AffichageDynamiqueIptv } from "@/components/affichage-dynamique/AffichageDynamiqueIptv";
-import { affichageDynamique } from "@/data/affichage-dynamique";
+import { getAffichageDynamique } from "@/data/affichage-dynamique";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { buildLocaleMetadata } from "@/lib/i18n/seo";
 
-export const metadata = {
-  title: "Affichage dynamique",
-  description: affichageDynamique.description,
-};
+export async function generateMetadata() {
+  const locale = await getLocale();
+  const affichageDynamique = getAffichageDynamique(locale);
+  return buildLocaleMetadata({
+    locale,
+    title: affichageDynamique.title,
+    description: affichageDynamique.description,
+    path: "/affichage-dynamique",
+  });
+}
 
-export default function AffichageDynamiquePage() {
+export default async function AffichageDynamiquePage() {
   return (
     <>
       <AffichageDynamiqueHero />

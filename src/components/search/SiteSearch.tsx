@@ -4,11 +4,12 @@ import { useEffect, useId, useRef, useState, useTransition } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Search, X } from "lucide-react";
-import {
-  contentTypeLabel,
-  type SearchHit,
-  type SearchResponse,
+import type {
+  SearchContentType,
+  SearchHit,
+  SearchResponse,
 } from "@/components/search/client-types";
+import { useDictionary, useLocale } from "@/lib/i18n/LocaleProvider";
 import { cn } from "@/lib/utils";
 
 type SiteSearchProps = {
@@ -27,6 +28,8 @@ export function SiteSearch({
   onNavigate,
 }: SiteSearchProps) {
   const router = useRouter();
+  const { locale } = useLocale();
+  const dictionary = useDictionary();
   const listId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -58,16 +61,13 @@ export function SiteSearch({
 
   useEffect(() => {
     const value = query.trim();
-    if (value.length < 2) {
-      setPayload(null);
-      return;
-    }
+    if (value.length < 2) return;
     const controller = new AbortController();
     const timer = setTimeout(() => {
       startTransition(async () => {
         try {
           const response = await fetch(
-            `/api/search?mode=suggest&q=${encodeURIComponent(value)}`,
+            `/api/search?mode=suggest&q=${encodeURIComponent(value)}&locale=${locale}`,
             { signal: controller.signal },
           );
           if (!response.ok) return;
@@ -83,7 +83,7 @@ export function SiteSearch({
       clearTimeout(timer);
       controller.abort();
     };
-  }, [query]);
+  }, [query, locale]);
 
   function goToResults(value = query) {
     const next = value.trim();
@@ -93,14 +93,17 @@ export function SiteSearch({
     router.push(`/recherche?q=${encodeURIComponent(next)}`);
   }
 
-  const suggestions = payload?.suggestions ?? [];
+  const suggestions =
+    query.trim().length < 2 ? [] : (payload?.suggestions ?? []);
+  const typeLabel = (type: SearchContentType) =>
+    dictionary.search.types[type] ?? type;
 
   return (
     <div
       ref={wrapRef}
       className={cn(
         "relative",
-        variant === "nav" && "w-[168px] xl:w-[200px] 2xl:w-[220px]",
+        variant === "nav" && "w-[148px] xl:w-[180px] 2xl:w-[200px]",
         variant === "mobile" && "w-full",
         variant === "page" && "w-full max-w-2xl",
         className,
@@ -120,7 +123,7 @@ export function SiteSearch({
         )}
       >
         <label className="sr-only" htmlFor={listId}>
-          Rechercher sur INFOLOG
+          {dictionary.search.aria}
         </label>
         <input
           id={listId}
@@ -130,11 +133,12 @@ export function SiteSearch({
           autoFocus={autoFocus}
           autoComplete="off"
           placeholder={
-            variant === "nav" ? "Rechercher…" : "Rechercher sur INFOLOG…"
+            variant === "nav"
+              ? dictionary.search.placeholderNav
+              : dictionary.search.placeholderFull
           }
-          aria-label="Rechercher sur INFOLOG"
+          aria-label={dictionary.search.aria}
           aria-autocomplete="list"
-          aria-expanded={open && suggestions.length > 0}
           aria-controls={`${listId}-list`}
           onFocus={() => query.trim().length >= 2 && setOpen(true)}
           onChange={(event) => setQuery(event.target.value)}
@@ -148,7 +152,7 @@ export function SiteSearch({
         {query ? (
           <button
             type="button"
-            aria-label="Effacer la recherche"
+            aria-label={dictionary.search.clear}
             className={cn(
               "grid shrink-0 place-items-center text-mute hover:text-ink",
               variant === "nav" ? "h-9 w-7" : "h-9 w-9",
@@ -164,7 +168,7 @@ export function SiteSearch({
         ) : null}
         <button
           type="submit"
-          aria-label="Lancer la recherche"
+          aria-label={dictionary.search.submit}
           className={cn(
             "grid shrink-0 place-items-center text-plan hover:bg-paper-2 hover:text-copper",
             variant === "nav" ? "h-9 w-8" : "h-9 w-9",
@@ -178,18 +182,19 @@ export function SiteSearch({
         <div
           id={`${listId}-list`}
           role="listbox"
-          className="absolute left-0 right-0 top-[calc(100%+6px)] z-[60] border border-ink/12 bg-paper shadow-[0_18px_40px_-24px_rgba(16,24,32,0.45)]"
+          className="absolute inset-inline-0 top-[calc(100%+6px)] z-[60] border border-ink/12 bg-paper shadow-[0_18px_40px_-24px_rgba(16,24,32,0.45)]"
         >
           <div className="border-b border-ink/10 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-mute">
-            {pending ? "Recherche…" : "Suggestions"}
-            <span className="ml-2 text-mute/70">Ctrl/⌘ K</span>
+            {pending ? dictionary.search.searching : dictionary.search.suggestions}
+            <span className="ms-2 text-mute/70">Ctrl/⌘ K</span>
           </div>
           {suggestions.length > 0 ? (
             <ul className="max-h-[360px] overflow-y-auto py-1">
               {suggestions.map((item) => (
-                <li key={item.id} role="option">
+                <li key={item.id} role="option" aria-selected={false}>
                   <SuggestionRow
                     item={item}
+                    typeLabel={typeLabel(item.type)}
                     onSelect={() => {
                       setOpen(false);
                       onNavigate?.();
@@ -205,18 +210,17 @@ export function SiteSearch({
             </ul>
           ) : (
             <p className="px-4 py-5 text-sm text-mute">
-              Aucune suggestion. Appuyez sur Entrée pour voir tous les
-              résultats.
+              {dictionary.search.noSuggestions}
             </p>
           )}
           <button
             type="button"
-            className="flex w-full items-center justify-between border-t border-ink/10 px-4 py-3 text-left text-sm text-plan hover:bg-paper-2"
+            className="flex w-full items-center justify-between border-t border-ink/10 px-4 py-3 text-start text-sm text-plan hover:bg-paper-2"
             onClick={() => goToResults()}
           >
-            Voir tous les résultats
+            {dictionary.search.seeAllResults}
             <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-mute">
-              Entrée
+              {dictionary.search.enter}
             </span>
           </button>
         </div>
@@ -227,16 +231,18 @@ export function SiteSearch({
 
 function SuggestionRow({
   item,
+  typeLabel,
   onSelect,
 }: {
   item: SearchHit;
+  typeLabel: string;
   onSelect: () => void;
 }) {
   return (
     <button
       type="button"
       onClick={onSelect}
-      className="flex w-full items-start gap-3 px-3 py-2.5 text-left hover:bg-paper-2"
+      className="flex w-full items-start gap-3 px-3 py-2.5 text-start hover:bg-paper-2"
     >
       <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center overflow-hidden border border-ink/10 bg-paper-2">
         {item.image ? (
@@ -256,7 +262,7 @@ function SuggestionRow({
           {item.title}
         </span>
         <span className="mt-0.5 block font-mono text-[10px] uppercase tracking-[0.16em] text-plan">
-          {contentTypeLabel(item.type)} · {item.category}
+          {typeLabel} · {item.category}
         </span>
       </span>
     </button>

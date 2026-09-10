@@ -1,9 +1,12 @@
 import { Container } from "@/components/ui/Container";
-import { energie as content } from "@/data/energie";
+import { getEnergie } from "@/data/energie";
+import { getLocale } from "@/lib/i18n/get-locale";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export function EnergieHero() {
+export async function EnergieHero() {
+  const locale = await getLocale();
+  const content = getEnergie(locale);
   return (
     <section className="relative isolate overflow-hidden border-b border-ink/10 bg-paper-2/60">
       <div

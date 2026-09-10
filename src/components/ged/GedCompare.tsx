@@ -1,10 +1,13 @@
 import { Check, X } from "lucide-react";
 import { Container } from "@/components/ui/Container";
-import { ged } from "@/data/ged";
+import { getGed } from "@/data/ged";
+import { getLocale } from "@/lib/i18n/get-locale";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export function GedCompare() {
+export async function GedCompare() {
+  const locale = await getLocale();
+  const ged = getGed(locale);
   const pairs = ged.without.items.map((without, index) => ({
     without,
     with: ged.with.items[index] ?? "",

@@ -7,8 +7,12 @@ import {
 } from "@/components/admin/AdminActions";
 import { AdminEmpty, AdminPageHeader, AdminPanel } from "@/components/admin/AdminChrome";
 import { AdminCheck, AdminField, AdminSelect, AdminSubmit } from "@/components/admin/AdminField";
+import { TranslationFields } from "@/components/admin/TranslationFields";
+import { TranslationStatusBadges } from "@/components/admin/TranslationStatusBadges";
 import { listAdminBanners, type AdminBanner } from "@/lib/cms/banners";
 import { toDatetimeLocal } from "@/lib/cms/format";
+import { cmsTranslationStatus } from "@/lib/i18n/content";
+import { parseTranslations } from "@/lib/i18n/localize";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import type { MediaRecord } from "@/lib/cms/types";
 
@@ -23,26 +27,47 @@ function BannerFields({
 }) {
   return (
     <>
-      <AdminField
-        label="Titre"
-        name="title"
-        defaultValue={banner?.title}
-        required
-        hint="Nom affiché sur le slide (ex. Infogérance)."
-      />
-      <AdminField label="Sous-titre" name="subtitle" defaultValue={banner?.subtitle} />
-      <AdminField
-        label="Description"
-        name="description"
-        textarea
-        defaultValue={banner?.description}
-        hint="Texte sous le titre du slide."
-      />
-      <AdminField
-        label="Texte du bouton"
-        name="button_label"
-        defaultValue={banner?.button_label}
-        hint="Laisser vide pour « Découvrir » + titre."
+      <TranslationFields
+        translations={parseTranslations(banner?.translations)}
+        fields={[
+          {
+            key: "title",
+            frName: "title",
+            labelFr: "Titre (FR)",
+            labelEn: "Title (EN)",
+            labelAr: "العنوان (AR)",
+            required: true,
+            frDefault: banner?.title,
+            hint: "Nom affiché sur le slide (ex. Infogérance).",
+          },
+          {
+            key: "subtitle",
+            frName: "subtitle",
+            labelFr: "Sous-titre (FR)",
+            labelEn: "Subtitle (EN)",
+            labelAr: "العنوان الفرعي (AR)",
+            frDefault: banner?.subtitle,
+          },
+          {
+            key: "description",
+            frName: "description",
+            labelFr: "Description (FR)",
+            labelEn: "Description (EN)",
+            labelAr: "الوصف (AR)",
+            textarea: true,
+            frDefault: banner?.description,
+            hint: "Texte sous le titre du slide.",
+          },
+          {
+            key: "button_label",
+            frName: "button_label",
+            labelFr: "Texte du bouton (FR)",
+            labelEn: "Button label (EN)",
+            labelAr: "نص الزر (AR)",
+            frDefault: banner?.button_label,
+            hint: "Laisser vide pour « Découvrir » + titre.",
+          },
+        ]}
       />
       <AdminField
         label="URL du bouton"
@@ -160,6 +185,18 @@ export default async function AdminBannersPage() {
                       {banner.desktopSrc ? "carrousel" : "actualité"} · ordre{" "}
                       {banner.sort_order}
                     </p>
+                    <TranslationStatusBadges
+                      status={cmsTranslationStatus(
+                        {
+                          title: banner.title,
+                          subtitle: banner.subtitle,
+                          description: banner.description,
+                          button_label: banner.button_label,
+                        },
+                        parseTranslations(banner.translations),
+                        ["title"],
+                      )}
+                    />
                   </div>
                 </div>
                 <AdminRowActions>

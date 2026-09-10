@@ -4,26 +4,44 @@ import { useState } from "react";
 import { Check } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionLabel } from "@/components/sections/SectionLabel";
-import {
-  telephonieServiceTabs,
-  type TelephonieServiceTab,
-} from "@/data/telephonie/service-tabs";
+import type { TelephonieServiceTab } from "@/data/telephonie/service-tabs";
 import { cn } from "@/lib/utils";
 
-export function TelephonieServiceTabs() {
-  const [activeId, setActiveId] = useState<string>(telephonieServiceTabs[0].id);
+export function TelephonieServiceTabs({
+  tabs,
+  label,
+  title,
+  servicesLabel,
+  servicesTitle,
+  servicesLead,
+  servicesAria,
+  savPresentation,
+}: {
+  tabs: TelephonieServiceTab[];
+  /** Optional short aliases for servicesLabel / servicesTitle */
+  label?: string;
+  title?: string;
+  servicesLabel?: string;
+  servicesTitle?: string;
+  servicesLead?: string;
+  servicesAria?: string;
+  savPresentation?: string;
+}) {
+  const resolvedLabel = servicesLabel ?? label ?? "Services";
+  const resolvedTitle =
+    servicesTitle ?? title ?? "Ce que INFOLOG met à votre disposition";
+  const [activeId, setActiveId] = useState<string>(tabs[0]?.id ?? "");
   const [subId, setSubId] = useState<string | null>(null);
 
-  const active =
-    telephonieServiceTabs.find((tab) => tab.id === activeId) ??
-    telephonieServiceTabs[0];
+  const active = tabs.find((tab) => tab.id === activeId) ?? tabs[0];
 
   const subActive =
-    subId && active.subTabs
+    subId && active?.subTabs
       ? active.subTabs.find((tab) => tab.id === subId)
       : null;
 
   const panel = subActive ?? active;
+  if (!active || !panel) return null;
 
   function selectTab(tab: TelephonieServiceTab) {
     setActiveId(tab.id);
@@ -35,24 +53,23 @@ export function TelephonieServiceTabs() {
       <Container>
         <div className="mx-auto max-w-2xl text-center">
           <div className="flex justify-center">
-            <SectionLabel>Services</SectionLabel>
+            <SectionLabel>{resolvedLabel}</SectionLabel>
           </div>
           <h2 className="mt-4 text-3xl font-medium tracking-tight text-ink sm:text-4xl">
-            Ce que INFOLOG met à votre disposition
+            {resolvedTitle}
           </h2>
-          <p className="mt-3 text-sm text-mute sm:text-base">
-            Produits, réseau, logistique et SAV — sélectionnez un onglet pour
-            afficher le détail.
-          </p>
+          {servicesLead ? (
+            <p className="mt-3 text-sm text-mute sm:text-base">{servicesLead}</p>
+          ) : null}
         </div>
 
         <div className="mt-10 overflow-hidden border border-ink/10 bg-paper">
           <div
             role="tablist"
-            aria-label="Services téléphonie"
+            aria-label={servicesAria ?? resolvedLabel}
             className="flex flex-col border-b border-ink/10 sm:flex-row sm:flex-wrap"
           >
-            {telephonieServiceTabs.map((tab) => {
+            {tabs.map((tab) => {
               const selected = tab.id === activeId && !subId;
               return (
                 <button
@@ -86,7 +103,7 @@ export function TelephonieServiceTabs() {
                     : "bg-paper text-mute hover:text-ink",
                 )}
               >
-                Présentation SAV
+                {savPresentation ?? "Présentation SAV"}
               </button>
               {active.subTabs.map((sub) => (
                 <button

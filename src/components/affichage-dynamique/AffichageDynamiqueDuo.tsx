@@ -1,10 +1,13 @@
 import { Monitor, Sparkles } from "lucide-react";
 import { Container } from "@/components/ui/Container";
-import { affichageDynamique as content } from "@/data/affichage-dynamique";
+import { getAffichageDynamique } from "@/data/affichage-dynamique";
+import { getLocale } from "@/lib/i18n/get-locale";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export function AffichageDynamiqueDuo() {
+export async function AffichageDynamiqueDuo() {
+  const locale = await getLocale();
+  const content = getAffichageDynamique(locale);
   return (
     <section className="relative isolate overflow-hidden border-b border-ink/10 bg-paper py-14 sm:py-16 lg:py-20">
       <div

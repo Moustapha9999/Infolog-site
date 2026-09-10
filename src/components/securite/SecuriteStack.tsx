@@ -2,11 +2,15 @@ import Image from "next/image";
 import { ArrowUpRight, Shield } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
-import { securite } from "@/data/securite";
+import { getSecurite } from "@/data/securite";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getLocale } from "@/lib/i18n/get-locale";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export function SecuriteStack() {
+export async function SecuriteStack() {
+  const locale = await getLocale();
+  const securite = getSecurite(locale);
   return (
     <section className="relative isolate overflow-hidden border-b border-ink/10 bg-paper-2/50 py-14 sm:py-16 lg:py-20">
       <div
@@ -67,7 +71,10 @@ export function SecuriteStack() {
   );
 }
 
-export function SecuriteCta() {
+export async function SecuriteCta() {
+  const locale = await getLocale();
+  const securite = getSecurite(locale);
+  const dictionary = getDictionary(locale);
   return (
     <section className="relative isolate overflow-hidden border-b border-ink/10 bg-paper py-14 sm:py-16">
       <Container>
@@ -102,7 +109,7 @@ export function SecuriteCta() {
                   <Shield className="h-4 w-4" strokeWidth={1.8} aria-hidden />
                 </span>
                 <p className={cn(type.label, "text-paper/70")}>
-                  Contact
+                  {dictionary.common.contact}
                 </p>
               </div>
               <h2 className={cn(type.h2, "mt-4 text-paper")}>
@@ -125,7 +132,7 @@ export function SecuriteCta() {
                 />
               </div>
               <Button href="/contact" className="inline-flex items-center gap-2">
-                Nous contacter
+                {dictionary.common.contactUs}
                 <ArrowUpRight className="h-4 w-4" aria-hidden />
               </Button>
             </div>

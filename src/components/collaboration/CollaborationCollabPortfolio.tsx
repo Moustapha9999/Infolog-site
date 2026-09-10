@@ -14,12 +14,13 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
-import { collaboration } from "@/data/collaboration";
+import type { CollaborationContent } from "@/data/collaboration";
+import { useDictionary } from "@/lib/i18n/LocaleProvider";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
 const icons: Record<
-  (typeof collaboration.collabPortfolio.items)[number]["icon"],
+  CollaborationContent["collabPortfolio"]["items"][number]["icon"],
   LucideIcon
 > = {
   handshake: Handshake,
@@ -30,7 +31,12 @@ const icons: Record<
   display: MonitorPlay,
 };
 
-export function CollaborationCollabPortfolio() {
+export function CollaborationCollabPortfolio({
+  collaboration,
+}: {
+  collaboration: CollaborationContent;
+}) {
+  const dictionary = useDictionary();
   const reduce = useReducedMotion();
   const { collabPortfolio } = collaboration;
   const [activeId, setActiveId] = useState<string>(
@@ -60,7 +66,7 @@ export function CollaborationCollabPortfolio() {
             </h2>
           </div>
           <Button href="/contact" className="shrink-0 self-start sm:self-auto">
-            Nous contacter
+            {dictionary.common.contactUs}
           </Button>
         </div>
 

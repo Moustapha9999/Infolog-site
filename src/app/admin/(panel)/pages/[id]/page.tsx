@@ -8,7 +8,9 @@ import {
 } from "@/components/admin/AdminActions";
 import { AdminPageHeader, AdminPanel } from "@/components/admin/AdminChrome";
 import { AdminCheck, AdminField, AdminSubmit } from "@/components/admin/AdminField";
+import { TranslationFields } from "@/components/admin/TranslationFields";
 import { getAdminPage } from "@/lib/cms/pages";
+import { parseTranslations } from "@/lib/i18n/localize";
 
 export default async function AdminPageDetail({
   params,
@@ -59,16 +61,43 @@ export default async function AdminPageDetail({
       <AdminPanel title="Métadonnées" className="max-w-xl">
         <form action={savePage} className="grid gap-4">
           <input type="hidden" name="id" value={page.id} />
-          <AdminField label="Titre" name="title" defaultValue={page.title} required />
-          <AdminField label="Slug" name="slug" defaultValue={page.slug} />
-          <AdminField label="Meta title" name="meta_title" defaultValue={page.meta_title} />
-          <AdminField
-            label="Meta description"
-            name="meta_description"
-            textarea
-            defaultValue={page.meta_description}
+          <TranslationFields
+            translations={parseTranslations(page.translations)}
+            fields={[
+              {
+                key: "title",
+                frName: "title",
+                labelFr: "Titre (FR)",
+                labelEn: "Title (EN)",
+                labelAr: "العنوان (AR)",
+                required: true,
+                frDefault: page.title,
+              },
+              {
+                key: "meta_title",
+                frName: "meta_title",
+                labelFr: "Meta title (FR)",
+                labelEn: "Meta title (EN)",
+                labelAr: "Meta title (AR)",
+                frDefault: page.meta_title,
+              },
+              {
+                key: "meta_description",
+                frName: "meta_description",
+                labelFr: "Meta description (FR)",
+                labelEn: "Meta description (EN)",
+                labelAr: "Meta description (AR)",
+                textarea: true,
+                frDefault: page.meta_description,
+              },
+            ]}
           />
-          <AdminCheck label="Publiée" name="is_published" defaultChecked={page.is_published} />
+          <AdminField label="Slug" name="slug" defaultValue={page.slug} />
+          <AdminCheck
+            label="Publiée"
+            name="is_published"
+            defaultChecked={page.is_published}
+          />
           <AdminSubmit>Enregistrer la page</AdminSubmit>
         </form>
       </AdminPanel>
@@ -81,24 +110,46 @@ export default async function AdminPageDetail({
             >
               <div className="min-w-0">
                 <p className="font-medium">{section.key}</p>
-                <p className="mt-1 line-clamp-2 text-sm text-mute">{section.value}</p>
+                <p className="mt-1 line-clamp-2 text-sm text-mute">
+                  {section.value}
+                </p>
                 <p className="mt-1 font-mono text-[11px] text-mute">
                   {section.kind} · ordre {section.sort_order}
                 </p>
               </div>
               <AdminRowActions>
-                <AdminFormDialog action={saveSection} title="Modifier la section" wide>
+                <AdminFormDialog
+                  action={saveSection}
+                  title="Modifier la section"
+                  wide
+                >
                   <input type="hidden" name="id" value={section.id} />
                   <input type="hidden" name="page_id" value={page.id} />
                   <AdminField label="Clé" name="key" defaultValue={section.key} />
-                  <AdminField label="Type" name="kind" defaultValue={section.kind} />
                   <AdminField
-                    label="Valeur"
-                    name="value"
-                    textarea
-                    defaultValue={section.value}
+                    label="Type"
+                    name="kind"
+                    defaultValue={section.kind}
                   />
-                  <AdminField label="Lien" name="href" defaultValue={section.href} />
+                  <TranslationFields
+                    translations={parseTranslations(section.translations)}
+                    fields={[
+                      {
+                        key: "value",
+                        frName: "value",
+                        labelFr: "Contenu (FR)",
+                        labelEn: "Content (EN)",
+                        labelAr: "المحتوى (AR)",
+                        textarea: true,
+                        frDefault: section.value,
+                      },
+                    ]}
+                  />
+                  <AdminField
+                    label="Lien"
+                    name="href"
+                    defaultValue={section.href}
+                  />
                   <AdminField
                     label="Ordre"
                     name="sort_order"
@@ -114,13 +165,33 @@ export default async function AdminPageDetail({
             </li>
           ))}
         </ul>
-        <form action={saveSection} className="mt-6 grid max-w-xl gap-3 border-t border-ink/10 pt-6">
+        <form
+          action={saveSection}
+          className="mt-6 grid max-w-xl gap-3 border-t border-ink/10 pt-6"
+        >
           <input type="hidden" name="page_id" value={page.id} />
           <h3 className="font-medium">Ajouter une section</h3>
           <AdminField label="Clé (ex. hero.title)" name="key" required />
           <AdminField label="Type" name="kind" defaultValue="paragraph" />
-          <AdminField label="Valeur" name="value" textarea required />
+          <TranslationFields
+            fields={[
+              {
+                key: "value",
+                frName: "value",
+                labelFr: "Contenu (FR)",
+                labelEn: "Content (EN)",
+                labelAr: "المحتوى (AR)",
+                textarea: true,
+              },
+            ]}
+          />
           <AdminField label="Lien" name="href" />
+          <AdminField
+            label="Ordre"
+            name="sort_order"
+            type="number"
+            defaultValue={0}
+          />
           <AdminSubmit>Ajouter</AdminSubmit>
         </form>
       </AdminPanel>

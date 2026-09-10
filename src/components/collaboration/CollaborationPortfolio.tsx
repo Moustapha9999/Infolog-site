@@ -4,11 +4,15 @@ import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { Container } from "@/components/ui/Container";
-import { collaboration } from "@/data/collaboration";
+import type { CollaborationContent } from "@/data/collaboration";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export function CollaborationPortfolio() {
+export function CollaborationPortfolio({
+  collaboration,
+}: {
+  collaboration: CollaborationContent;
+}) {
   const reduce = useReducedMotion();
   const [activeId, setActiveId] = useState<string>(
     collaboration.portfolio[0]?.id ?? "",

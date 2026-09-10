@@ -12,9 +12,17 @@ export type {
 
 export {
   categoryLabel,
+  getCategoryLabel,
+  getTelephonie,
   telephonie,
   telephonieMedia,
 } from "./telephonie/constants";
+export type { TelephonieContent } from "./telephonie/constants";
+export {
+  getTelephonieServiceTabs,
+  telephonieServiceTabs,
+} from "./telephonie/service-tabs";
+export type { TelephonieServiceTab } from "./telephonie/service-tabs";
 
 /** Fallback fichiers — préférer getPublishedProducts() côté pages. */
 export const phones: PhoneProduct[] = loadPhonesFromFolders();

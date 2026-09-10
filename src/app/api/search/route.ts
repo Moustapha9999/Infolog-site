@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { clientKey, rateLimit } from "@/lib/cms/rate-limit";
+import { resolveLocale } from "@/lib/i18n/config";
 import { searchSite } from "@/lib/search";
 
 export async function GET(request: Request) {
@@ -14,9 +15,11 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const q = String(searchParams.get("q") ?? "").slice(0, 120);
   const mode = searchParams.get("mode");
+  const locale = resolveLocale(searchParams.get("locale"));
   const payload = await searchSite(q, {
     suggestionsOnly: mode === "suggest",
     limit: mode === "suggest" ? 8 : 40,
+    locale,
   });
 
   return NextResponse.json(payload, {

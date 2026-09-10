@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { Container } from "@/components/ui/Container";
-import { securite } from "@/data/securite";
+import type { SecuriteContent } from "@/data/securite";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export function SecuriteApproche() {
+export function SecuriteApproche({ securite }: { securite: SecuriteContent }) {
   const [activeId, setActiveId] = useState<string>(securite.volets[0].id);
   const active = securite.volets.find((volet) => volet.id === activeId) ?? securite.volets[0];
 

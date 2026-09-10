@@ -4,11 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, Search, X } from "lucide-react";
+import { LanguageSelector } from "@/components/i18n/LanguageSelector";
 import { Logo } from "@/components/ui/Logo";
 import { MegaMenu } from "@/components/layout/MegaMenu";
 import { MobileMenu } from "@/components/layout/MobileMenu";
 import { SiteSearch } from "@/components/search/SiteSearch";
-import { isNavActive, mainNav } from "@/data/nav";
+import { isNavActive } from "@/data/nav";
+import { useDictionary } from "@/lib/i18n/LocaleProvider";
+import { localizedMainNav } from "@/lib/i18n/localized-nav";
 import type { SiteContact } from "@/lib/cms/site-contact";
 import { cn } from "@/lib/utils";
 
@@ -21,6 +24,8 @@ function navClass(active: boolean) {
 
 export function Header({ contact }: { contact: SiteContact }) {
   const pathname = usePathname();
+  const dictionary = useDictionary();
+  const mainNav = localizedMainNav(dictionary);
   const [openId, setOpenId] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const wrapRef = useRef<HTMLElement>(null);
@@ -71,25 +76,32 @@ export function Header({ contact }: { contact: SiteContact }) {
       <div className="bg-ink">
         <div className="mx-auto flex h-[84px] max-w-[1600px] items-center justify-between gap-4 px-5 sm:px-8">
           <Logo compact large />
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="hidden sm:block lg:hidden">
+              <LanguageSelector variant="top" />
+            </div>
             <Link
               href="/recherche"
               className="grid h-11 w-11 place-items-center border border-paper/25 text-paper lg:hidden"
-              aria-label="Rechercher sur INFOLOG"
+              aria-label={dictionary.search.aria}
             >
               <Search className="h-5 w-5" strokeWidth={2} />
             </Link>
             <Link
               href="/contact"
-              className="hidden bg-copper px-5 py-3 text-[15px] font-medium text-paper sm:inline-flex"
+              className="hidden bg-copper px-4 py-3 text-[14px] font-medium text-paper sm:inline-flex xl:px-5 xl:text-[15px]"
             >
-              Nous contacter
+              {dictionary.common.contactUs}
             </Link>
             <button
               type="button"
               className="grid h-11 w-11 place-items-center border border-paper/25 text-paper lg:hidden"
               aria-expanded={mobileOpen}
-              aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
+              aria-label={
+                mobileOpen
+                  ? dictionary.common.closeMenu
+                  : dictionary.common.openMenu
+              }
               onClick={() => setMobileOpen((value) => !value)}
             >
               {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -100,18 +112,19 @@ export function Header({ contact }: { contact: SiteContact }) {
 
       <nav
         className="hidden border-t border-ink/10 lg:block"
-        aria-label="Principal"
+        aria-label={dictionary.common.principalNav}
       >
-        <div className="mx-auto flex max-w-[1600px] flex-nowrap items-center justify-center gap-x-2.5 px-4 py-3 sm:px-6 xl:gap-x-4 xl:px-8 2xl:gap-x-5">
+        <div className="mx-auto flex max-w-[1600px] flex-nowrap items-center justify-center gap-x-2 px-3 py-3 sm:px-5 xl:gap-x-3.5 xl:px-8 2xl:gap-x-4.5">
           {mainNav.map((item) => {
             const afterItem =
               item.type === "mega" && item.id === "services" ? (
                 <div
-                  key="site-search"
-                  className="ml-1 shrink-0 xl:ml-2"
+                  key="site-tools"
+                  className="ms-1 flex shrink-0 items-center gap-1.5 xl:ms-2 xl:gap-2"
                   onFocusCapture={() => setOpenId(null)}
                 >
                   <SiteSearch variant="nav" />
+                  <LanguageSelector variant="nav" />
                 </div>
               ) : null;
 
@@ -170,7 +183,7 @@ export function Header({ contact }: { contact: SiteContact }) {
                   {item.type === "dropdown" && open ? (
                     <div
                       id={`${item.id}-menu`}
-                      className="absolute left-1/2 top-full z-50 min-w-52 -translate-x-1/2 pt-3"
+                      className="absolute start-1/2 top-full z-50 min-w-52 -translate-x-1/2 pt-3 rtl:translate-x-1/2"
                     >
                       <ul className="border border-ink/10 bg-paper py-2 shadow-[0_16px_32px_-20px_rgba(16,24,32,0.45)]">
                         {item.items.map((child) => (

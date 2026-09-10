@@ -4,13 +4,17 @@ import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { SectionLabel } from "@/components/sections/SectionLabel";
-import { electromenager } from "@/data/electromenager/constants";
+import type { ElectromenagerFamiliesContent } from "@/data/electromenager";
 import { cn } from "@/lib/utils";
 
-export function ElectromenagerFamilies() {
+export function ElectromenagerFamilies({
+  content,
+}: {
+  content: ElectromenagerFamiliesContent;
+}) {
   const reduce = useReducedMotion();
   const [active, setActive] = useState<string>(
-    electromenager.families[0]?.id ?? "",
+    content.families[0]?.id ?? "",
   );
 
   return (
@@ -21,22 +25,22 @@ export function ElectromenagerFamilies() {
       <Container>
         <div className="mx-auto max-w-3xl text-center">
           <div className="flex justify-center">
-            <SectionLabel>Gammes</SectionLabel>
+            <SectionLabel>{content.rangesLabel ?? "Gammes"}</SectionLabel>
           </div>
           <h2 className="mt-4 text-3xl font-medium tracking-tight text-ink sm:text-4xl">
-            {electromenager.familiesTitle}
+            {content.familiesTitle}
           </h2>
           <p className="mt-3 text-sm text-mute sm:text-base">
-            {electromenager.familiesLead}
+            {content.familiesLead}
           </p>
         </div>
 
         <div
           className="mt-12 grid gap-px overflow-hidden border border-ink/10 bg-ink/10 lg:grid-cols-3"
           role="tablist"
-          aria-label="Familles de produits électroménager"
+          aria-label={content.familiesAria}
         >
-          {electromenager.families.map((family) => {
+          {content.families.map((family) => {
             const isActive = active === family.id;
             return (
               <motion.button
@@ -73,7 +77,7 @@ export function ElectromenagerFamilies() {
                 />
 
                 <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-plan">
-                  Famille
+                  {content.familyLabel}
                 </p>
                 <h3 className="mt-2 text-2xl font-medium tracking-tight text-ink sm:text-3xl">
                   {family.label}

@@ -12,10 +12,30 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
 import type { PhoneProduct } from "@/data/telephonie/types";
-import { categoryLabel } from "@/data/telephonie/constants";
+import type { CategoryLabels } from "@/data/telephonie/constants";
 import { formatPhoneMemory } from "@/data/telephonie/memory";
 
-export function PhoneCarousel({ phones }: { phones: PhoneProduct[] }) {
+export function PhoneCarousel({
+  phones,
+  discoverLabel = "Découvrir",
+  newBadge = "Nouveau",
+  categoryLabels,
+  productInfoSheet = "Fiche d'information sur le produit",
+  visualComing = "Visuel à venir",
+  carouselProgress = "Progression du carrousel",
+  scrollLeft = "Défiler vers la gauche",
+  scrollRight = "Défiler vers la droite",
+}: {
+  phones: PhoneProduct[];
+  discoverLabel?: string;
+  newBadge?: string;
+  categoryLabels: CategoryLabels;
+  productInfoSheet?: string;
+  visualComing?: string;
+  carouselProgress?: string;
+  scrollLeft?: string;
+  scrollRight?: string;
+}) {
   const reduce = useReducedMotion();
   const trackRef = useRef<HTMLUListElement>(null);
   const [canPrev, setCanPrev] = useState(false);
@@ -105,7 +125,7 @@ export function PhoneCarousel({ phones }: { phones: PhoneProduct[] }) {
                     aria-hidden
                   />
                   <span className="absolute left-3 top-3 z-10 border border-ink/10 bg-paper/90 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-plan backdrop-blur-sm">
-                    {phone.isNew ? "Nouveau" : categoryLabel[phone.category]}
+                    {phone.isNew ? newBadge : categoryLabels[phone.category]}
                   </span>
                   {phone.image ? (
                     <Image
@@ -118,7 +138,7 @@ export function PhoneCarousel({ phones }: { phones: PhoneProduct[] }) {
                   ) : (
                     <div className="grid h-full place-items-center px-4">
                       <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-mute">
-                        Visuel à venir
+                        {visualComing}
                       </span>
                     </div>
                   )}
@@ -133,7 +153,7 @@ export function PhoneCarousel({ phones }: { phones: PhoneProduct[] }) {
                     {phone.name}
                   </h3>
                   <p className="mt-1 text-xs leading-5 text-mute">
-                    Fiche d&apos;information sur le produit
+                    {productInfoSheet}
                   </p>
                   <p className="mt-2 font-mono text-[11px] tracking-wide text-ink/70">
                     {formatPhoneMemory(phone)}
@@ -149,7 +169,7 @@ export function PhoneCarousel({ phones }: { phones: PhoneProduct[] }) {
                     </p>
                   ) : null}
                   <span className="mt-4 inline-flex w-fit items-center gap-2 border-b border-copper pb-0.5 text-sm font-medium text-copper transition-colors group-hover:border-ink group-hover:text-ink">
-                    Découvrir
+                    {discoverLabel}
                     <span aria-hidden>→</span>
                   </span>
                 </div>
@@ -166,7 +186,7 @@ export function PhoneCarousel({ phones }: { phones: PhoneProduct[] }) {
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={Math.round(progress * 100)}
-          aria-label="Progression du carrousel"
+          aria-label={carouselProgress}
         >
           <div
             className="absolute inset-y-0 h-full w-[22%] bg-ink transition-[left] duration-300 ease-out"
@@ -179,7 +199,7 @@ export function PhoneCarousel({ phones }: { phones: PhoneProduct[] }) {
             type="button"
             onClick={() => scrollByCard(-1)}
             disabled={!canPrev}
-            aria-label="Défiler vers la gauche"
+            aria-label={scrollLeft}
             className="grid h-11 w-11 place-items-center border border-ink/20 bg-paper text-ink transition-colors hover:border-plan hover:text-plan disabled:cursor-not-allowed disabled:opacity-35"
           >
             <ChevronLeft className="h-5 w-5" strokeWidth={1.75} />
@@ -188,7 +208,7 @@ export function PhoneCarousel({ phones }: { phones: PhoneProduct[] }) {
             type="button"
             onClick={() => scrollByCard(1)}
             disabled={!canNext}
-            aria-label="Défiler vers la droite"
+            aria-label={scrollRight}
             className="grid h-11 w-11 place-items-center border border-ink/20 bg-paper text-ink transition-colors hover:border-plan hover:text-plan disabled:cursor-not-allowed disabled:opacity-35"
           >
             <ChevronRight className="h-5 w-5" strokeWidth={1.75} />

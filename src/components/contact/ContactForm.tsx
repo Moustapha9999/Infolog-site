@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { useDictionary } from "@/lib/i18n/LocaleProvider";
 import { cn } from "@/lib/utils";
 
 type Status = "idle" | "error" | "success";
@@ -11,20 +12,23 @@ type ContactFormProps = {
 };
 
 export function ContactForm({ variant = "default" }: ContactFormProps) {
+  const dictionary = useDictionary();
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
+  const [sending, setSending] = useState(false);
   const isHome = variant === "home";
   const searchParams = useSearchParams();
   const initialSubject = searchParams.get("subject") ?? "";
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const data = new FormData(form);
 
     if (String(data.get("company") ?? "").trim()) {
       setStatus("success");
-      setMessage("Message reçu.");
-      event.currentTarget.reset();
+      setMessage(dictionary.contact.success);
+      form.reset();
       return;
     }
 
@@ -35,10 +39,11 @@ export function ContactForm({ variant = "default" }: ContactFormProps) {
 
     if (!name || !email || !subject || !body || !email.includes("@")) {
       setStatus("error");
-      setMessage("Merci de renseigner nom, e-mail, sujet et message.");
+      setMessage(dictionary.contact.error);
       return;
     }
 
+    setSending(true);
     const phone = String(data.get("phone") ?? "").trim();
     const response = await fetch("/api/contact", {
       method: "POST",
@@ -52,22 +57,20 @@ export function ContactForm({ variant = "default" }: ContactFormProps) {
         company: String(data.get("company") ?? ""),
       }),
     });
+    setSending(false);
 
     if (!response.ok) {
       const payload = (await response.json().catch(() => null)) as {
         error?: string;
       } | null;
       setStatus("error");
-      setMessage(
-        payload?.error ??
-          "Impossible d’envoyer le message. Réessayez dans un instant.",
-      );
+      setMessage(payload?.error ?? dictionary.contact.error);
       return;
     }
 
     setStatus("success");
-    setMessage("Message reçu. INFOLOG vous répondra sous 24–48 h ouvrées.");
-    event.currentTarget.reset();
+    setMessage(dictionary.contact.success);
+    form.reset();
   }
 
   if (isHome) {
@@ -78,59 +81,46 @@ export function ContactForm({ variant = "default" }: ContactFormProps) {
           name="company"
           tabIndex={-1}
           autoComplete="off"
-          className="absolute left-[-9999px] h-0 w-0 opacity-0"
+          className="absolute start-[-9999px] h-0 w-0 opacity-0"
           aria-hidden
         />
         <div className="grid gap-5 sm:grid-cols-2">
+          <HomeField label={dictionary.contact.name} name="name" required />
           <HomeField
-            label="Nom complet"
-            name="name"
-            required
-            placeholder="Ex. Mohamed Fall"
-          />
-          <HomeField
-            label="E-mail"
+            label={dictionary.contact.email}
             name="email"
             type="email"
             required
-            placeholder="vous@entreprise.com"
           />
         </div>
         <div className="grid gap-5 sm:grid-cols-2">
+          <HomeField label={dictionary.contact.phoneOptional} name="phone" />
           <HomeField
-            label="Téléphone"
-            name="phone"
-            placeholder="+222 XX XX XX XX"
-          />
-          <HomeField
-            label="Sujet"
+            label={dictionary.contact.subject}
             name="subject"
             required
-            placeholder="Objet de votre demande"
             defaultValue={initialSubject}
           />
         </div>
         <label className="block">
           <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-plan">
-            Message
+            {dictionary.contact.message}
           </span>
           <textarea
             name="message"
             required
             rows={5}
-            placeholder="Décrivez votre besoin ou votre projet…"
-            className="mt-2 w-full resize-y border border-ink/15 bg-paper-2/40 px-3 py-3 text-sm text-ink outline-none transition-colors placeholder:text-mute/60 focus:border-plan focus:bg-paper"
+            className="mt-2 w-full resize-y border border-ink/15 bg-paper-2/40 px-3 py-3 text-sm text-ink outline-none transition-colors focus:border-plan focus:bg-paper"
           />
         </label>
         <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-mute">
-            Réponse sous 24–48 h ouvrées
-          </p>
+          <span className="sr-only">{dictionary.common.loading}</span>
           <button
             type="submit"
+            disabled={sending}
             className="bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.16em] text-paper transition-colors hover:bg-[#a34f27]"
           >
-            Envoyer
+            {sending ? dictionary.contact.sending : dictionary.contact.send}
           </button>
         </div>
         {status !== "idle" ? (
@@ -157,23 +147,28 @@ export function ContactForm({ variant = "default" }: ContactFormProps) {
         name="company"
         tabIndex={-1}
         autoComplete="off"
-        className="absolute left-[-9999px] h-0 w-0 opacity-0"
+        className="absolute start-[-9999px] h-0 w-0 opacity-0"
         aria-hidden
       />
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Nom complet" name="name" required />
-        <Field label="E-mail" name="email" type="email" required />
+        <Field label={dictionary.contact.name} name="name" required />
+        <Field
+          label={dictionary.contact.email}
+          name="email"
+          type="email"
+          required
+        />
       </div>
-      <Field label="Téléphone" name="phone" />
+      <Field label={dictionary.contact.phoneOptional} name="phone" />
       <Field
-        label="Sujet"
+        label={dictionary.contact.subject}
         name="subject"
         required
         defaultValue={initialSubject}
       />
       <label className="block">
         <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-plan">
-          Message
+          {dictionary.contact.message}
         </span>
         <textarea
           name="message"
@@ -184,9 +179,10 @@ export function ContactForm({ variant = "default" }: ContactFormProps) {
       </label>
       <button
         type="submit"
+        disabled={sending}
         className="bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.16em] text-paper transition-colors hover:bg-[#a34f27]"
       >
-        Envoyer
+        {sending ? dictionary.contact.sending : dictionary.contact.send}
       </button>
       {status !== "idle" ? (
         <p
@@ -221,7 +217,6 @@ function HomeField({
     <label className="block">
       <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-plan">
         {label}
-        {!required ? " · optionnel" : ""}
       </span>
       <input
         name={name}
@@ -252,7 +247,6 @@ function Field({
     <label className="block">
       <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-plan">
         {label}
-        {required ? "" : " · optionnel"}
       </span>
       <input
         name={name}

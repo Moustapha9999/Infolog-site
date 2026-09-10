@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
-import { stats } from "@/data/stats";
+import type { StatItem } from "@/data/stats";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/sections/Reveal";
 import { SectionLabel } from "@/components/sections/SectionLabel";
@@ -34,11 +34,11 @@ function useCount(target: number, active: boolean, reduce: boolean | null) {
   return value;
 }
 
-function StatItem({
+function StatItemView({
   stat,
   active,
 }: {
-  stat: (typeof stats)[number];
+  stat: StatItem;
   active: boolean;
 }) {
   const reduce = useReducedMotion();
@@ -46,7 +46,7 @@ function StatItem({
 
   return (
     <article className="relative border border-plan/35 bg-ink/50 p-6 sm:p-7">
-      <span className="absolute right-4 top-4 h-1.5 w-1.5 bg-copper" aria-hidden />
+      <span className="absolute end-4 top-4 h-1.5 w-1.5 bg-copper" aria-hidden />
       <p className="font-mono text-6xl leading-none tracking-tight text-paper sm:text-7xl lg:text-[84px]">
         {value}
         <span className="text-copper">{stat.suffix}</span>
@@ -55,14 +55,20 @@ function StatItem({
       <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.22em] text-paper/75">
         {stat.label}
       </p>
-      {"detail" in stat && stat.detail ? (
+      {stat.detail ? (
         <p className="mt-2 text-sm leading-6 text-paper/50">{stat.detail}</p>
       ) : null}
     </article>
   );
 }
 
-export function Stats() {
+export function Stats({
+  items,
+  label,
+}: {
+  items: readonly StatItem[];
+  label: string;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(false);
 
@@ -82,14 +88,14 @@ export function Stats() {
   return (
     <section className="relative overflow-hidden bg-ink text-paper">
       <Container className="py-16 sm:py-20">
-        <SectionLabel tone="dark">Chiffres clés</SectionLabel>
+        <SectionLabel tone="dark">{label}</SectionLabel>
         <div
           ref={ref}
           className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
         >
-          {stats.map((stat, index) => (
+          {items.map((stat, index) => (
             <Reveal key={stat.label} delay={index * 0.08}>
-              <StatItem stat={stat} active={active} />
+              <StatItemView stat={stat} active={active} />
             </Reveal>
           ))}
         </div>

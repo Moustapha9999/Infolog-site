@@ -4,27 +4,30 @@ import { SectionLabel } from "@/components/sections/SectionLabel";
 import { Container } from "@/components/ui/Container";
 import { site } from "@/data/site";
 import { getSiteContact } from "@/lib/cms/site-contact";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getLocale } from "@/lib/i18n/get-locale";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
 export async function FinalCTA() {
   const contact = await getSiteContact();
+  const locale = await getLocale();
+  const dictionary = getDictionary(locale);
 
   return (
     <section className="relative overflow-hidden border-t border-ink/10 bg-paper-2 py-20">
       <div
-        className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/3 border-l border-ink/10 lg:block"
+        className="pointer-events-none absolute inset-y-0 end-0 hidden w-1/3 border-s border-ink/10 lg:block"
         aria-hidden
       />
       <Container className="relative grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-end lg:gap-16">
         <div>
-          <SectionLabel>Contact</SectionLabel>
+          <SectionLabel>{dictionary.common.contact}</SectionLabel>
           <h2 className={cn(type.h2, "mt-4 max-w-md text-ink")}>
-            Entrer en contact
+            {dictionary.cta.finalTitle}
           </h2>
           <p className={cn(type.body, "mt-5 max-w-md text-mute")}>
-            Parlez-nous de votre projet. Notre équipe vous accompagne depuis{" "}
-            {site.city} pour donner vie à vos idées.
+            {dictionary.cta.finalBody} {site.city}.
           </p>
 
           <ul className="mt-10 space-y-4">
@@ -32,7 +35,7 @@ export async function FinalCTA() {
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-copper" aria-hidden />
               <div>
                 <p className={cn(type.label, "tracking-[0.2em] text-plan")}>
-                  Localisation
+                  {dictionary.common.coordinates}
                 </p>
                 <p className={cn(type.bodyCard, "mt-1 text-ink")}>
                   {contact.address}
@@ -51,7 +54,7 @@ export async function FinalCTA() {
               <Phone className="mt-0.5 h-4 w-4 shrink-0 text-copper" aria-hidden />
               <div>
                 <p className={cn(type.label, "tracking-[0.2em] text-plan")}>
-                  Téléphone
+                  {dictionary.contact.phone}
                 </p>
                 <div className="mt-1 space-y-1">
                   {contact.phones.map((item) => (
@@ -70,7 +73,7 @@ export async function FinalCTA() {
               <Mail className="mt-0.5 h-4 w-4 shrink-0 text-copper" aria-hidden />
               <div>
                 <p className={cn(type.label, "tracking-[0.2em] text-plan")}>
-                  E-mail
+                  {dictionary.contact.email}
                 </p>
                 <a
                   href={contact.emailHref}
@@ -88,7 +91,7 @@ export async function FinalCTA() {
           <span className="frame-corners-br" aria-hidden />
           <div className="mb-6 flex items-center justify-between gap-3 border-b border-ink/10 pb-4">
             <p className={cn(type.label, "tracking-[0.22em] text-plan")}>
-              Formulaire
+              {dictionary.contact.title}
             </p>
             <span className="h-1.5 w-1.5 bg-copper" aria-hidden />
           </div>

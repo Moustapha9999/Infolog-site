@@ -4,7 +4,9 @@ import {
   AdminSelect,
   AdminSubmit,
 } from "@/components/admin/AdminField";
+import { TranslationFields } from "@/components/admin/TranslationFields";
 import { saveProduct } from "@/app/admin/actions/content";
+import { parseTranslations } from "@/lib/i18n/localize";
 import type { BrandRecord, CategoryRecord, ProductRecord } from "@/lib/cms/types";
 
 function firstPrice(product?: ProductRecord | null) {
@@ -42,7 +44,56 @@ export function ProductForm({
   return (
     <form action={saveProduct} className="grid max-w-3xl gap-5">
       {product ? <input type="hidden" name="id" value={product.id} /> : null}
-      <AdminField label="Nom" name="name" required defaultValue={product?.name} />
+
+      <TranslationFields
+        translations={parseTranslations(product?.translations)}
+        fields={[
+          {
+            key: "name",
+            frName: "name",
+            labelFr: "Nom (FR)",
+            labelEn: "Name (EN)",
+            labelAr: "الاسم (AR)",
+            required: true,
+            frDefault: product?.name,
+          },
+          {
+            key: "tagline",
+            frName: "tagline",
+            labelFr: "Accroche (FR)",
+            labelEn: "Tagline (EN)",
+            labelAr: "الشعار (AR)",
+            frDefault: product?.tagline,
+          },
+          {
+            key: "description",
+            frName: "description",
+            labelFr: "Description (FR)",
+            labelEn: "Description (EN)",
+            labelAr: "الوصف (AR)",
+            textarea: true,
+            frDefault: product?.description,
+          },
+          {
+            key: "meta_title",
+            frName: "meta_title",
+            labelFr: "Meta title (FR)",
+            labelEn: "Meta title (EN)",
+            labelAr: "Meta title (AR)",
+            frDefault: product?.meta_title,
+          },
+          {
+            key: "meta_description",
+            frName: "meta_description",
+            labelFr: "Meta description (FR)",
+            labelEn: "Meta description (EN)",
+            labelAr: "Meta description (AR)",
+            textarea: true,
+            frDefault: product?.meta_description,
+          },
+        ]}
+      />
+
       <AdminField
         label="Slug"
         name="slug"
@@ -69,14 +120,6 @@ export function ProductForm({
           </option>
         ))}
       </AdminSelect>
-      <AdminField label="Accroche" name="tagline" defaultValue={product?.tagline} />
-      <AdminField
-        label="Description"
-        name="description"
-        textarea
-        rows={6}
-        defaultValue={product?.description}
-      />
       <AdminField
         label="Points forts (une ligne chacun)"
         name="highlights"
@@ -95,7 +138,7 @@ export function ProductForm({
         textarea
         rows={3}
         defaultValue={searchKeywords}
-        hint="Séparés par virgule ou ligne. Indexés dans la recherche globale du site dès que le produit est actif."
+        hint="Séparés par virgule ou ligne. Indexés dans la recherche globale. Ajoutez des synonymes FR / EN / AR."
       />
       <AdminField
         label="Caractéristiques (libellé|valeur)"
@@ -160,13 +203,6 @@ export function ProductForm({
         name="sort_order"
         type="number"
         defaultValue={product?.sort_order ?? 0}
-      />
-      <AdminField label="Meta title" name="meta_title" defaultValue={product?.meta_title} />
-      <AdminField
-        label="Meta description"
-        name="meta_description"
-        textarea
-        defaultValue={product?.meta_description}
       />
       <AdminSubmit>{product ? "Enregistrer" : "Créer le produit"}</AdminSubmit>
     </form>

@@ -2,14 +2,22 @@ import Image from "next/image";
 import { Check } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionLabel } from "@/components/sections/SectionLabel";
-import { btp } from "@/data/btp";
+import { getBtp } from "@/data/btp";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { buildLocaleMetadata } from "@/lib/i18n/seo";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export const metadata = {
-  title: "BTP",
-  description: btp.description,
-};
+export async function generateMetadata() {
+  const locale = await getLocale();
+  const btp = getBtp(locale);
+  return buildLocaleMetadata({
+    locale,
+    title: btp.title,
+    description: btp.description,
+    path: "/btp",
+  });
+}
 
 const atoutAccent = [
   "border-plan/35 text-plan",
@@ -19,7 +27,9 @@ const atoutAccent = [
   "border-copper/40 text-copper",
 ] as const;
 
-export default function BtpPage() {
+export default async function BtpPage() {
+  const locale = await getLocale();
+  const btp = getBtp(locale);
   return (
     <>
       <section className="relative isolate overflow-hidden border-b border-ink/10">

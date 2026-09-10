@@ -1,9 +1,12 @@
 import { Container } from "@/components/ui/Container";
-import { collaboration } from "@/data/collaboration";
+import { getCollaboration } from "@/data/collaboration";
+import { getLocale } from "@/lib/i18n/get-locale";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export function CollaborationHero() {
+export async function CollaborationHero() {
+  const locale = await getLocale();
+  const collaboration = getCollaboration(locale);
   return (
     <section className="relative isolate overflow-hidden border-b border-ink/10 bg-paper-2/60">
       <div

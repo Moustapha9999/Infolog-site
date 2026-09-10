@@ -3,6 +3,11 @@ import { poles } from "@/data/poles";
 import { getPublishedProducts } from "@/data/telephonie";
 import { site } from "@/data/site";
 
+/**
+ * Sitemap uses cookie-based locale (no /fr|/en|/ar prefixes).
+ * Paths stay canonical; language is signaled via html lang + hreflang alternates
+ * from buildLocaleMetadata. Do not noindex public pages.
+ */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
   const phones = await getPublishedProducts();

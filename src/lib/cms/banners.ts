@@ -1,4 +1,6 @@
-import { homeHeroSlides, type HomeHeroSlide } from "@/data/home-hero-slides";
+import { getHomeHeroSlidesFallback, type HomeHeroSlide } from "@/data/home-hero-slides";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { applyTranslations, parseTranslations } from "@/lib/i18n/localize";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { mediaSrc } from "./media-url";
@@ -81,11 +83,20 @@ export function bannerToHeroSlide(banner: PublicBanner): HomeHeroSlide | null {
 }
 
 export async function getHomeHeroSlides(): Promise<HomeHeroSlide[]> {
+  const locale = await getLocale();
   const banners = await getActiveBanners();
   const slides = banners
-    .map(bannerToHeroSlide)
+    .map((banner) => {
+      const localized = applyTranslations(
+        locale,
+        banner,
+        parseTranslations(banner.translations),
+        ["title", "subtitle", "description", "button_label"],
+      );
+      return bannerToHeroSlide({ ...banner, ...localized });
+    })
     .filter((slide): slide is HomeHeroSlide => slide !== null);
-  return slides.length > 0 ? slides : homeHeroSlides;
+  return slides.length > 0 ? slides : getHomeHeroSlidesFallback(locale);
 }
 
 export async function getNewsBanners(): Promise<PublicBanner[]> {

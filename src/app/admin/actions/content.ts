@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { requireAdminSession } from "@/lib/cms/auth";
 import { writeAuditLog } from "@/lib/cms/audit";
 import { slugify } from "@/lib/cms/format";
+import { readTranslationFields } from "@/lib/i18n/localize";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import {
   IMAGE_MIME,
@@ -100,6 +101,7 @@ export async function saveBrand(formData: FormData) {
     name,
     slug,
     is_active: bool(formData, "is_active"),
+    translations: readTranslationFields(formData, ["name"]),
   };
   if (id) {
     await supabase.from("brands").update(payload).eq("id", id);
@@ -142,6 +144,7 @@ export async function saveCategory(formData: FormData) {
     description: text(formData, "description"),
     is_active: bool(formData, "is_active"),
     sort_order: num(formData, "sort_order") ?? 0,
+    translations: readTranslationFields(formData, ["name", "description"]),
   };
   if (id) await supabase.from("categories").update(payload).eq("id", id);
   else await supabase.from("categories").insert(payload);
@@ -228,6 +231,13 @@ export async function saveProduct(formData: FormData) {
     sort_order: num(formData, "sort_order") ?? 0,
     meta_title: text(formData, "meta_title"),
     meta_description: text(formData, "meta_description"),
+    translations: readTranslationFields(formData, [
+      "name",
+      "tagline",
+      "description",
+      "meta_title",
+      "meta_description",
+    ]),
   };
 
   let productId = id;
@@ -466,6 +476,12 @@ export async function saveBanner(formData: FormData) {
     is_active: bool(formData, "is_active"),
     starts_at: text(formData, "starts_at"),
     ends_at: text(formData, "ends_at"),
+    translations: readTranslationFields(formData, [
+      "title",
+      "subtitle",
+      "description",
+      "button_label",
+    ]),
   };
   let bannerId = id;
   if (id) await supabase.from("banners").update(payload).eq("id", id);
@@ -524,6 +540,7 @@ export async function saveService(formData: FormData) {
     icon: text(formData, "icon"),
     sort_order: num(formData, "sort_order") ?? 0,
     is_active: bool(formData, "is_active"),
+    translations: readTranslationFields(formData, ["title", "description"]),
   };
   if (id) await supabase.from("services").update(payload).eq("id", id);
   else await supabase.from("services").insert(payload);
@@ -563,6 +580,11 @@ export async function savePage(formData: FormData) {
     meta_title: text(formData, "meta_title"),
     meta_description: text(formData, "meta_description"),
     is_published: bool(formData, "is_published"),
+    translations: readTranslationFields(formData, [
+      "title",
+      "meta_title",
+      "meta_description",
+    ]),
   };
   if (id) await supabase.from("pages").update(payload).eq("id", id);
   else await supabase.from("pages").insert(payload);
@@ -663,6 +685,7 @@ export async function saveSection(formData: FormData) {
     value: text(formData, "value"),
     href: text(formData, "href"),
     sort_order: num(formData, "sort_order") ?? 0,
+    translations: readTranslationFields(formData, ["value"]),
   };
   if (id) await supabase.from("page_sections").update(payload).eq("id", id);
   else await supabase.from("page_sections").insert(payload);

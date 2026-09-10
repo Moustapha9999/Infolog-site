@@ -10,18 +10,28 @@ import { Container } from "@/components/ui/Container";
 import { SectionLabel } from "@/components/sections/SectionLabel";
 import { TechnicalFrame } from "@/components/ui/TechnicalFrame";
 import { MonetiqueHero } from "@/components/monetique/MonetiqueHero";
-import { monetique } from "@/data/monetique";
+import { getMonetique } from "@/data/monetique";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { buildLocaleMetadata } from "@/lib/i18n/seo";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export const metadata = {
-  title: "Monétique",
-  description: monetique.description,
-};
+export async function generateMetadata() {
+  const locale = await getLocale();
+  const monetique = getMonetique(locale);
+  return buildLocaleMetadata({
+    locale,
+    title: monetique.title,
+    description: monetique.description,
+    path: "/monetique",
+  });
+}
 
 const sifcoIcons: LucideIcon[] = [Users, CreditCard, BookOpen, Building2];
 
-export default function MonetiquePage() {
+export default async function MonetiquePage() {
+  const locale = await getLocale();
+  const monetique = getMonetique(locale);
   return (
     <>
       <MonetiqueHero />

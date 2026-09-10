@@ -1,13 +1,16 @@
 import { ArrowUpRight, Gauge, Building2, DraftingCompass, Users } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
-import { energie as content } from "@/data/energie";
+import { getEnergie } from "@/data/energie";
+import { getLocale } from "@/lib/i18n/get-locale";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
 const axisIcons = [Users, DraftingCompass, Gauge, Building2];
 
-export function EnergieAxes() {
+export async function EnergieAxes() {
+  const locale = await getLocale();
+  const content = getEnergie(locale);
   return (
     <section className="relative isolate overflow-hidden border-b border-ink/10 bg-paper-2/50 py-14 sm:py-16 lg:py-20">
       <div
@@ -57,7 +60,9 @@ export function EnergieAxes() {
   );
 }
 
-export function EnergieApproach() {
+export async function EnergieApproach() {
+  const locale = await getLocale();
+  const content = getEnergie(locale);
   return (
     <section className="relative isolate overflow-hidden border-b border-ink/10 bg-paper py-14 sm:py-16 lg:py-20">
       <Container className="relative max-w-7xl">

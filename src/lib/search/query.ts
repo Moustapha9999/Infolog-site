@@ -8,6 +8,8 @@ import {
   tokenize,
 } from "./normalize";
 import { expandQueryTerms, suggestCorrection } from "./synonyms";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import type { Locale } from "@/lib/i18n/config";
 import type {
   SearchContentType,
   SearchDocument,
@@ -88,20 +90,19 @@ function scoreDocument(doc: SearchDocument, query: string, tokens: string[]) {
   };
 }
 
-function groupHits(results: SearchHit[]): SearchGroup[] {
-  return TYPE_ORDER.map((type) => ({
-    type,
-    label: SEARCH_TYPE_LABELS[type],
-    items: results.filter((item) => item.type === type),
-  })).filter((group) => group.items.length > 0);
-}
-
 export async function searchSite(
   rawQuery: string,
-  options?: { limit?: number; suggestionsOnly?: boolean },
+  options?: {
+    limit?: number;
+    suggestionsOnly?: boolean;
+    locale?: Locale;
+  },
 ): Promise<SearchResponse> {
   const query = rawQuery.trim();
   const limit = options?.limit ?? (options?.suggestionsOnly ? 8 : 40);
+  const locale = options?.locale ?? "fr";
+  const typeLabels =
+    locale === "fr" ? SEARCH_TYPE_LABELS : getDictionary(locale).search.types;
   const empty: SearchResponse = {
     query,
     total: 0,
@@ -112,7 +113,7 @@ export async function searchSite(
   };
   if (query.length < 2) return empty;
 
-  const index = await buildSearchIndex();
+  const index = await buildSearchIndex(locale);
   const tokens = tokenize(query);
   const scored: SearchHit[] = [];
 
@@ -126,6 +127,14 @@ export async function searchSite(
   const results = scored.slice(0, limit);
   const didYouMean =
     results.length === 0 ? suggestCorrection(query) : null;
+
+  function groupHits(list: SearchHit[]): SearchGroup[] {
+    return TYPE_ORDER.map((type) => ({
+      type,
+      label: typeLabels[type],
+      items: list.filter((item) => item.type === type),
+    })).filter((group) => group.items.length > 0);
+  }
 
   return {
     query,

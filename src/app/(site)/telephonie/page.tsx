@@ -6,22 +6,43 @@ import { TechnicalFrame } from "@/components/ui/TechnicalFrame";
 import { PhoneCarousel } from "@/components/telephonie/PhoneCarousel";
 import { TelephonieHeroVisual } from "@/components/telephonie/TelephonieHeroVisual";
 import { TelephonieServiceTabs } from "@/components/telephonie/TelephonieServiceTabs";
-import { getPublishedProducts, telephonie } from "@/data/telephonie";
-import { iziShop } from "@/data/izi-shop";
+import {
+  getCategoryLabel,
+  getPublishedProducts,
+  getTelephonie,
+  getTelephonieServiceTabs,
+} from "@/data/telephonie";
+import { getIziShop } from "@/data/izi-shop";
 import { getPageSections, sectionValue } from "@/lib/cms/pages";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { buildLocaleMetadata } from "@/lib/i18n/seo";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export const metadata = {
-  title: "Téléphonie",
-  description: telephonie.description,
-};
+export async function generateMetadata() {
+  const locale = await getLocale();
+  const telephonie = getTelephonie(locale);
+  return buildLocaleMetadata({
+    locale,
+    title: telephonie.title,
+    description: telephonie.description,
+    path: "/telephonie",
+  });
+}
 
 export default async function TelephoniePage() {
+  const locale = await getLocale();
   const [phones, sections] = await Promise.all([
-    getPublishedProducts(),
-    getPageSections("telephonie"),
+    getPublishedProducts(locale),
+    getPageSections("telephonie", locale),
   ]);
+  const telephonie = getTelephonie(locale);
+  const serviceTabs = getTelephonieServiceTabs(locale);
+  const categoryLabels = getCategoryLabel(locale);
+  const iziShop = getIziShop(locale);
+  const dictionary = getDictionary(locale);
+
   return (
     <>
       <section className="relative isolate min-h-[78vh] overflow-hidden border-b border-ink/10 bg-ink">
@@ -41,9 +62,9 @@ export default async function TelephoniePage() {
               {telephonie.heroLead}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button href="#catalogue">Découvrir</Button>
+              <Button href="#catalogue">{dictionary.home.discover}</Button>
               <Button href="/contact" variant="secondary">
-                Nous contacter
+                {dictionary.common.contactUs}
               </Button>
             </div>
           </div>
@@ -55,7 +76,12 @@ export default async function TelephoniePage() {
           <div className="flex justify-center">
             <SectionLabel>INFOLOG</SectionLabel>
           </div>
-          <div className={cn(type.body, "mt-5 space-y-4 text-left text-ink/80 sm:text-center")}>
+          <div
+            className={cn(
+              type.body,
+              "mt-5 space-y-4 text-left text-ink/80 sm:text-center",
+            )}
+          >
             {telephonie.intro.split("\n\n").map((paragraph) => (
               <p key={paragraph.slice(0, 40)}>{paragraph}</p>
             ))}
@@ -77,7 +103,9 @@ export default async function TelephoniePage() {
                 </p>
               </div>
               <div className="flex flex-wrap gap-3">
-                <Button href="/telephonie/izi-shop">Découvrir IZI SHOP</Button>
+                <Button href="/telephonie/izi-shop">
+                  {telephonie.discoverIziShop}
+                </Button>
                 <Button href={iziShop.website.href} variant="outline">
                   {iziShop.website.host}
                   <ArrowUpRight className="h-4 w-4" aria-hidden />
@@ -88,7 +116,14 @@ export default async function TelephoniePage() {
         </Container>
       </section>
 
-      <TelephonieServiceTabs />
+      <TelephonieServiceTabs
+        tabs={serviceTabs}
+        servicesLabel={telephonie.servicesLabel}
+        servicesTitle={telephonie.servicesTitle}
+        servicesLead={telephonie.servicesLead}
+        servicesAria={telephonie.servicesAria}
+        savPresentation={telephonie.savPresentation}
+      />
 
       <section
         id="catalogue"
@@ -97,30 +132,37 @@ export default async function TelephoniePage() {
         <Container>
           <div className="mx-auto max-w-2xl text-center">
             <div className="flex justify-center">
-              <SectionLabel>Catalogue</SectionLabel>
+              <SectionLabel>{telephonie.catalogLabel}</SectionLabel>
             </div>
             <h2 className={cn(type.h2, "mt-4 text-ink")}>
               {telephonie.showcaseTitle}
             </h2>
             <p className={cn(type.body, "mt-3 text-mute")}>
-              Cliquez sur Découvrir pour ouvrir la fiche complète de chaque
-              modèle.
+              {telephonie.catalogLead}
             </p>
           </div>
-          <PhoneCarousel phones={phones} />
+          <PhoneCarousel
+            phones={phones}
+            discoverLabel={dictionary.home.discover}
+            newBadge={telephonie.newBadge}
+            categoryLabels={categoryLabels}
+            productInfoSheet={telephonie.productInfoSheet}
+            visualComing={telephonie.visualComing}
+            carouselProgress={telephonie.carouselProgress}
+            scrollLeft={telephonie.scrollLeft}
+            scrollRight={telephonie.scrollRight}
+          />
         </Container>
       </section>
 
       <section className="bg-ink py-16 sm:py-20">
         <Container className="max-w-3xl text-center">
-          <h2 className={cn(type.h2, "text-paper")}>
-            {telephonie.ctaTitle}
-          </h2>
+          <h2 className={cn(type.h2, "text-paper")}>{telephonie.ctaTitle}</h2>
           <p className={cn(type.body, "mt-4 text-paper/70")}>
             {telephonie.ctaLead}
           </p>
           <div className="mt-8 flex justify-center">
-            <Button href="/contact">Contact</Button>
+            <Button href="/contact">{dictionary.common.contact}</Button>
           </div>
         </Container>
       </section>

@@ -1,11 +1,14 @@
 import { ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
-import { transformationIt as content } from "@/data/transformation-it";
+import { getTransformationIt } from "@/data/transformation-it";
+import { getLocale } from "@/lib/i18n/get-locale";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
-export function TransformationItCta() {
+export async function TransformationItCta() {
+  const locale = await getLocale();
+  const content = getTransformationIt(locale);
   return (
     <section className="relative isolate overflow-hidden border-b border-ink/10 bg-paper py-14 sm:py-16 lg:py-20">
       <Container className="relative max-w-7xl">

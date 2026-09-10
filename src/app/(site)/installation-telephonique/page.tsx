@@ -5,14 +5,22 @@ import {
   InstallationTelephoniqueSolutions,
   InstallationTelephoniqueSupport,
 } from "@/components/installation-telephonique/InstallationTelephoniqueSolutions";
-import { installationTelephonique } from "@/data/installation-telephonique";
+import { getInstallationTelephonique } from "@/data/installation-telephonique";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { buildLocaleMetadata } from "@/lib/i18n/seo";
 
-export const metadata = {
-  title: "Installation téléphonique pour entreprise",
-  description: installationTelephonique.description,
-};
+export async function generateMetadata() {
+  const locale = await getLocale();
+  const installationTelephonique = getInstallationTelephonique(locale);
+  return buildLocaleMetadata({
+    locale,
+    title: installationTelephonique.title,
+    description: installationTelephonique.description,
+    path: "/installation-telephonique",
+  });
+}
 
-export default function InstallationTelephoniquePage() {
+export default async function InstallationTelephoniquePage() {
   return (
     <>
       <InstallationTelephoniqueHero />

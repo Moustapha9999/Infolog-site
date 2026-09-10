@@ -4,14 +4,22 @@ import {
   EnergieAxes,
   EnergieApproach,
 } from "@/components/energie/EnergieAxes";
-import { energie } from "@/data/energie";
+import { getEnergie } from "@/data/energie";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { buildLocaleMetadata } from "@/lib/i18n/seo";
 
-export const metadata = {
-  title: "Énergie",
-  description: energie.description,
-};
+export async function generateMetadata() {
+  const locale = await getLocale();
+  const energie = getEnergie(locale);
+  return buildLocaleMetadata({
+    locale,
+    title: energie.title,
+    description: energie.description,
+    path: "/energie",
+  });
+}
 
-export default function EnergiePage() {
+export default async function EnergiePage() {
   return (
     <>
       <EnergieHero />
