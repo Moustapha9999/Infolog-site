@@ -17,6 +17,7 @@ import { TranslationStatusBadges } from "@/components/admin/TranslationStatusBad
 import { listAdminPages } from "@/lib/cms/pages";
 import { cmsTranslationStatus } from "@/lib/i18n/content";
 import { parseTranslations } from "@/lib/i18n/localize";
+import Link from "next/link";
 
 function PageTranslationFields({
   title,
@@ -92,13 +93,17 @@ export default async function AdminPagesPage() {
           <p className="text-sm leading-6 text-mute">
             Page prête :{" "}
             <span className="font-medium text-ink">{contactPage.title}</span>{" "}
-            ({contactPage.is_published ? "publiée" : "brouillon"}). Cliquez
-            « Compléter les sections manquantes » pour ajouter les nouveaux
-            réseaux (Facebook, Instagram, TikTok, WhatsApp, LinkedIn) s’ils
-            n’apparaissent pas encore dans l’éditeur.
+            ({contactPage.is_published ? "publiée" : "brouillon"}). Les
+            réseaux sociaux se gèrent dans{" "}
+            <Link href="/admin/socials" className="text-plan underline">
+              Réseaux sociaux
+            </Link>
+            . Cliquez « Compléter les sections manquantes » pour ajouter
+            d’éventuelles clés techniques.
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
             <AdminEditLink href={`/admin/pages/${contactPage.id}`} />
+            <AdminEditLink href="/admin/socials" label="Réseaux sociaux" />
             <form action={ensureContactPage}>
               <button
                 type="submit"

@@ -8,11 +8,12 @@ export const adminLinks = [
   { href: "/admin/banners", label: "Carrousel accueil" },
   { href: "/admin/services", label: "Services" },
   { href: "/admin/pages", label: "Pages" },
+  { href: "/admin/socials", label: "Réseaux sociaux" },
   { href: "/admin/messages", label: "Messages" },
 ] as const;
 
 export function adminPageTitle(pathname: string) {
-  if (pathname.startsWith("/admin/users")) return "Utilisateurs";
+  if (pathname.startsWith("/admin/users")) return "Utilisateurs & accès";
   const match = adminLinks.find((link) =>
     link.href === "/admin" ? pathname === "/admin" : pathname.startsWith(link.href),
   );

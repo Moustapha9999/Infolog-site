@@ -9,8 +9,7 @@ import { site } from "@/data/site";
 import {
   getSiteContact,
   getSiteSocials,
-  INFOLOG_SOCIAL_IDS,
-  socialsByIds,
+  socialsFor,
 } from "@/lib/cms/site-contact";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getLocale } from "@/lib/i18n/get-locale";
@@ -37,7 +36,7 @@ export default async function ContactPage() {
     getSiteContact(),
     getSiteSocials(),
   ]);
-  const socials = socialsByIds(allSocials, INFOLOG_SOCIAL_IDS);
+  const socials = socialsFor(allSocials, "contact");
   const lead = dictionary.contactPage.lead.replace("{city}", site.city);
 
   return (

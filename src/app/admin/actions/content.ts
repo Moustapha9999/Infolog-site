@@ -613,8 +613,7 @@ export async function deletePage(formData: FormData) {
   redirect(adminNext(formData, "/admin/pages"));
 }
 
-export async function ensureContactPage() {
-  const session = await requireAdminSession();
+async function ensureContactPageId() {
   const supabase = await createServerSupabaseClient();
   const { CONTACT_PAGE_SECTIONS } = await import("@/lib/cms/site-contact");
 
@@ -634,13 +633,11 @@ export async function ensureContactPage() {
         is_published: true,
         meta_title: "Coordonnées INFOLOG",
         meta_description:
-          "Téléphones, e-mail, adresse et carte du site INFOLOG.",
+          "Téléphones, e-mail, adresse, carte et réseaux sociaux INFOLOG.",
       })
       .select("id")
       .single();
-    if (error || !created) {
-      redirect("/admin/pages?error=contact");
-    }
+    if (error || !created) return null;
     pageId = created.id;
   }
 
@@ -663,6 +660,16 @@ export async function ensureContactPage() {
     });
   }
 
+  return pageId;
+}
+
+export async function ensureContactPage() {
+  const session = await requireAdminSession();
+  const pageId = await ensureContactPageId();
+  if (!pageId) {
+    redirect("/admin/pages?error=contact");
+  }
+
   await writeAuditLog({
     actorId: session.userId,
     action: "upsert",
@@ -671,6 +678,94 @@ export async function ensureContactPage() {
   });
   await revalidatePublic();
   redirect(`/admin/pages/${pageId}`);
+}
+
+export async function saveSocialLink(formData: FormData) {
+  const session = await requireAdminSession();
+  const {
+    makeSocialSlug,
+    SOCIAL_NETWORKS,
+    toWhatsAppHref,
+  } = await import("@/lib/cms/social-links");
+  const id = text(formData, "id");
+  const network = String(formData.get("network") ?? "facebook").trim();
+  const label = String(formData.get("label") ?? "").trim();
+  let href = String(formData.get("href") ?? "").trim();
+  const groupKey = String(formData.get("group_key") ?? "autre").trim() || "autre";
+  const sortOrder = num(formData, "sort_order") ?? 0;
+  const isActive = bool(formData, "is_active");
+  const showFooter = bool(formData, "show_footer");
+  const showContact = bool(formData, "show_contact");
+  const showNationalCash = bool(formData, "show_national_cash");
+  const showIziShop = bool(formData, "show_izi_shop");
+  const showTelephonie = bool(formData, "show_telephonie");
+
+  if (!label) redirect("/admin/socials?error=label");
+  if (!SOCIAL_NETWORKS.some((item) => item.value === network)) {
+    redirect("/admin/socials?error=network");
+  }
+  if (network === "whatsapp") href = toWhatsAppHref(href) || href;
+
+  const slugInput = text(formData, "slug");
+  const slug = slugInput || makeSocialSlug(label, network);
+  const payload = {
+    slug,
+    network,
+    label,
+    href,
+    group_key: groupKey,
+    sort_order: sortOrder,
+    is_active: isActive,
+    show_footer: showFooter,
+    show_contact: showContact,
+    show_national_cash: showNationalCash,
+    show_izi_shop: showIziShop,
+    show_telephonie: showTelephonie,
+  };
+
+  const supabase = await createServerSupabaseClient();
+  if (id) {
+    const { error } = await supabase
+      .from("social_links")
+      .update(payload)
+      .eq("id", id);
+    if (error) redirect("/admin/socials?error=save");
+  } else {
+    const { error } = await supabase.from("social_links").insert(payload);
+    if (error) {
+      redirect(
+        error.code === "23505"
+          ? "/admin/socials?error=slug"
+          : "/admin/socials?error=save",
+      );
+    }
+  }
+
+  await writeAuditLog({
+    actorId: session.userId,
+    action: id ? "update" : "create",
+    entityType: "social_link",
+    entityId: id ?? slug,
+  });
+  await revalidatePublic();
+  redirect(id ? "/admin/socials?ok=updated" : "/admin/socials?ok=created");
+}
+
+export async function deleteSocialLink(formData: FormData) {
+  const session = await requireAdminSession();
+  const id = String(formData.get("id") ?? "");
+  if (!id) redirect("/admin/socials?error=not-found");
+  const supabase = await createServerSupabaseClient();
+  const { error } = await supabase.from("social_links").delete().eq("id", id);
+  if (error) redirect("/admin/socials?error=delete");
+  await writeAuditLog({
+    actorId: session.userId,
+    action: "delete",
+    entityType: "social_link",
+    entityId: id,
+  });
+  await revalidatePublic();
+  redirect("/admin/socials?ok=deleted");
 }
 
 export async function saveSection(formData: FormData) {
@@ -738,11 +833,6 @@ export async function deleteMessage(formData: FormData) {
 }
 
 export async function setUserRole(formData: FormData) {
-  await requireAdminSession({ adminOnly: true });
-  const id = String(formData.get("id"));
-  const role = String(formData.get("role"));
-  if (role !== "admin" && role !== "editor") return;
-  const supabase = await createServerSupabaseClient();
-  await supabase.from("profiles").update({ role }).eq("id", id);
-  redirect("/admin/users");
+  const { setUserRole: setStaffRole } = await import("@/app/admin/actions/users");
+  await setStaffRole(formData);
 }

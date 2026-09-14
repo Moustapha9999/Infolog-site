@@ -4,12 +4,7 @@ import { SectionLabel } from "@/components/sections/SectionLabel";
 import { Container } from "@/components/ui/Container";
 import { site } from "@/data/site";
 import { SocialLinks } from "@/components/layout/SocialLinks";
-import {
-  getSiteContact,
-  getSiteSocials,
-  INFOLOG_SOCIAL_IDS,
-  socialsByIds,
-} from "@/lib/cms/site-contact";
+import { getSiteContact, getSiteSocials, socialsFor } from "@/lib/cms/site-contact";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { type } from "@/lib/typography";
@@ -22,7 +17,7 @@ export async function FinalCTA() {
     getSiteContact(),
     getSiteSocials(),
   ]);
-  const socials = socialsByIds(allSocials, INFOLOG_SOCIAL_IDS);
+  const socials = socialsFor(allSocials, "contact");
 
   return (
     <section className="relative overflow-hidden border-t border-ink/10 bg-paper-2 py-20">

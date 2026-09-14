@@ -4,7 +4,7 @@ import { site } from "@/data/site";
 import { Logo } from "@/components/ui/Logo";
 import { SocialLinks } from "@/components/layout/SocialLinks";
 import { getPageSections, sectionValue } from "@/lib/cms/pages";
-import { getSiteContact, getSiteSocials } from "@/lib/cms/site-contact";
+import { getSiteContact, getSiteSocials, socialsFor } from "@/lib/cms/site-contact";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getLocale } from "@/lib/i18n/get-locale";
 
@@ -12,11 +12,12 @@ export async function Footer() {
   const year = new Date().getFullYear();
   const locale = await getLocale();
   const dictionary = getDictionary(locale);
-  const [sections, contact, socials] = await Promise.all([
+  const [sections, contact, allSocials] = await Promise.all([
     getPageSections("footer", locale),
     getSiteContact(),
     getSiteSocials(),
   ]);
+  const socials = socialsFor(allSocials, "footer");
   const tagline = sectionValue(
     sections,
     "tagline",

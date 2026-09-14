@@ -51,7 +51,17 @@ Ou en CLI :
 npx tsx --env-file=.env.local scripts/grant-admin.ts VOTRE_EMAIL
 ```
 
-## 4. Seed (optionnel)
+## 4. Réseaux sociaux (CRUD)
+
+Après la migration initiale, exécutez aussi :
+
+`supabase/migrations/20260914170000_social_links.sql`
+
+dans le SQL Editor. Cela crée la table `social_links` et importe les comptes
+INFOLOG / National Cash / IZICALL. La page **Réseaux sociaux** du back-office
+permet ensuite d’ajouter, modifier et supprimer les liens.
+
+## 5. Seed (optionnel)
 
 ```bash
 npx tsx scripts/seed-cms.ts

@@ -3,10 +3,10 @@ import type { Dictionary } from "@/lib/i18n/dictionary-types";
 import type { SiteSocial } from "@/lib/cms/site-contact";
 
 export function socialAccountLabel(
-  dictionary: Dictionary,
+  _dictionary: Dictionary,
   social: SiteSocial,
 ) {
-  return dictionary.footer.socialAccounts[social.labelKey] ?? social.label;
+  return social.label;
 }
 
 function SocialIcon({

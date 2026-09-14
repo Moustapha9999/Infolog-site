@@ -15,7 +15,7 @@ import {
 import { getIziShop } from "@/data/izi-shop";
 import { SocialLinks } from "@/components/layout/SocialLinks";
 import { getPageSections, sectionValue } from "@/lib/cms/pages";
-import { getSiteSocials, socialsByIds } from "@/lib/cms/site-contact";
+import { getSiteSocials, socialsFor } from "@/lib/cms/site-contact";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { buildLocaleMetadata } from "@/lib/i18n/seo";
@@ -40,10 +40,7 @@ export default async function TelephoniePage() {
     getPageSections("telephonie", locale),
     getSiteSocials(),
   ]);
-  const shopSocials = socialsByIds(socials, [
-    "facebook-infolog-shop",
-    "whatsapp-izicall",
-  ]);
+  const shopSocials = socialsFor(socials, "telephonie");
   const telephonie = getTelephonie(locale);
   const serviceTabs = getTelephonieServiceTabs(locale);
   const categoryLabels = getCategoryLabel(locale);

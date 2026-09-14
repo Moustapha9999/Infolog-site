@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useFormStatus } from "react-dom";
 import type { LucideIcon } from "lucide-react";
-import { Ban, Eye, Pencil, Power, SquarePen, Trash2 } from "lucide-react";
+import { Ban, Eye, KeyRound, Pencil, Power, SquarePen, Trash2 } from "lucide-react";
 import { setRecordActive } from "@/app/admin/actions/content";
 import { AdminDialog } from "@/components/admin/AdminDialog";
 import { adminGhostButtonClass } from "@/components/admin/admin-styles";
@@ -162,11 +162,17 @@ export function AdminConfirmDialog({
   );
 }
 
+const formDialogIcons = {
+  pencil: Pencil,
+  key: KeyRound,
+} as const;
+
 export function AdminFormDialog({
   action,
   title,
   triggerLabel = "Modifier",
   submitLabel = "Enregistrer",
+  icon = "pencil",
   wide,
   children,
 }: {
@@ -174,13 +180,16 @@ export function AdminFormDialog({
   title: string;
   triggerLabel?: string;
   submitLabel?: string;
+  /** String key only — Lucide components cannot cross the Server/Client boundary. */
+  icon?: keyof typeof formDialogIcons;
   wide?: boolean;
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  const Icon = formDialogIcons[icon] ?? Pencil;
   return (
     <>
-      <AdminIconButton label={triggerLabel} icon={Pencil} onClick={() => setOpen(true)} />
+      <AdminIconButton label={triggerLabel} icon={Icon} onClick={() => setOpen(true)} />
       <AdminDialog open={open} onClose={() => setOpen(false)} title={title} wide={wide}>
         <form action={action} className="space-y-4">
           {children}

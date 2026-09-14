@@ -17,7 +17,7 @@ import { TechnicalFrame } from "@/components/ui/TechnicalFrame";
 import { Button } from "@/components/ui/Button";
 import { SocialLinks } from "@/components/layout/SocialLinks";
 import { getIziShop } from "@/data/izi-shop";
-import { getSiteSocials, socialsByIds } from "@/lib/cms/site-contact";
+import { getSiteSocials, socialsFor } from "@/lib/cms/site-contact";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { buildLocaleMetadata } from "@/lib/i18n/seo";
@@ -43,15 +43,8 @@ export default async function IziShopPage() {
   const dictionary = getDictionary(locale);
   const iziShop = getIziShop(locale);
   const socials = await getSiteSocials();
-  const whatsapp = socials.find((item) => item.id === "whatsapp-izicall");
-  const izicallSocials = socialsByIds(socials, [
-    "whatsapp-izicall",
-    "facebook-izicall",
-    "tiktok-izicall-mr",
-    "tiktok-izicall-ci",
-    "tiktok-izicall-sn",
-    "tiktok-izicall-ml",
-  ]);
+  const whatsapp = socials.find((item) => item.network === "whatsapp");
+  const izicallSocials = socialsFor(socials, "izi-shop");
   return (
     <>
       <section className="relative isolate overflow-hidden border-b border-ink/10 bg-ink">

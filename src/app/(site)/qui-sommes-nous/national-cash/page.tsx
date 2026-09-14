@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/Button";
 import { NationalCashStats } from "@/components/national-cash/NationalCashStats";
 import { SocialLinks } from "@/components/layout/SocialLinks";
 import { getNationalCash } from "@/data/national-cash";
-import { getSiteSocials, socialsByIds } from "@/lib/cms/site-contact";
+import { getSiteSocials, socialsFor } from "@/lib/cms/site-contact";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { buildLocaleMetadata } from "@/lib/i18n/seo";
@@ -49,10 +49,10 @@ export default async function NationalCashPage() {
   const locale = await getLocale();
   const dictionary = getDictionary(locale);
   const nationalCash = getNationalCash(locale);
-  const nationalCashSocials = socialsByIds(await getSiteSocials(), [
-    "facebook-national-cash",
-    "instagram-national-cash",
-  ]);
+  const nationalCashSocials = socialsFor(
+    await getSiteSocials(),
+    "national-cash",
+  );
 
   return (
     <>

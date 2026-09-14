@@ -12,6 +12,7 @@ import {
   Package,
   PanelsTopLeft,
   RectangleHorizontal,
+  Share2,
   Tag,
   Users,
   Wrench,
@@ -30,6 +31,7 @@ const navIcons = {
   "/admin/banners": RectangleHorizontal,
   "/admin/services": Wrench,
   "/admin/pages": PanelsTopLeft,
+  "/admin/socials": Share2,
   "/admin/messages": Mail,
 } as const;
 
