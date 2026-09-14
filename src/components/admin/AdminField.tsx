@@ -102,7 +102,7 @@ export function AdminSubmit({ children }: { children: React.ReactNode }) {
   return (
     <button
       type="submit"
-      className="bg-copper px-5 py-2.5 text-sm font-medium uppercase tracking-[0.14em] text-paper hover:bg-[#a34f27]"
+      className="rounded-xl bg-copper px-5 py-2.5 text-sm font-medium text-paper transition hover:bg-[#a34f27]"
     >
       {children}
     </button>

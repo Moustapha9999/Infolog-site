@@ -37,7 +37,7 @@ export function TranslationFields({
   const [tab, setTab] = useState<"fr" | "en" | "ar">("fr");
 
   return (
-    <div className={cn("space-y-4 border border-ink/10 bg-paper-2/40 p-4", className)}>
+    <div className={cn("space-y-4 rounded-xl border border-ink/10 bg-paper-2/40 p-4", className)}>
       <div>
         <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-plan">
           Traductions

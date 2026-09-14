@@ -34,7 +34,7 @@ export default async function AdminMediaPage({
     <div className="space-y-8">
       <AdminPageHeader eyebrow="Médiathèque" title="Images" />
       {error ? (
-        <p className="border border-copper/30 bg-copper/5 px-3 py-2 text-sm text-copper">
+        <p className="rounded-xl border border-copper/30 bg-copper/5 px-3 py-2.5 text-sm text-copper">
           Import refusé (type, taille ou erreur d’upload). Images max 10 Mo.
         </p>
       ) : null}
@@ -69,12 +69,16 @@ export default async function AdminMediaPage({
             .join(", ");
           const label = item.title || item.original_name || "Image";
           return (
-            <article key={item.id} className="border border-ink/10 bg-paper p-3">
+            <article key={item.id} className="admin-card overflow-hidden p-3">
               {src ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={src} alt={item.alt ?? ""} className="aspect-video w-full object-cover" />
+                <img
+                  src={src}
+                  alt={item.alt ?? ""}
+                  className="aspect-video w-full rounded-lg object-cover"
+                />
               ) : (
-                <div className="grid aspect-video place-items-center bg-paper-2 text-xs text-mute">
+                <div className="grid aspect-video place-items-center rounded-lg bg-[var(--admin-main)] text-xs text-mute">
                   Aperçu indisponible
                 </div>
               )}

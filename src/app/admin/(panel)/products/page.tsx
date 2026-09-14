@@ -6,7 +6,13 @@ import {
   AdminRowActions,
   AdminToggleDialog,
 } from "@/components/admin/AdminActions";
-import { AdminEmpty, AdminPageHeader } from "@/components/admin/AdminChrome";
+import {
+  AdminEmpty,
+  AdminPageHeader,
+  AdminTable,
+  AdminTableHead,
+} from "@/components/admin/AdminChrome";
+import { adminPrimaryButtonClass } from "@/components/admin/admin-styles";
 import { TranslationStatusBadges } from "@/components/admin/TranslationStatusBadges";
 import { listAdminProducts } from "@/lib/cms/products";
 import { formatMoney } from "@/lib/cms/format";
@@ -22,10 +28,7 @@ export default async function AdminProductsPage() {
         title="Produits"
         description="Produits actifs indexés dans la recherche. Gérez les traductions FR / EN / AR sur chaque fiche (onglets)."
         action={
-          <Link
-            href="/admin/products/new"
-            className="inline-flex bg-copper px-4 py-2 text-sm uppercase tracking-[0.14em] text-paper"
-          >
+          <Link href="/admin/products/new" className={adminPrimaryButtonClass}>
             Ajouter
           </Link>
         }
@@ -33,19 +36,18 @@ export default async function AdminProductsPage() {
       {products.length === 0 ? (
         <AdminEmpty>Aucun produit. Ajoutez une fiche ou lancez le seed.</AdminEmpty>
       ) : (
-        <div className="overflow-x-auto border border-ink/10 bg-paper">
-          <table className="w-full min-w-[720px] text-left text-sm">
-            <thead className="bg-paper-2 font-mono text-[11px] uppercase tracking-[0.16em] text-mute">
-              <tr>
-                <th className="px-4 py-3">Nom</th>
-                <th className="px-4 py-3">Traductions</th>
-                <th className="px-4 py-3">Statut</th>
-                <th className="px-4 py-3">Prix</th>
-                <th className="px-4 py-3">Flags</th>
-                <th className="px-4 py-3 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
+        <AdminTable>
+          <AdminTableHead>
+            <tr>
+              <th className="px-4 py-3">Nom</th>
+              <th className="px-4 py-3">Traductions</th>
+              <th className="px-4 py-3">Statut</th>
+              <th className="px-4 py-3">Prix</th>
+              <th className="px-4 py-3">Flags</th>
+              <th className="px-4 py-3 text-right">Actions</th>
+            </tr>
+          </AdminTableHead>
+          <tbody>
               {products.map((product) => {
                 const price = Array.isArray(product.product_prices)
                   ? product.product_prices[0]
@@ -117,8 +119,7 @@ export default async function AdminProductsPage() {
                 );
               })}
             </tbody>
-          </table>
-        </div>
+        </AdminTable>
       )}
     </div>
   );

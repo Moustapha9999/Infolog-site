@@ -43,7 +43,7 @@ const SUCCESS: Record<string, string> = {
 
 function PlacementFields({ social }: { social?: SiteSocial }) {
   return (
-    <div className="grid gap-2 rounded border border-ink/10 bg-paper-2/40 p-3">
+    <div className="grid gap-2 rounded-xl border border-ink/10 bg-[var(--admin-main)]/50 p-3">
       <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-plan">
         Affichage sur le site
       </p>

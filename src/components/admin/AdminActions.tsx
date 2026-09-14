@@ -21,8 +21,8 @@ export type AdminActiveEntity =
 type AdminAction = (formData: FormData) => void | Promise<void>;
 
 const iconButtonClass = cn(
-  "grid h-8 w-8 place-items-center border border-ink/15 text-ink/70",
-  "hover:border-plan hover:text-plan",
+  "grid h-8 w-8 place-items-center rounded-lg border border-ink/10 text-ink/70",
+  "transition hover:border-plan/40 hover:text-plan",
 );
 
 function PendingSubmit({
@@ -38,8 +38,8 @@ function PendingSubmit({
       type="submit"
       disabled={pending}
       className={cn(
-        "px-4 py-2 text-sm uppercase tracking-[0.14em] text-paper disabled:opacity-60",
-        tone === "copper" ? "bg-copper" : "bg-plan",
+        "rounded-xl px-4 py-2.5 text-sm font-medium text-[#eef1f4] disabled:opacity-60",
+        tone === "copper" ? "bg-copper hover:bg-[#a34f27]" : "bg-plan hover:opacity-90",
       )}
     >
       {pending ? "…" : children}
@@ -147,10 +147,16 @@ export function AdminConfirmDialog({
         tone={tone === "copper" ? "copper" : "default"}
         onClick={() => setOpen(true)}
       />
-      <AdminDialog open={open} onClose={() => setOpen(false)} title={title} description={description}>
+      <AdminDialog
+        open={open}
+        onClose={() => setOpen(false)}
+        title={title}
+        description={description}
+        tone={tone}
+      >
         <form action={action}>
           {children}
-          <div className="mt-6 flex justify-end gap-2">
+          <div className="mt-6 flex flex-wrap justify-end gap-2 border-t border-ink/8 pt-4">
             <button type="button" onClick={() => setOpen(false)} className={adminGhostButtonClass}>
               Annuler
             </button>
@@ -193,7 +199,7 @@ export function AdminFormDialog({
       <AdminDialog open={open} onClose={() => setOpen(false)} title={title} wide={wide}>
         <form action={action} className="space-y-4">
           {children}
-          <div className="flex justify-end gap-2 pt-2">
+          <div className="flex flex-wrap justify-end gap-2 border-t border-ink/8 pt-4">
             <button type="button" onClick={() => setOpen(false)} className={adminGhostButtonClass}>
               Annuler
             </button>
@@ -220,7 +226,7 @@ export function AdminViewDialog({
       <AdminIconButton label={triggerLabel} icon={Eye} onClick={() => setOpen(true)} />
       <AdminDialog open={open} onClose={() => setOpen(false)} title={title} wide>
         {children}
-        <div className="mt-5 flex justify-end">
+        <div className="mt-5 flex justify-end border-t border-ink/8 pt-4">
           <button type="button" onClick={() => setOpen(false)} className={adminGhostButtonClass}>
             Fermer
           </button>

@@ -23,7 +23,7 @@ export function AdminAuthField({
   defaultValue?: string;
 }) {
   return (
-    <label className="flex h-12 items-stretch border border-ink/15 bg-paper focus-within:border-plan">
+    <label className="flex h-12 items-stretch overflow-hidden rounded-xl border border-ink/10 bg-paper focus-within:border-plan focus-within:ring-2 focus-within:ring-plan/15">
       <span className="grid w-12 shrink-0 place-items-center text-plan" aria-hidden>
         {icon}
       </span>
@@ -49,7 +49,7 @@ export function AdminAuthSubmit({ idle, pending }: { idle: string; pending: stri
     <button
       type="submit"
       disabled={status.pending}
-      className="w-full bg-copper px-5 py-3.5 text-sm font-medium uppercase tracking-[0.2em] text-paper disabled:opacity-60"
+      className="w-full rounded-xl bg-copper px-5 py-3.5 text-sm font-medium text-paper transition hover:bg-[#a34f27] disabled:opacity-60"
     >
       {status.pending ? pending : idle}
     </button>

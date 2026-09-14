@@ -16,12 +16,13 @@ import {
   Tag,
   Users,
   Wrench,
+  type LucideIcon,
 } from "lucide-react";
-import { adminLinks } from "@/components/admin/admin-nav-data";
+import { adminNavGroups } from "@/components/admin/admin-nav-data";
 import { useAdminUi } from "@/components/admin/AdminTheme";
 import { cn } from "@/lib/utils";
 
-const navIcons = {
+const navIcons: Record<string, LucideIcon> = {
   "/admin": LayoutDashboard,
   "/admin/products": Package,
   "/admin/brands": Tag,
@@ -33,7 +34,8 @@ const navIcons = {
   "/admin/pages": PanelsTopLeft,
   "/admin/socials": Share2,
   "/admin/messages": Mail,
-} as const;
+  "/admin/users": Users,
+};
 
 function isActive(href: string, pathname: string) {
   if (href === "/admin") return pathname === "/admin";
@@ -53,46 +55,76 @@ function NavItems({
   collapsed: boolean;
   onNavigate?: () => void;
 }) {
-  const items = [
-    ...adminLinks.map((link) => ({ ...link, icon: navIcons[link.href] })),
+  const groups = [
+    ...adminNavGroups.map((group) => ({
+      id: group.id,
+      label: group.label,
+      links: group.links.map((link) => ({
+        ...link,
+        icon: navIcons[link.href] ?? LayoutDashboard,
+      })),
+    })),
     ...(showUsers
-      ? [{ href: "/admin/users", label: "Utilisateurs", icon: Users }]
+      ? [
+          {
+            id: "access",
+            label: "Accès" as string | null,
+            links: [{ href: "/admin/users", label: "Utilisateurs", icon: Users }],
+          },
+        ]
       : []),
   ];
 
   return (
-    <nav className="flex flex-col gap-0.5" aria-label="Navigation back-office">
-      {items.map((link) => {
-        const active = isActive(link.href, pathname);
-        const Icon = link.icon;
-        return (
-          <Link
-            key={link.href}
-            href={link.href}
-            onClick={onNavigate}
-            title={link.label}
-            className={cn(
-              "flex items-center gap-3 border-l-2 px-3 py-2.5 text-sm",
-              collapsed && "justify-center px-2",
-              active
-                ? "border-copper bg-white/8 text-[var(--admin-sidebar-fg)]"
-                : "border-transparent text-[var(--admin-sidebar-fg)]/65 hover:border-white/25 hover:bg-white/5 hover:text-[var(--admin-sidebar-fg)]",
-            )}
-          >
-            <Icon strokeWidth={1.4} className="h-4 w-4 shrink-0" />
-            {collapsed ? null : (
-              <>
-                <span className="flex-1">{link.label}</span>
-                {link.href === "/admin/messages" && unread > 0 ? (
-                  <span className="bg-copper px-1.5 py-0.5 font-mono text-[10px] text-paper">
-                    {unread}
-                  </span>
-                ) : null}
-              </>
-            )}
-          </Link>
-        );
-      })}
+    <nav className="flex flex-col gap-5" aria-label="Navigation back-office">
+      {groups.map((group) => (
+        <div key={group.id}>
+          {group.label && !collapsed ? (
+            <p className="mb-1.5 px-3 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--admin-sidebar-muted)]">
+              {group.label}
+            </p>
+          ) : null}
+          <div className="flex flex-col gap-0.5">
+            {group.links.map((link) => {
+              const active = isActive(link.href, pathname);
+              const Icon = link.icon;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={onNavigate}
+                  title={link.label}
+                  className={cn(
+                    "relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition",
+                    collapsed && "justify-center px-2",
+                    active
+                      ? "bg-[var(--admin-sidebar-active)] font-medium text-plan"
+                      : "text-[var(--admin-sidebar-muted)] hover:bg-[var(--admin-sidebar-hover)] hover:text-[var(--admin-sidebar-fg)]",
+                  )}
+                >
+                  {active ? (
+                    <span
+                      className="absolute inset-y-1.5 start-0 w-1 rounded-full bg-plan"
+                      aria-hidden
+                    />
+                  ) : null}
+                  <Icon strokeWidth={1.5} className="h-4 w-4 shrink-0" />
+                  {collapsed ? null : (
+                    <>
+                      <span className="flex-1">{link.label}</span>
+                      {link.href === "/admin/messages" && unread > 0 ? (
+                        <span className="rounded-md bg-copper px-1.5 py-0.5 font-mono text-[10px] text-paper">
+                          {unread}
+                        </span>
+                      ) : null}
+                    </>
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      ))}
     </nav>
   );
 }
@@ -127,7 +159,7 @@ export function AdminNav({
       <div className="lg:hidden">
         <button
           type="button"
-          className="border border-white/20 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--admin-sidebar-fg)]"
+          className="rounded-xl border border-ink/10 bg-[var(--admin-card)] px-3 py-2 text-sm text-[var(--admin-sidebar-fg)]"
           aria-expanded={open}
           aria-controls="admin-mobile-nav"
           onClick={() => setOpen((value) => !value)}
@@ -135,14 +167,14 @@ export function AdminNav({
           {open ? "Fermer" : "Menu"}
         </button>
         {open ? (
-          <div id="admin-mobile-nav" className="admin-sidebar fixed inset-0 z-50 p-5">
+          <div id="admin-mobile-nav" className="admin-sidebar fixed inset-0 z-50 overflow-y-auto p-5">
             <div className="mb-6 flex items-center justify-between">
-              <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-[var(--admin-sidebar-fg)]/50">
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--admin-sidebar-muted)]">
                 Navigation
               </p>
               <button
                 type="button"
-                className="border border-white/20 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.16em]"
+                className="rounded-xl border border-ink/10 bg-[var(--admin-card)] px-3 py-2 text-sm"
                 onClick={() => setOpen(false)}
               >
                 Fermer

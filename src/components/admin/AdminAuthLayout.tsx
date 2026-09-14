@@ -53,7 +53,7 @@ export function AdminAuthHeader({
   return (
     <div className="mb-8 flex flex-col items-center gap-3">
       <span
-        className="grid h-14 w-14 place-items-center border border-ink/15 text-plan"
+        className="grid h-14 w-14 place-items-center rounded-2xl border border-ink/10 bg-paper-2 text-plan"
         aria-hidden
       >
         {icon}
@@ -72,7 +72,7 @@ const AUTH_STEPS = [
 
 export function AdminAuthSteps({ current }: { current: 1 | 2 | 3 }) {
   return (
-    <ol className="mb-8 grid grid-cols-3 border border-ink/15">
+    <ol className="mb-8 grid grid-cols-3 overflow-hidden rounded-2xl border border-ink/10">
       {AUTH_STEPS.map((step, index) => {
         const stepNumber = (index + 1) as 1 | 2 | 3;
         const active = stepNumber === current;
@@ -82,7 +82,7 @@ export function AdminAuthSteps({ current }: { current: 1 | 2 | 3 }) {
             aria-current={active ? "step" : undefined}
             className={cn(
               "flex flex-col gap-1 px-3 py-2.5",
-              index > 0 && "border-l border-ink/15",
+              index > 0 && "border-l border-ink/10",
               active && "bg-paper-2",
             )}
           >
@@ -113,17 +113,21 @@ export function AdminAuthAlert({
 }) {
   if (tone === "ok") {
     return (
-      <p className="border border-plan/25 bg-plan/5 px-3 py-2 text-sm text-plan">{children}</p>
+      <p className="rounded-xl border border-plan/25 bg-plan/5 px-3 py-2.5 text-sm text-plan">
+        {children}
+      </p>
     );
   }
   return (
-    <p className="border border-copper/30 bg-copper/5 px-3 py-2 text-sm text-copper">{children}</p>
+    <p className="rounded-xl border border-copper/30 bg-copper/5 px-3 py-2.5 text-sm text-copper">
+      {children}
+    </p>
   );
 }
 
 export function AdminAuthConfigMissing() {
   return (
-    <p className="border border-ink/10 bg-paper-2 px-4 py-4 text-sm leading-7 text-mute">
+    <p className="rounded-xl border border-ink/10 bg-paper-2 px-4 py-4 text-sm leading-7 text-mute">
       Ajoutez <code className="font-mono text-copper">NEXT_PUBLIC_SUPABASE_URL</code> et la clé
       publishable dans <code className="font-mono">.env.local</code>.
     </p>

@@ -68,7 +68,7 @@ export function AdminThemeProvider({ children }: { children: React.ReactNode }) 
 
   return (
     <AdminUiContext.Provider value={value}>
-      <div data-admin-theme={theme} className="admin-shell min-h-screen bg-paper text-ink">
+      <div data-admin-theme={theme} className="admin-shell min-h-screen text-ink">
         {children}
       </div>
     </AdminUiContext.Provider>
@@ -82,7 +82,7 @@ export function AdminThemeToggle() {
     <button
       type="button"
       onClick={() => setTheme(next)}
-      className="grid h-9 w-9 place-items-center border border-ink/15 hover:border-plan"
+      className="grid h-10 w-10 place-items-center rounded-full border border-ink/10 bg-[var(--admin-card)] text-mute transition hover:border-plan/40 hover:text-plan"
       aria-pressed={theme === "dark"}
       aria-label={theme === "dark" ? "Activer le mode clair" : "Activer le mode sombre"}
       title={theme === "dark" ? "Mode clair" : "Mode sombre"}

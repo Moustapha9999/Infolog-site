@@ -45,7 +45,7 @@ function StatItemView({
   const value = useCount(stat.value, active, reduce);
 
   return (
-    <article className="relative border border-plan/35 bg-ink/50 p-6 sm:p-7">
+    <article className="relative flex h-full flex-col border border-plan/35 bg-ink/50 p-6 sm:p-7">
       <span className="absolute end-4 top-4 h-1.5 w-1.5 bg-copper" aria-hidden />
       <p className="font-mono text-6xl leading-none tracking-tight text-paper sm:text-7xl lg:text-[84px]">
         {value}
@@ -94,7 +94,7 @@ export function Stats({
           className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
         >
           {items.map((stat, index) => (
-            <Reveal key={stat.label} delay={index * 0.08}>
+            <Reveal key={stat.label} delay={index * 0.08} className="h-full">
               <StatItemView stat={stat} active={active} />
             </Reveal>
           ))}
