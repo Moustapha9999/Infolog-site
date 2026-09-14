@@ -133,6 +133,20 @@ export const fr: Dictionary = {
     taglineFallback:
       "Des solutions technologiques au service de votre développement.",
     socials: "Réseaux sociaux",
+    socialComingSoon: "lien à venir",
+    whatsappCta: "WhatsApp IZICALL",
+    socialAccounts: {
+      facebookInfologShop: "Infolog Shop / SAV",
+      facebookNationalCash: "National Cash",
+      instagramNationalCash: "National Cash",
+      facebookIzicall: "IZICALL Mauritanie",
+      tiktokIzicallMr: "IZICALL Mauritanie",
+      tiktokIzicallCi: "IZICALL Côte d'Ivoire",
+      tiktokIzicallSn: "IZICALL Sénégal",
+      tiktokIzicallMl: "IZICALL Mali",
+      whatsappIzicall: "WhatsApp IZICALL",
+      linkedinInfolog: "LinkedIn INFOLOG",
+    },
   },
   contact: {
     title: "Contact",
@@ -152,6 +166,7 @@ export const fr: Dictionary = {
     lead: "Décrivez votre besoin ci-dessous. Notre équipe commerciale vous répond depuis {city}.",
     address: "Adresse",
     map: "Carte",
+    socials: "Réseaux sociaux",
   },
   cta: {
     finalTitle: "Parlons de votre projet",

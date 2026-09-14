@@ -127,6 +127,20 @@ export const ar: Dictionary = {
   footer: {
     taglineFallback: "حلول تكنولوجية في خدمة تطوركم.",
     socials: "الشبكات الاجتماعية",
+    socialComingSoon: "الرابط قريباً",
+    whatsappCta: "واتساب IZICALL",
+    socialAccounts: {
+      facebookInfologShop: "Infolog Shop / SAV",
+      facebookNationalCash: "National Cash",
+      instagramNationalCash: "National Cash",
+      facebookIzicall: "IZICALL موريتانيا",
+      tiktokIzicallMr: "IZICALL موريتانيا",
+      tiktokIzicallCi: "IZICALL ساحل العاج",
+      tiktokIzicallSn: "IZICALL السنغال",
+      tiktokIzicallMl: "IZICALL مالي",
+      whatsappIzicall: "واتساب IZICALL",
+      linkedinInfolog: "لينكدإن INFOLOG",
+    },
   },
   contact: {
     title: "اتصل",
@@ -146,6 +160,7 @@ export const ar: Dictionary = {
     lead: "صفوا احتياجكم أدناه. يردّ فريقنا التجاري من {city}.",
     address: "العنوان",
     map: "الخريطة",
+    socials: "الشبكات الاجتماعية",
   },
   cta: {
     finalTitle: "لنتحدث عن مشروعكم",

@@ -6,11 +6,52 @@ export type SitePhone = {
   href: string;
 };
 
+export type SiteSocialNetwork =
+  | "facebook"
+  | "instagram"
+  | "tiktok"
+  | "whatsapp"
+  | "linkedin";
+
 export type SiteSocial = {
-  id: string;
+  id: (typeof site.socials)[number]["id"];
+  network: SiteSocialNetwork;
+  cmsKey: string;
+  labelKey: (typeof site.socials)[number]["labelKey"];
   label: string;
   href: string;
   icon: string;
+};
+
+/** Libellés back-office pour les sections de coordonnées. */
+export const CONTACT_SECTION_LABELS: Record<string, string> = {
+  phone_1: "Téléphone 1",
+  phone_1_href: "Lien téléphone 1 (tel:)",
+  phone_2: "Téléphone 2",
+  phone_2_href: "Lien téléphone 2 (tel:)",
+  email: "E-mail",
+  email_href: "Lien e-mail (mailto:)",
+  address: "Adresse",
+  street: "Rue",
+  postal_box: "Boîte postale",
+  plus_code: "Plus Code",
+  geo_lat: "Latitude",
+  geo_lng: "Longitude",
+  maps_href: "Lien Google Maps",
+  maps_embed: "Intégration carte",
+  social_facebook_infolog_shop: "Facebook — Infolog Shop / SAV",
+  social_facebook_national_cash: "Facebook — National Cash",
+  social_instagram_national_cash: "Instagram — National Cash",
+  social_facebook_izicall: "Facebook — IZICALL Mauritanie",
+  social_tiktok_izicall_mr: "TikTok — IZICALL Mauritanie",
+  social_tiktok_izicall_ci: "TikTok — IZICALL Côte d'Ivoire",
+  social_tiktok_izicall_sn: "TikTok — IZICALL Sénégal",
+  social_tiktok_izicall_ml: "TikTok — IZICALL Mali",
+  social_whatsapp_izicall:
+    "WhatsApp — IZICALL (numéro ou URL wa.me, ouvre la discussion)",
+  social_linkedin_infolog: "LinkedIn — INFOLOG",
+  social_facebook: "Ancien Facebook (obsolète — à supprimer)",
+  social_tiktok: "Ancien TikTok (obsolète — à supprimer)",
 };
 
 export type SiteContact = {
@@ -55,10 +96,10 @@ export const CONTACT_PAGE_SECTIONS = [
     value:
       "https://maps.google.com/maps?q=18.089889,-15.989528&hl=fr&z=17&output=embed",
   },
-  /** URL profil Facebook (footer). Vide = icône affichée sans lien. */
-  { key: "social_facebook", value: "" },
-  /** URL profil TikTok (footer). Vide = icône affichée sans lien. */
-  { key: "social_tiktok", value: "" },
+  ...site.socials.map((social) => ({
+    key: social.cmsKey,
+    value: social.href,
+  })),
 ] as const;
 
 function toTelHref(display: string, fallback?: string) {
@@ -139,18 +180,45 @@ export async function getSiteContact(): Promise<SiteContact> {
   };
 }
 
-/** Réseaux sociaux footer : CMS page `contact` avec repli sur `site.socials`. */
+/** Transforme un numéro ou une URL WhatsApp en lien wa.me (ouvre la discussion). */
+export function toWhatsAppHref(value: string, fallback = "") {
+  const raw = value.trim() || fallback.trim();
+  if (!raw) return "";
+  if (/^https?:\/\//i.test(raw) || raw.startsWith("whatsapp:")) return raw;
+  const digits = raw.replace(/[^\d]/g, "");
+  return digits ? `https://wa.me/${digits}` : "";
+}
+
+export function socialsByIds(socials: SiteSocial[], ids: readonly string[]) {
+  const allowed = new Set(ids);
+  return socials.filter((social) => allowed.has(social.id));
+}
+
+/** Comptes INFOLOG (contact / accueil) — hors National Cash et IZICALL. */
+export const INFOLOG_SOCIAL_IDS = [
+  "facebook-infolog-shop",
+  "linkedin-infolog",
+] as const;
+
+/** Réseaux sociaux vitrine : CMS page `contact` avec repli sur `site.socials`. */
 export async function getSiteSocials(): Promise<SiteSocial[]> {
   const sections = await getPageSections("contact");
-  const hrefById: Record<string, string> = {
-    facebook: sectionValue(sections, "social_facebook", "").trim(),
-    tiktok: sectionValue(sections, "social_tiktok", "").trim(),
-  };
 
-  return site.socials.map((social) => ({
-    id: social.id,
-    label: social.label,
-    icon: social.icon,
-    href: hrefById[social.id] || social.href || "",
-  }));
+  return site.socials.map((social) => {
+    const fromCms = sectionValue(sections, social.cmsKey, "").trim();
+    const href =
+      social.network === "whatsapp"
+        ? toWhatsAppHref(fromCms, social.href)
+        : fromCms || social.href || "";
+
+    return {
+      id: social.id,
+      network: social.network,
+      cmsKey: social.cmsKey,
+      labelKey: social.labelKey,
+      label: social.label,
+      icon: social.icon,
+      href,
+    };
+  });
 }

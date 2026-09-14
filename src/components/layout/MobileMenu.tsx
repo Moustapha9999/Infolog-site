@@ -4,19 +4,22 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { LanguageSelector } from "@/components/i18n/LanguageSelector";
 import { SiteSearch } from "@/components/search/SiteSearch";
+import { SocialLinks } from "@/components/layout/SocialLinks";
 import { site } from "@/data/site";
 import { useDictionary } from "@/lib/i18n/LocaleProvider";
 import { localizedMainNav } from "@/lib/i18n/localized-nav";
-import type { SiteContact } from "@/lib/cms/site-contact";
+import type { SiteContact, SiteSocial } from "@/lib/cms/site-contact";
 
 export function MobileMenu({
   open,
   onClose,
   contact,
+  socials = [],
 }: {
   open: boolean;
   onClose: () => void;
   contact: SiteContact;
+  socials?: SiteSocial[];
 }) {
   const dictionary = useDictionary();
   const mainNav = localizedMainNav(dictionary);
@@ -149,6 +152,18 @@ export function MobileMenu({
               {contact.email}
             </a>
           </div>
+          {socials.length > 0 ? (
+            <div className="mt-5">
+              <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.22em] text-plan">
+                {dictionary.footer.socials}
+              </p>
+              <SocialLinks
+                socials={socials}
+                dictionary={dictionary}
+                variant="compact"
+              />
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

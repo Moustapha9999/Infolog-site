@@ -102,6 +102,20 @@ export type Dictionary = {
   footer: {
     taglineFallback: string;
     socials: string;
+    socialComingSoon: string;
+    whatsappCta: string;
+    socialAccounts: {
+      facebookInfologShop: string;
+      facebookNationalCash: string;
+      instagramNationalCash: string;
+      facebookIzicall: string;
+      tiktokIzicallMr: string;
+      tiktokIzicallCi: string;
+      tiktokIzicallSn: string;
+      tiktokIzicallMl: string;
+      whatsappIzicall: string;
+      linkedinInfolog: string;
+    };
   };
   contact: {
     title: string;
@@ -121,6 +135,7 @@ export type Dictionary = {
     lead: string;
     address: string;
     map: string;
+    socials: string;
   };
   cta: {
     finalTitle: string;

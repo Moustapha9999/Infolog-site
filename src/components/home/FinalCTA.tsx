@@ -3,16 +3,26 @@ import { ContactFormGate } from "@/components/contact/ContactFormGate";
 import { SectionLabel } from "@/components/sections/SectionLabel";
 import { Container } from "@/components/ui/Container";
 import { site } from "@/data/site";
-import { getSiteContact } from "@/lib/cms/site-contact";
+import { SocialLinks } from "@/components/layout/SocialLinks";
+import {
+  getSiteContact,
+  getSiteSocials,
+  INFOLOG_SOCIAL_IDS,
+  socialsByIds,
+} from "@/lib/cms/site-contact";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { type } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
 export async function FinalCTA() {
-  const contact = await getSiteContact();
   const locale = await getLocale();
   const dictionary = getDictionary(locale);
+  const [contact, allSocials] = await Promise.all([
+    getSiteContact(),
+    getSiteSocials(),
+  ]);
+  const socials = socialsByIds(allSocials, INFOLOG_SOCIAL_IDS);
 
   return (
     <section className="relative overflow-hidden border-t border-ink/10 bg-paper-2 py-20">
@@ -84,6 +94,19 @@ export async function FinalCTA() {
               </div>
             </li>
           </ul>
+          {socials.length > 0 ? (
+            <div className="mt-8">
+              <p className={cn(type.label, "tracking-[0.2em] text-plan")}>
+                {dictionary.footer.socials}
+              </p>
+              <SocialLinks
+                socials={socials}
+                dictionary={dictionary}
+                variant="compact"
+                className="mt-3"
+              />
+            </div>
+          ) : null}
         </div>
 
         <div className="frame-corners relative border border-ink/15 bg-paper p-6 sm:p-8">

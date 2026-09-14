@@ -10,6 +10,7 @@ import { AdminPageHeader, AdminPanel } from "@/components/admin/AdminChrome";
 import { AdminCheck, AdminField, AdminSubmit } from "@/components/admin/AdminField";
 import { TranslationFields } from "@/components/admin/TranslationFields";
 import { getAdminPage } from "@/lib/cms/pages";
+import { CONTACT_SECTION_LABELS } from "@/lib/cms/site-contact";
 import { parseTranslations } from "@/lib/i18n/localize";
 
 export default async function AdminPageDetail({
@@ -40,25 +41,20 @@ export default async function AdminPageDetail({
         </p>
       ) : null}
       {page.slug === "contact" ? (
-        <p className="max-w-2xl text-sm leading-6 text-mute">
+        <p className="max-w-3xl text-sm leading-6 text-mute">
           Coordonnées affichées sur l’accueil, le pied de page, le menu mobile
-          et la page Contact. Clés :{" "}
-          <code className="font-mono text-xs">phone_1</code>,{" "}
-          <code className="font-mono text-xs">phone_2</code>,{" "}
-          <code className="font-mono text-xs">phone_1_href</code> /{" "}
-          <code className="font-mono text-xs">phone_2_href</code> (ex.{" "}
-          <code className="font-mono text-xs">tel:+222…</code>),{" "}
-          <code className="font-mono text-xs">email</code>,{" "}
-          <code className="font-mono text-xs">address</code>,{" "}
-          <code className="font-mono text-xs">plus_code</code>,{" "}
-          <code className="font-mono text-xs">maps_href</code>,{" "}
-          <code className="font-mono text-xs">maps_embed</code>,{" "}
-          <code className="font-mono text-xs">geo_lat</code> /{" "}
-          <code className="font-mono text-xs">geo_lng</code>,{" "}
-          <code className="font-mono text-xs">social_facebook</code> /{" "}
-          <code className="font-mono text-xs">social_tiktok</code> (URL
-          complètes du footer). Laissez la page publiée pour que le site
-          vitrine les utilise.
+          et la page Contact. Les clés{" "}
+          <code className="font-mono text-xs">social_*</code> sont les URL des
+          réseaux (Facebook Infolog Shop / SAV, National Cash, IZICALL ;
+          Instagram National Cash ; TikTok IZICALL Mauritanie, Côte d’Ivoire,
+          Sénégal, Mali ; LinkedIn INFOLOG). Pour WhatsApp IZICALL, saisissez
+          le numéro{" "}
+          <code className="font-mono text-xs">+221 77 170 57 41</code> ou l’URL{" "}
+          <code className="font-mono text-xs">https://wa.me/221771705741</code>{" "}
+          — le clic ouvre une discussion WhatsApp. Cliquez « Compléter les
+          sections manquantes » sur la liste des pages si une clé n’apparaît
+          pas encore. Laissez la page publiée pour que le site vitrine les
+          utilise.
         </p>
       ) : null}
       <AdminPanel title="Métadonnées" className="max-w-xl">
@@ -112,7 +108,17 @@ export default async function AdminPageDetail({
               className="flex items-start justify-between gap-4 py-4 first:pt-0 last:pb-0"
             >
               <div className="min-w-0">
-                <p className="font-medium">{section.key}</p>
+                <p className="font-medium">
+                  {page.slug === "contact"
+                    ? (CONTACT_SECTION_LABELS[section.key] ?? section.key)
+                    : section.key}
+                </p>
+                {page.slug === "contact" &&
+                CONTACT_SECTION_LABELS[section.key] ? (
+                  <p className="mt-0.5 font-mono text-[11px] text-mute">
+                    {section.key}
+                  </p>
+                ) : null}
                 <p className="mt-1 line-clamp-2 text-sm text-mute">
                   {section.value}
                 </p>

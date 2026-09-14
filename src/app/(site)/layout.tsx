@@ -3,7 +3,7 @@ import { Header } from "@/components/layout/Header";
 import { ScrollToTop } from "@/components/layout/ScrollToTop";
 import { site } from "@/data/site";
 import { getSiteCopy } from "@/data/site-copy";
-import { getSiteContact } from "@/lib/cms/site-contact";
+import { getSiteContact, getSiteSocials } from "@/lib/cms/site-contact";
 import { localeMeta } from "@/lib/i18n/config";
 import { getLocale } from "@/lib/i18n/get-locale";
 
@@ -12,8 +12,15 @@ export default async function SiteLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [contact, locale] = await Promise.all([getSiteContact(), getLocale()]);
+  const [contact, socials, locale] = await Promise.all([
+    getSiteContact(),
+    getSiteSocials(),
+    getLocale(),
+  ]);
   const copy = getSiteCopy(locale);
+  const sameAs = socials
+    .map((social) => social.href)
+    .filter((href) => /^https?:\/\//i.test(href));
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": ["Organization", "LocalBusiness"],
@@ -23,6 +30,7 @@ export default async function SiteLayout({
     inLanguage: localeMeta[locale].htmlLang,
     telephone: contact.phones.map((item) => item.display),
     email: contact.email,
+    ...(sameAs.length ? { sameAs } : {}),
     address: {
       "@type": "PostalAddress",
       streetAddress: `${contact.postalBox}, ${contact.street}`,
@@ -43,7 +51,7 @@ export default async function SiteLayout({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Header contact={contact} />
+      <Header contact={contact} socials={socials} />
       <main className="flex-1">{children}</main>
       <Footer />
       <ScrollToTop />

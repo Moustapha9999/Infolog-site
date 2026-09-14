@@ -2,10 +2,16 @@ import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
 import { ContactFormGate } from "@/components/contact/ContactFormGate";
 import { ContactMap } from "@/components/contact/ContactMap";
 import { SectionLabel } from "@/components/sections/SectionLabel";
+import { SocialLinks } from "@/components/layout/SocialLinks";
 import { Container } from "@/components/ui/Container";
 import { TechnicalFrame } from "@/components/ui/TechnicalFrame";
 import { site } from "@/data/site";
-import { getSiteContact } from "@/lib/cms/site-contact";
+import {
+  getSiteContact,
+  getSiteSocials,
+  INFOLOG_SOCIAL_IDS,
+  socialsByIds,
+} from "@/lib/cms/site-contact";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { buildLocaleMetadata } from "@/lib/i18n/seo";
@@ -27,7 +33,11 @@ export async function generateMetadata() {
 export default async function ContactPage() {
   const locale = await getLocale();
   const dictionary = getDictionary(locale);
-  const contact = await getSiteContact();
+  const [contact, allSocials] = await Promise.all([
+    getSiteContact(),
+    getSiteSocials(),
+  ]);
+  const socials = socialsByIds(allSocials, INFOLOG_SOCIAL_IDS);
   const lead = dictionary.contactPage.lead.replace("{city}", site.city);
 
   return (
@@ -114,6 +124,19 @@ export default async function ContactPage() {
               </li>
             </ul>
           </TechnicalFrame>
+          {socials.length > 0 ? (
+            <TechnicalFrame className="p-6 sm:p-8">
+              <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-plan">
+                {dictionary.contactPage.socials}
+              </p>
+              <SocialLinks
+                socials={socials}
+                dictionary={dictionary}
+                variant="panel"
+                className="mt-5"
+              />
+            </TechnicalFrame>
+          ) : null}
           <TechnicalFrame className="overflow-hidden">
             <div className="flex items-center justify-between gap-3 border-b border-ink/10 px-6 py-4">
               <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-plan">

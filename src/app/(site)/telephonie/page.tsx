@@ -13,7 +13,9 @@ import {
   getTelephonieServiceTabs,
 } from "@/data/telephonie";
 import { getIziShop } from "@/data/izi-shop";
+import { SocialLinks } from "@/components/layout/SocialLinks";
 import { getPageSections, sectionValue } from "@/lib/cms/pages";
+import { getSiteSocials, socialsByIds } from "@/lib/cms/site-contact";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { buildLocaleMetadata } from "@/lib/i18n/seo";
@@ -33,9 +35,14 @@ export async function generateMetadata() {
 
 export default async function TelephoniePage() {
   const locale = await getLocale();
-  const [phones, sections] = await Promise.all([
+  const [phones, sections, socials] = await Promise.all([
     getPublishedProducts(locale),
     getPageSections("telephonie", locale),
+    getSiteSocials(),
+  ]);
+  const shopSocials = socialsByIds(socials, [
+    "facebook-infolog-shop",
+    "whatsapp-izicall",
   ]);
   const telephonie = getTelephonie(locale);
   const serviceTabs = getTelephonieServiceTabs(locale);
@@ -102,7 +109,7 @@ export default async function TelephoniePage() {
                   {iziShop.heroLead}
                 </p>
               </div>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap items-center gap-3">
                 <Button href="/telephonie/izi-shop">
                   {telephonie.discoverIziShop}
                 </Button>
@@ -110,6 +117,13 @@ export default async function TelephoniePage() {
                   {iziShop.website.host}
                   <ArrowUpRight className="h-4 w-4" aria-hidden />
                 </Button>
+                {shopSocials.length > 0 ? (
+                  <SocialLinks
+                    socials={shopSocials}
+                    dictionary={dictionary}
+                    variant="compact"
+                  />
+                ) : null}
               </div>
             </div>
           </TechnicalFrame>

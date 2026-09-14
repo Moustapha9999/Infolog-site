@@ -80,7 +80,8 @@ export default async function AdminPagesPage() {
           <p className="text-sm leading-6 text-mute">
             La page CMS des coordonnées n’existe pas encore. Créez-la pour
             contrôler téléphones, e-mail, adresse, carte et réseaux sociaux
-            depuis le back-office.
+            (Facebook, Instagram, TikTok, WhatsApp, LinkedIn) depuis le
+            back-office.
           </p>
           <form action={ensureContactPage} className="mt-4">
             <AdminSubmit>Initialiser les coordonnées</AdminSubmit>
@@ -91,7 +92,10 @@ export default async function AdminPagesPage() {
           <p className="text-sm leading-6 text-mute">
             Page prête :{" "}
             <span className="font-medium text-ink">{contactPage.title}</span>{" "}
-            ({contactPage.is_published ? "publiée" : "brouillon"}).
+            ({contactPage.is_published ? "publiée" : "brouillon"}). Cliquez
+            « Compléter les sections manquantes » pour ajouter les nouveaux
+            réseaux (Facebook, Instagram, TikTok, WhatsApp, LinkedIn) s’ils
+            n’apparaissent pas encore dans l’éditeur.
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
             <AdminEditLink href={`/admin/pages/${contactPage.id}`} />

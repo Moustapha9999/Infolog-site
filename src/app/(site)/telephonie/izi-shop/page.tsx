@@ -15,7 +15,10 @@ import { SectionLabel } from "@/components/sections/SectionLabel";
 import { OutboundCta } from "@/components/sections/OutboundCta";
 import { TechnicalFrame } from "@/components/ui/TechnicalFrame";
 import { Button } from "@/components/ui/Button";
+import { SocialLinks } from "@/components/layout/SocialLinks";
 import { getIziShop } from "@/data/izi-shop";
+import { getSiteSocials, socialsByIds } from "@/lib/cms/site-contact";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { buildLocaleMetadata } from "@/lib/i18n/seo";
 import { type } from "@/lib/typography";
@@ -37,7 +40,18 @@ const stepIcons: LucideIcon[] = [UserRound, Smartphone, IdCard, MessageCircle];
 
 export default async function IziShopPage() {
   const locale = await getLocale();
+  const dictionary = getDictionary(locale);
   const iziShop = getIziShop(locale);
+  const socials = await getSiteSocials();
+  const whatsapp = socials.find((item) => item.id === "whatsapp-izicall");
+  const izicallSocials = socialsByIds(socials, [
+    "whatsapp-izicall",
+    "facebook-izicall",
+    "tiktok-izicall-mr",
+    "tiktok-izicall-ci",
+    "tiktok-izicall-sn",
+    "tiktok-izicall-ml",
+  ]);
   return (
     <>
       <section className="relative isolate overflow-hidden border-b border-ink/10 bg-ink">
@@ -77,6 +91,19 @@ export default async function IziShopPage() {
               {iziShop.website.cta}
               <ArrowUpRight className="h-4 w-4" aria-hidden />
             </Button>
+            {whatsapp?.href ? (
+              <Button href={whatsapp.href} variant="secondary">
+                {/* eslint-disable-next-line @next/next/no-img-element -- brand PNG */}
+                <img
+                  src={whatsapp.icon}
+                  alt=""
+                  width={18}
+                  height={18}
+                  className="size-[18px] rounded-[4px]"
+                />
+                {dictionary.footer.whatsappCta}
+              </Button>
+            ) : null}
             <Button href="/telephonie" variant="secondary">
               Catalogue INFOLOG
             </Button>
@@ -219,6 +246,24 @@ export default async function IziShopPage() {
                     <p className="mt-3 text-sm leading-7 text-mute">
                       {step.description}
                     </p>
+                    {index === 3 && whatsapp?.href ? (
+                      <a
+                        href={whatsapp.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-5 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-copper hover:text-ink"
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element -- brand PNG */}
+                        <img
+                          src={whatsapp.icon}
+                          alt=""
+                          width={18}
+                          height={18}
+                          className="size-[18px] rounded-[5px]"
+                        />
+                        {dictionary.footer.whatsappCta}
+                      </a>
+                    ) : null}
                   </article>
                 </li>
               );
@@ -264,6 +309,27 @@ export default async function IziShopPage() {
             >
               {iziShop.contact.phone}
             </a>
+            {whatsapp ? (
+              <>
+                <p className={cn(type.label, "mt-6 text-plan")}>WhatsApp</p>
+                <a
+                  href={whatsapp.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-2 font-mono text-sm tracking-wide text-ink hover:text-plan"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element -- brand PNG */}
+                  <img
+                    src={whatsapp.icon}
+                    alt=""
+                    width={20}
+                    height={20}
+                    className="size-5 rounded-[6px]"
+                  />
+                  {iziShop.contact.phone}
+                </a>
+              </>
+            ) : null}
             <p className={cn(type.label, "mt-6 text-plan")}>Boutique</p>
             <a
               href={iziShop.website.href}
@@ -274,6 +340,19 @@ export default async function IziShopPage() {
               {iziShop.website.host}
               <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
             </a>
+            {izicallSocials.length > 0 ? (
+              <>
+                <p className={cn(type.label, "mt-6 text-plan")}>
+                  {dictionary.footer.socials}
+                </p>
+                <SocialLinks
+                  socials={izicallSocials}
+                  dictionary={dictionary}
+                  variant="compact"
+                  className="mt-3"
+                />
+              </>
+            ) : null}
           </aside>
         </Container>
       </section>
@@ -285,10 +364,17 @@ export default async function IziShopPage() {
           href: iziShop.website.href,
           label: iziShop.website.cta,
         }}
-        secondary={{
-          href: "/telephonie",
-          label: "Catalogue INFOLOG",
-        }}
+        secondary={
+          whatsapp?.href
+            ? {
+                href: whatsapp.href,
+                label: dictionary.footer.whatsappCta,
+              }
+            : {
+                href: "/telephonie",
+                label: "Catalogue INFOLOG",
+              }
+        }
       />
     </>
   );

@@ -12,7 +12,7 @@ import { SiteSearch } from "@/components/search/SiteSearch";
 import { isNavActive } from "@/data/nav";
 import { useDictionary } from "@/lib/i18n/LocaleProvider";
 import { localizedMainNav } from "@/lib/i18n/localized-nav";
-import type { SiteContact } from "@/lib/cms/site-contact";
+import type { SiteContact, SiteSocial } from "@/lib/cms/site-contact";
 import { cn } from "@/lib/utils";
 
 function navClass(active: boolean) {
@@ -22,7 +22,13 @@ function navClass(active: boolean) {
   );
 }
 
-export function Header({ contact }: { contact: SiteContact }) {
+export function Header({
+  contact,
+  socials = [],
+}: {
+  contact: SiteContact;
+  socials?: SiteSocial[];
+}) {
   const pathname = usePathname();
   const dictionary = useDictionary();
   const mainNav = localizedMainNav(dictionary);
@@ -227,6 +233,7 @@ export function Header({ contact }: { contact: SiteContact }) {
         open={mobileOpen}
         onClose={() => setMobileOpen(false)}
         contact={contact}
+        socials={socials}
       />
     </header>
   );

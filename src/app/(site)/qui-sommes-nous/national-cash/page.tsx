@@ -16,7 +16,9 @@ import { OutboundCta } from "@/components/sections/OutboundCta";
 import { TechnicalFrame } from "@/components/ui/TechnicalFrame";
 import { Button } from "@/components/ui/Button";
 import { NationalCashStats } from "@/components/national-cash/NationalCashStats";
+import { SocialLinks } from "@/components/layout/SocialLinks";
 import { getNationalCash } from "@/data/national-cash";
+import { getSiteSocials, socialsByIds } from "@/lib/cms/site-contact";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { buildLocaleMetadata } from "@/lib/i18n/seo";
@@ -47,41 +49,31 @@ export default async function NationalCashPage() {
   const locale = await getLocale();
   const dictionary = getDictionary(locale);
   const nationalCash = getNationalCash(locale);
+  const nationalCashSocials = socialsByIds(await getSiteSocials(), [
+    "facebook-national-cash",
+    "instagram-national-cash",
+  ]);
 
   return (
     <>
-      <section className="relative isolate overflow-hidden border-b border-ink/10 bg-ink">
-        <div className="relative h-[240px] w-full sm:h-[280px] lg:h-[320px]">
-          <Image
-            src="/brand/national-cash-hero.jpg"
-            alt="National Cash"
-            fill
-            priority
-            quality={100}
-            sizes="100vw"
-            className="object-cover object-center"
-          />
-          <div
-            className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,24,32,0.55)_0%,rgba(16,24,32,0.15)_45%,rgba(16,24,32,0.2)_100%)]"
-            aria-hidden
-          />
-          <Container
-            wide
-            className="absolute inset-0 flex items-end pb-5 sm:pb-6 lg:pb-8"
-          >
-            <div className="border-s-2 border-paper ps-5 sm:ps-6">
-              <h1 className={cn(type.h1, "text-paper")}>
-                {nationalCash.title}
-              </h1>
-              <div className="mt-5">
-                <Button href={nationalCash.website.href}>
-                  {nationalCash.website.cta}
-                  <ArrowUpRight className="h-4 w-4" aria-hidden />
-                </Button>
-              </div>
-            </div>
-          </Container>
-        </div>
+      <section className="border-b border-ink/10 bg-ink">
+        <Container wide className="py-16 sm:py-20 lg:py-24">
+          <SectionLabel className="text-paper/80" tone="dark">
+            National Cash
+          </SectionLabel>
+          <h1 className={cn(type.h1, "mt-4 max-w-3xl text-paper")}>
+            {nationalCash.title}
+          </h1>
+          <p className={cn(type.body, "mt-5 max-w-2xl text-paper/70")}>
+            {nationalCash.description}
+          </p>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <Button href={nationalCash.website.href}>
+              {nationalCash.website.cta}
+              <ArrowUpRight className="h-4 w-4" aria-hidden />
+            </Button>
+          </div>
+        </Container>
       </section>
 
       <section className="border-b border-ink/10 bg-paper">
@@ -284,6 +276,16 @@ export default async function NationalCashPage() {
           href: nationalCash.website.href,
           label: nationalCash.website.cta,
         }}
+        pattern={false}
+        extra={
+          nationalCashSocials.length > 0 ? (
+            <SocialLinks
+              socials={nationalCashSocials}
+              dictionary={dictionary}
+              variant="compact"
+            />
+          ) : null
+        }
       />
     </>
   );
