@@ -1,0 +1,98 @@
+name: infolog
+
+networks:
+  frontend_network:
+    driver: bridge
+  backend_network:
+    driver: bridge
+    internal: true
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-}
+        NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:-}
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    environment:
+      NODE_ENV: production
+      HOSTNAME: 0.0.0.0
+      PORT: "3000"
+      PUBLIC_HOST: ${PUBLIC_HOST:-infolog.localhost}
+      ADMIN_HOST: ${ADMIN_HOST:-admin.infolog.localhost}
+      PUBLIC_HOST_ALIASES: ${PUBLIC_HOST_ALIASES:-}
+      ADMIN_HOST_ALIASES: ${ADMIN_HOST_ALIASES:-}
+      SITE_URL: ${SITE_URL:-http://infolog.localhost}
+      ADMIN_URL: ${ADMIN_URL:-http://admin.infolog.localhost}
+      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-}
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:-}
+      SUPABASE_SECRET_KEY: ${SUPABASE_SECRET_KEY:-}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:-}
+      CONTACT_TO_EMAIL: ${CONTACT_TO_EMAIL:-}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      CONTACT_FROM_EMAIL: ${CONTACT_FROM_EMAIL:-}
+    expose:
+      - "3000"
+    networks:
+      - frontend_network
+      - backend_network
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      PUBLIC_HOST: ${PUBLIC_HOST:-infolog.localhost}
+      ADMIN_HOST: ${ADMIN_HOST:-admin.infolog.localhost}
+      PUBLIC_HOST_ALIASES: ${PUBLIC_HOST_ALIASES:-}
+      ADMIN_HOST_ALIASES: ${ADMIN_HOST_ALIASES:-}
+      ENABLE_HTTPS_REDIRECT: ${ENABLE_HTTPS_REDIRECT:-0}
+      SSL_CERTIFICATE: ${SSL_CERTIFICATE:-/etc/nginx/certs/tls.crt}
+      SSL_CERTIFICATE_KEY: ${SSL_CERTIFICATE_KEY:-/etc/nginx/certs/tls.key}
+    volumes:
+      - ./certs:/etc/nginx/certs
+      - certbot_www:/var/www/certbot
+      - letsencrypt:/etc/letsencrypt:ro
+    depends_on:
+      web:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -fsS -H \"Host: $${PUBLIC_HOST}\" http://127.0.0.1/api/health | grep -q ok",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - frontend_network
+
+  certbot:
+    image: certbot/certbot
+    profiles: ["certs"]
+    volumes:
+      - certbot_www:/var/www/certbot
+      - letsencrypt:/etc/letsencrypt
+    entrypoint: certbot
+
+volumes:
+  certbot_www:
+  letsencrypt:

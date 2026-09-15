@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { hardenedCookieOptions } from "./cookies";
 import { getSupabasePublishableKey, getSupabaseUrl } from "./env";
 
 export async function createServerSupabaseClient(options?: {
@@ -16,7 +17,7 @@ export async function createServerSupabaseClient(options?: {
         try {
           cookiesToSet.forEach(({ name, value, options: cookieOptions }) => {
             cookieStore.set(name, value, {
-              ...cookieOptions,
+              ...hardenedCookieOptions(cookieOptions),
               ...(options?.sessionMaxAge
                 ? { maxAge: options.sessionMaxAge }
                 : {}),

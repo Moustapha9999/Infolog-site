@@ -11,6 +11,7 @@ import {
   getSupabaseUrl,
   isSupabaseConfigured,
 } from "@/lib/supabase/env";
+import { hardenedCookieOptions } from "@/lib/supabase/cookies";
 
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
@@ -41,7 +42,7 @@ export async function GET(request: NextRequest) {
       },
       setAll(cookiesToSet) {
         cookiesToSet.forEach(({ name, value, options }) => {
-          success.cookies.set(name, value, options);
+          success.cookies.set(name, value, hardenedCookieOptions(options));
         });
       },
     },

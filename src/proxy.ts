@@ -9,9 +9,35 @@ import {
   RESET_PASSWORD_PATH,
 } from "@/lib/cms/admin-path";
 import { PASSWORD_RECOVERY_COOKIE } from "@/lib/cms/password-recovery";
+import {
+  adminHostSplitEnabled,
+  hostFromHeaders,
+  isAdminHostname,
+  isAdminOnlyPath,
+  isPublicHostname,
+  originForHost,
+  pairedAdminHost,
+} from "@/lib/site-hosts";
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const host = hostFromHeaders(request.headers);
+
+  if (adminHostSplitEnabled()) {
+    if (isPublicHostname(host) && pathname.startsWith("/admin")) {
+      const adminHost = pairedAdminHost(host);
+      if (adminHost && adminHost !== host) {
+        return NextResponse.redirect(
+          new URL(pathname + request.nextUrl.search, originForHost(adminHost)),
+          308,
+        );
+      }
+    }
+    if (isAdminHostname(host) && !isAdminOnlyPath(pathname)) {
+      return NextResponse.redirect(new URL("/admin", originForHost(host)), 308);
+    }
+  }
+
   const response = await updateSession(request);
   const recovering = request.cookies.get(PASSWORD_RECOVERY_COOKIE)?.value === "1";
 

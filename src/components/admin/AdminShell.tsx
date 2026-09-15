@@ -30,10 +30,12 @@ function displayName(email?: string) {
 function AdminShellFrame({
   session,
   unread,
+  siteHref,
   children,
 }: {
   session: AdminSession;
   unread: number;
+  siteHref: string;
   children: React.ReactNode;
 }) {
   const { collapsed, setCollapsed } = useAdminUi();
@@ -106,7 +108,7 @@ function AdminShellFrame({
       </aside>
 
       <div className="flex min-w-0 flex-col bg-[var(--admin-main)]">
-        <AdminTopbar session={session} />
+        <AdminTopbar session={session} siteHref={siteHref} />
         <div className="flex-1 px-5 py-6 sm:px-8 sm:py-8">{children}</div>
       </div>
     </div>
@@ -116,15 +118,17 @@ function AdminShellFrame({
 export function AdminShell({
   session,
   unread,
+  siteHref,
   children,
 }: {
   session: AdminSession;
   unread: number;
+  siteHref: string;
   children: React.ReactNode;
 }) {
   return (
     <AdminThemeProvider>
-      <AdminShellFrame session={session} unread={unread}>
+      <AdminShellFrame session={session} unread={unread} siteHref={siteHref}>
         {children}
       </AdminShellFrame>
     </AdminThemeProvider>

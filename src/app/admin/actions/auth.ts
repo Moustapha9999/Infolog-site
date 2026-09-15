@@ -1,9 +1,10 @@
 "use server";
 
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { writeAuditLog } from "@/lib/cms/audit";
+import { clientKeyFromHeaders, rateLimit } from "@/lib/cms/rate-limit";
 import { isStaffRole } from "@/lib/cms/roles";
 import {
   FORGOT_PASSWORD_PATH,
@@ -15,12 +16,21 @@ import {
   PASSWORD_RECOVERY_COOKIE,
   passwordRecoveryCookieOptions,
 } from "@/lib/cms/password-recovery";
-import { getRequestOrigin } from "@/lib/cms/request-origin";
+import { getAdminRequestOrigin } from "@/lib/cms/request-origin";
 
 export async function loginAction(formData: FormData) {
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
   const next = safeAdminNext(String(formData.get("next") ?? "/admin"));
+  const headerList = await headers();
+  const limited = rateLimit(
+    `login:${clientKeyFromHeaders(headerList)}`,
+    8,
+    10 * 60 * 1000,
+  );
+  if (!limited.ok) {
+    redirect(`/admin/login?error=rate&next=${encodeURIComponent(next)}`);
+  }
 
   const remember = formData.get("remember") === "1";
   const supabase = await createServerSupabaseClient({
@@ -32,15 +42,33 @@ export async function loginAction(formData: FormData) {
   });
 
   if (error || !data.user) {
+    await writeAuditLog({
+      action: "login_failed",
+      entityType: "session",
+      meta: { email, reason: "credentials" },
+      useServiceRole: true,
+    });
     redirect(`/admin/login?error=1&next=${encodeURIComponent(next)}`);
   }
 
   const role = (data.user.app_metadata as { role?: string } | undefined)?.role;
   if (!isStaffRole(role)) {
     await supabase.auth.signOut();
+    await writeAuditLog({
+      actorId: data.user.id,
+      action: "login_failed",
+      entityType: "session",
+      meta: { email, reason: "role" },
+      useServiceRole: true,
+    });
     redirect(`/admin/login?error=role&next=${encodeURIComponent(next)}`);
   }
 
+  await writeAuditLog({
+    actorId: data.user.id,
+    action: "login",
+    entityType: "session",
+  });
   redirect(next);
 }
 
@@ -68,7 +96,7 @@ export async function requestPasswordResetAction(formData: FormData) {
   }
 
   const supabase = await createServerSupabaseClient();
-  const origin = await getRequestOrigin();
+  const origin = await getAdminRequestOrigin();
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${origin}/auth/callback?next=${encodeURIComponent(RESET_PASSWORD_PATH)}`,
   });

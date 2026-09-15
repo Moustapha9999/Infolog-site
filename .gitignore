@@ -33,6 +33,13 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 !.env.example
+!.env.hostinger.example
+
+# TLS origin (Cloudflare Origin CA or local self-signed)
+certs/*.crt
+certs/*.key
+certs/*.pem
+!certs/.gitkeep
 
 # vercel
 .vercel
@@ -46,6 +53,7 @@ next-env.d.ts
 Mamoudou/
 tmp_monetique.*
 infolog/
+infolog-images.tar.gz
 
 # scrapes / dumps téléphonie (on garde catalog, products, videos)
 /public/brand/telephonie/*

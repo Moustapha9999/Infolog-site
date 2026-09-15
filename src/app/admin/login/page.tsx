@@ -7,6 +7,7 @@ import {
 } from "@/components/admin/AdminAuthLayout";
 import { getAdminSession } from "@/lib/cms/auth";
 import { safeAdminNext } from "@/lib/cms/admin-path";
+import { getPublicSiteHref } from "@/lib/site-hosts";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 
 export default async function AdminLoginPage({
@@ -29,7 +30,10 @@ export default async function AdminLoginPage({
         <AdminLoginForm next={safeAdminNext(params.next)} error={params.error} />
       )}
       <p className="mt-6 text-center text-sm text-mute">
-        <Link href="/" className="hover:text-plan">
+        <Link
+          href={getPublicSiteHref()}
+          className="hover:text-plan"
+        >
           Retour au site
         </Link>
       </p>

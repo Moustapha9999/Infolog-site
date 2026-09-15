@@ -1,29 +1,28 @@
-# INFOLOG — site 
+# INFOLOG — site
 
 Refonte du site [infolog.digital](https://infolog.digital).
 
-
-## Lancer en local
+## Local
 
 ```bash
 npm install
 npm run dev
 ```
 
-Ouvrir [http://localhost:3000](http://localhost:3000).
+Ouvrir [http://localhost:3000](http://localhost:3000) — back-office : [http://localhost:3000/admin](http://localhost:3000/admin).
 
-## Stack
+Copier `.env.example` vers `.env.local` (clés Supabase). Sans ces variables, le site public lit `src/data`.
 
-Next.js (App Router) · TypeScript · Tailwind CSS · Framer Motion · Supabase (CMS)
+## Docker local
 
-## Back-office
+```bash
+docker compose up --build -d web nginx
+```
 
-Interface : [http://localhost:3000/admin](http://localhost:3000/admin)
+Hosts : `127.0.0.1 infolog.localhost admin.infolog.localhost`
 
-1. Créez un projet Supabase.
-2. Copiez `.env.example` vers `.env.local`.
-3. Appliquez `supabase/migrations/20260905120000_init_cms.sql` (voir `supabase/README.md`).
-4. Créez un utilisateur Auth et donnez-lui le rôle `admin`.
-5. Optionnel : `npm run cms:seed` (importe les contenus existants, **sans inventer de prix**).
+## Production Hostinger
 
-Sans variables Supabase, le site public continue de lire les fichiers `src/data` et `public/brand`.
+Guide complet : [deploy/hostinger/README.md](deploy/hostinger/README.md).
+
+Sur le VPS : copier `.env.hostinger.example` vers `.env`, puis `bash deploy/hostinger/setup-vps.sh` et `bash deploy/hostinger/deploy.sh`.

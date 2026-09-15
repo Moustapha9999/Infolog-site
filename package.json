@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "eslint",
     "test:cms": "npx tsx src/lib/cms/contact.test.ts",
-    "cms:seed": "npx tsx scripts/seed-cms.ts"
+    "test:hosts": "npx tsx src/lib/site-hosts.test.ts",
+    "cms:seed": "npx tsx scripts/seed-cms.ts",
+    "docker:up": "docker compose up --build -d",
+    "docker:down": "docker compose down"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.6",

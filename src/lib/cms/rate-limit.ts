@@ -12,8 +12,19 @@ export function rateLimit(key: string, limit: number, windowMs: number) {
   return { ok: true as const };
 }
 
+export function clientIpFromHeaders(headers: Headers) {
+  const cf = headers.get("cf-connecting-ip")?.trim();
+  if (cf) return cf;
+  const real = headers.get("x-real-ip")?.trim();
+  if (real) return real;
+  const forwarded = headers.get("x-forwarded-for");
+  return forwarded?.split(",")[0]?.trim() || "";
+}
+
+export function clientKeyFromHeaders(headers: Headers) {
+  return clientIpFromHeaders(headers) || "unknown";
+}
+
 export function clientKey(request: Request) {
-  const forwarded = request.headers.get("x-forwarded-for");
-  const ip = forwarded?.split(",")[0]?.trim() || "unknown";
-  return ip;
+  return clientKeyFromHeaders(request.headers);
 }

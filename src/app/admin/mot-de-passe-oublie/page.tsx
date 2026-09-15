@@ -6,6 +6,7 @@ import {
   AdminAuthLayout,
 } from "@/components/admin/AdminAuthLayout";
 import { ADMIN_LOGIN_PATH } from "@/lib/cms/admin-path";
+import { getPublicSiteHref } from "@/lib/site-hosts";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 
 export const metadata: Metadata = {
@@ -34,7 +35,7 @@ export default async function ForgotPasswordPage({
         <span className="mx-2 text-ink/20" aria-hidden>
           ·
         </span>
-        <Link href="/" className="hover:text-plan">
+        <Link href={getPublicSiteHref()} className="hover:text-plan">
           Retour au site
         </Link>
       </p>

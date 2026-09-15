@@ -74,6 +74,10 @@ export function AdminLoginForm({
         <AdminAuthAlert>
           Compte reconnu, mais le rôle administrateur n’est pas encore attribué.
         </AdminAuthAlert>
+      ) : error === "rate" ? (
+        <AdminAuthAlert>
+          Trop de tentatives de connexion. Réessayez dans quelques minutes.
+        </AdminAuthAlert>
       ) : error ? (
         <AdminAuthAlert>
           Identifiants invalides. Vérifiez l’e-mail et le mot de passe.

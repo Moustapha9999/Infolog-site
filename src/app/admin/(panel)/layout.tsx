@@ -3,6 +3,7 @@ export const dynamic = "force-dynamic";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { requireAdminSession } from "@/lib/cms/auth";
 import { getUnreadCount } from "@/lib/cms/dashboard";
+import { getPublicSiteHref } from "@/lib/site-hosts";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import Link from "next/link";
 
@@ -35,7 +36,7 @@ export default async function AdminPanelLayout({
   const session = await requireAdminSession();
   const unread = await getUnreadCount();
   return (
-    <AdminShell session={session} unread={unread}>
+    <AdminShell session={session} unread={unread} siteHref={getPublicSiteHref()}>
       {children}
     </AdminShell>
   );
